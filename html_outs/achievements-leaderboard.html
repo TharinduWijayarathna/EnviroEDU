@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements & Leaderboard - EnviroEdu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 35px;
+            border-bottom: 2px solid #e0e0e0;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 14px 30px;
+            background: transparent;
+            border: none;
+            color: #6c757d;
+            font-size: 1.2em;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Badges Tab */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+        }
+
+        .badge-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .badge-card:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .badge-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .badge-name {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        /* Leaderboard Tab */
+        .leaderboard-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .leaderboard-title {
+            color: #2c3e50;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .trophy-icon {
+            font-size: 2.5em;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .leaderboard-item.first {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe4b3 100%);
+            border-color: #ffd700;
+        }
+
+        .leaderboard-item.highlight {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #667eea;
+        }
+
+        .leaderboard-rank {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .rank-number {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+            min-width: 35px;
+        }
+
+        .leaderboard-item.first .rank-number {
+            color: #ffa500;
+        }
+
+        .player-name {
+            color: #2c3e50;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .player-points {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .points-value {
+            color: #667eea;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .points-label {
+            color: #6c757d;
+            font-size: 1em;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .tabs {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .tab {
+                padding: 12px 20px;
+                font-size: 1.1em;
+            }
+
+            .badges-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+
+            .leaderboard-item {
+                padding: 15px;
+            }
+
+            .player-name,
+            .points-value {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Achievements & Leaderboard</h1>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('badges')">Badges Earned</button>
+            <button class="tab" onclick="showTab('leaderboard')">Weekly Leaderboard</button>
+        </div>
+
+        <!-- Badges Tab -->
+        <div id="badges" class="tab-content active">
+            <div class="badges-grid">
+                <div class="badge-card">
+                    <div class="badge-icon">♻️</div>
+                    <div class="badge-name">Eco Hero</div>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon">💧</div>
+                    <div class="badge-name">Water Saver</div>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon">🐾</div>
+                    <div class="badge-name">Animal Friend</div>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon">🌱</div>
+                    <div class="badge-name">Green Thumb</div>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon">⭐</div>
+                    <div class="badge-name">Star Student</div>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon">🏆</div>
+                    <div class="badge-name">Champion</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Tab -->
+        <div id="leaderboard" class="tab-content">
+            <div class="leaderboard-section">
+                <div class="leaderboard-header">
+                    <h2 class="leaderboard-title">Weekly Leaderboard</h2>
+                    <div class="trophy-icon">🏆</div>
+                </div>
+
+                <div class="leaderboard-item first highlight">
+                    <div class="leaderboard-rank">
+                        <span class="rank-number">1.</span>
+                        <span class="player-name">Aanya</span>
+                    </div>
+                    <div class="player-points">
+                        <span class="points-value">450 pts</span>
+                        <span class="points-label">350 pts</span>
+                    </div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">
+                        <span class="rank-number">2.</span>
+                        <span class="player-name">Ravi</span>
+                    </div>
+                    <div class="player-points">
+                        <span class="points-value">380 pts</span>
+                    </div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">
+                        <span class="rank-number">3.</span>
+                        <span class="player-name">Nimal</span>
+                    </div>
+                    <div class="player-points">
+                        <span class="points-value">320 pts</span>
+                    </div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">
+                        <span class="rank-number">4.</span>
+                        <span class="player-name">June</span>
+                    </div>
+                    <div class="player-points">
+                        <span class="points-value">300 pts</span>
+                    </div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">
+                        <span class="rank-number">5.</span>
+                        <span class="player-name">Lalith</span>
+                    </div>
+                    <div class="player-points">
+                        <span class="points-value">250 pts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="student-dashboard.html">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

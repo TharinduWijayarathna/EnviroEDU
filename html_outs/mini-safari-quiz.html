@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Safari Quiz - EnviroEdu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+            transform: translateX(-3px);
+        }
+
+        .title {
+            color: #2c3e50;
+            font-size: 1.8em;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .quiz-title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .question-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .image-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #e0e0e0;
+        }
+
+        .question-text {
+            color: #2c3e50;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .animal-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .animal-image {
+            background: white;
+            border: 3px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            font-size: 4em;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .animal-image:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .main-image {
+            background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            font-size: 6em;
+            margin-top: 20px;
+        }
+
+        .answers-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            background: white;
+            border: 3px solid #e0e0e0;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .answer-btn:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .answer-btn.selected {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .answer-btn.correct {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .answer-btn.incorrect {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .feedback-section {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-section.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .question-section {
+                grid-template-columns: 1fr;
+            }
+
+            .main-image {
+                font-size: 4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='student-dashboard.html'">
+                ◀ Back
+            </button>
+            <h1 class="title">Mini Safari Quiz</h1>
+        </div>
+
+        <h2 class="quiz-title">Mini Safari Quiz</h2>
+
+        <div class="question-section">
+            <div class="image-section">
+                <div class="question-text">What is a tiger?</div>
+                <div class="animal-images">
+                    <div class="animal-image">🐅</div>
+                    <div class="animal-image">🏙️</div>
+                </div>
+                <div class="main-image">🐅</div>
+            </div>
+
+            <div class="answers-section">
+                <button class="answer-btn" onclick="selectAnswer(this, 'wild')">
+                    A. Wild Animal
+                </button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'pet')">
+                    B. Pet
+                </button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'bird')">
+                    C. Bird
+                </button>
+            </div>
+        </div>
+
+        <div id="feedback" class="feedback-section"></div>
+
+        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        let answered = false;
+
+        function selectAnswer(button, answer) {
+            if (answered) return;
+
+            answered = true;
+            const buttons = document.querySelectorAll('.answer-btn');
+            const feedbackDiv = document.getElementById('feedback');
+
+            buttons.forEach(btn => {
+                btn.style.pointerEvents = 'none';
+            });
+
+            if (answer === 'wild') {
+                button.classList.add('correct');
+                feedbackDiv.className = 'feedback-section show correct';
+                feedbackDiv.textContent = '✓ Correct! +10 Points';
+            } else {
+                button.classList.add('incorrect');
+                // Show the correct answer
+                buttons.forEach(btn => {
+                    if (btn.textContent.includes('Wild Animal')) {
+                        btn.classList.add('correct');
+                    }
+                });
+                feedbackDiv.className = 'feedback-section show';
+                feedbackDiv.style.background = '#f8d7da';
+                feedbackDiv.style.color = '#721c24';
+                feedbackDiv.textContent = '✗ Incorrect. The correct answer is: Wild Animal';
+            }
+        }
+
+        function nextQuestion() {
+            // In a real app, this would load the next question
+            alert('Great job! Moving to the next question...');
+            window.location.href = 'student-dashboard.html';
+        }
+    </script>
+</body>
+</html>

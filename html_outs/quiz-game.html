@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game - EnviroEdu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            padding: 50px 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .question-section {
+            margin-bottom: 35px;
+        }
+
+        .question {
+            color: #2c3e50;
+            font-size: 1.5em;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: #5a6c7d;
+            color: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            text-align: left;
+        }
+
+        .option:hover {
+            background: #4a5c6d;
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: #667eea;
+            border-color: #764ba2;
+        }
+
+        .option.correct {
+            background: #27ae60;
+            border-color: #229954;
+        }
+
+        .option.incorrect {
+            background: #e74c3c;
+            border-color: #c0392b;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #e74c3c;
+        }
+
+        .feedback h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .feedback p {
+            font-size: 1.1em;
+        }
+
+        .next-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto 0;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .next-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .score-display {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .score-display h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .score-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            .question {
+                font-size: 1.3em;
+            }
+
+            .option {
+                font-size: 1.1em;
+                padding: 18px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quiz Game Page</h1>
+        </div>
+
+        <div class="question-section">
+            <div class="question">Which part of the plant takes in water?</div>
+
+            <div class="options">
+                <div class="option" data-answer="correct" onclick="selectOption(this)">
+                    A. Roots
+                </div>
+                <div class="option" data-answer="incorrect" onclick="selectOption(this)">
+                    B. Stem
+                </div>
+                <div class="option" data-answer="incorrect" onclick="selectOption(this)">
+                    C. Leaves
+                </div>
+            </div>
+        </div>
+
+        <div class="feedback" id="feedback">
+            <h3 id="feedbackTitle"></h3>
+            <p id="feedbackText"></p>
+        </div>
+
+        <div class="score-display">
+            <h3>Current Score</h3>
+            <div class="score-number" id="score">0 pts</div>
+        </div>
+
+        <button class="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let answered = false;
+
+        function selectOption(element) {
+            if (answered) return;
+
+            answered = true;
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackText = document.getElementById('feedbackText');
+
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.answer === 'correct') {
+                    opt.classList.add('correct');
+                }
+            });
+
+            if (element.dataset.answer === 'correct') {
+                element.classList.add('correct');
+                currentScore += 10;
+                document.getElementById('score').textContent = currentScore + ' pts';
+                
+                feedbackTitle.textContent = 'Correct! +10 Points';
+                feedbackText.textContent = 'Great job! Roots absorb water and nutrients from the soil.';
+                feedback.className = 'feedback show correct';
+            } else {
+                element.classList.add('incorrect');
+                feedbackTitle.textContent = 'Incorrect';
+                feedbackText.textContent = 'The correct answer is A. Roots. They absorb water from the soil.';
+                feedback.className = 'feedback show incorrect';
+            }
+        }
+
+        function nextQuestion() {
+            window.location.href = 'progress-leaderboard.html';
+        }
+    </script>
+</body>
+</html>
