@@ -56,11 +56,11 @@
                     <p style="color: #666;">Create drag-and-drop, multiple choice, or matching games from templates.</p>
                     <span class="eco-btn" style="margin-top: 1rem; display: inline-block;">Manage Mini Games</span>
                 </a>
-                <div class="eco-card eco-dash-card">
-                    <h3>📊 Progress</h3>
-                    <p style="color: #666;">View student progress and quiz scores.</p>
-                    <button type="button" class="eco-btn" style="margin-top: 1rem;" disabled>Coming soon</button>
-                </div>
+                <a href="{{ route('teacher.progress.index') }}" class="eco-card eco-dash-card" style="text-decoration: none; color: inherit;">
+                    <h3>📊 Student Progress</h3>
+                    <p style="color: #666;">View student progress, quiz scores, and game attempts.</p>
+                    <span class="eco-btn" style="margin-top: 1rem; display: inline-block;">View Progress</span>
+                </a>
             </div>
         </main>
     </div>

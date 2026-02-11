@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MiniGame extends Model
 {
@@ -43,5 +44,10 @@ class MiniGame extends Model
     public function gameTemplate(): BelongsTo
     {
         return $this->belongsTo(GameTemplate::class);
+    }
+
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(MiniGameAttempt::class, 'mini_game_id');
     }
 }

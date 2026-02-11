@@ -30,6 +30,9 @@
             template: @json($miniGame->gameTemplate->slug),
             config: @json($miniGame->config),
             storageUrl: @json(asset('storage')),
+            gameId: {{ $miniGame->id }},
+            progressGameUrl: @json(route('progress.game')),
+            csrfToken: @json(csrf_token()),
         };
     </script>
     @vite(['resources/js/game-runner.js'])

@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Parent\ChildController as ParentChildController;
 use App\Http\Controllers\PlayController;
+use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\Teacher\MiniGameController;
+use App\Http\Controllers\Teacher\ProgressController as TeacherProgressController;
 use App\Http\Controllers\Teacher\QuizController;
 use App\Http\Controllers\Teacher\TopicController;
 use Illuminate\Support\Facades\Route;
@@ -23,14 +26,24 @@ Route::get('/play/quiz/{quiz}', [PlayController::class, 'quiz'])->name('play.qui
 Route::get('/play/game/{miniGame}', [PlayController::class, 'miniGame'])->name('play.mini-game');
 
 Route::middleware('auth')->group(function (): void {
+    Route::post('/progress/quiz', [ProgressController::class, 'recordQuiz'])->name('progress.quiz');
+    Route::post('/progress/game', [ProgressController::class, 'recordMiniGame'])->name('progress.game');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->name('dashboard.student')->middleware('role:student');
     Route::get('/dashboard/teacher', [DashboardController::class, 'teacher'])->name('dashboard.teacher')->middleware('role:teacher');
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->name('dashboard.parent')->middleware('role:parent');
 
+    Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function (): void {
+        Route::get('children', [ParentChildController::class, 'index'])->name('children.index');
+        Route::post('children', [ParentChildController::class, 'store'])->name('children.store');
+        Route::get('children/{child}', [ParentChildController::class, 'show'])->name('children.show');
+    });
+
     Route::middleware('role:teacher')->prefix('teacher')->name('teacher.')->group(function (): void {
         Route::resource('topics', TopicController::class)->parameters(['topics' => 'topic']);
         Route::resource('quizzes', QuizController::class);
         Route::resource('mini-games', MiniGameController::class)->parameters(['mini-games' => 'miniGame']);
+        Route::get('progress', [TeacherProgressController::class, 'index'])->name('progress.index');
+        Route::get('progress/students/{student}', [TeacherProgressController::class, 'show'])->name('progress.show');
     });
 });

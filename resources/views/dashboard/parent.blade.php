@@ -8,8 +8,6 @@
         .eco-dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
         .eco-dash-card { padding: 1.5rem; }
         .eco-dash-card h3 { font-family: 'Bubblegum Sans', cursive; font-size: 1.25rem; color: var(--eco-primary); margin-bottom: 0.75rem; }
-        .eco-badge-list { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-        .eco-badge-pill { background: var(--eco-secondary); padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
     </style>
 @endpush
 
@@ -31,28 +29,50 @@
 
         <main style="flex: 1; padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%;">
             <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">Parent Dashboard</h1>
-            <p style="margin-bottom: 2rem; font-size: 1.1rem; color: #555;">View your child's progress and celebrate their eco-learning journey.</p>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem; color: #555;">Link your child's account to see their badges, progress, and areas to improve.</p>
 
-            <div class="eco-dash-grid">
-                <div class="eco-card eco-dash-card">
-                    <h3>👤 My Children</h3>
-                    <p style="color: #666;">Link to your child's account to see their activity and progress.</p>
-                    <button type="button" class="eco-btn" style="margin-top: 1rem;" disabled>Coming soon</button>
+            @if (session('status'))
+                <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 0.75rem 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                    {{ session('status') }}
                 </div>
-                <div class="eco-card eco-dash-card">
-                    <h3>🏆 Badges</h3>
-                    <p style="color: #666;">Badges earned by your child will appear here.</p>
-                    <div class="eco-badge-list" style="margin-top: 1rem;">
-                        <span class="eco-badge-pill">No badges yet</span>
+            @endif
+            @if ($errors->any())
+                <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 0.75rem 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <div class="eco-card eco-dash-card" style="margin-bottom: 2rem;">
+                <h3>👤 Link a child</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Enter your child's EnviroEdu account email to link their progress to your dashboard.</p>
+                <form method="POST" action="{{ route('parent.children.store') }}" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end;">
+                    @csrf
+                    <div>
+                        <label for="email" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Child's email</label>
+                        <input id="email" type="email" name="email" class="eco-input" value="{{ old('email') }}" required placeholder="student@example.com" style="min-width: 220px;">
                     </div>
-                </div>
-                <div class="eco-card eco-dash-card">
-                    <h3>📈 Progress</h3>
-                    <p style="color: #666;">Topic completion and quiz scores.</p>
-                    <button type="button" class="eco-btn" style="margin-top: 1rem;" disabled>Coming soon</button>
-                </div>
+                    <button type="submit" class="eco-btn">Link account</button>
+                </form>
             </div>
+
+            <h2 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.35rem; color: var(--eco-primary); margin-bottom: 1rem;">My Children</h2>
+            @if ($children->isEmpty())
+                <div class="eco-card" style="padding: 1.5rem; color: #666;">
+                    <p>No children linked yet. Use the form above to link your child's account by email.</p>
+                </div>
+            @else
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    @foreach ($children as $child)
+                        <div class="eco-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <strong>{{ $child->name }}</strong>
+                                <span style="color: #666;">{{ $child->email }}</span>
+                            </div>
+                            <a href="{{ route('parent.children.show', $child) }}" class="eco-btn" style="padding: 0.5rem 1rem;">View badges & progress</a>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </main>
     </div>
 @endsection
-

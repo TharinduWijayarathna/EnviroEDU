@@ -3,6 +3,16 @@
 @section('title', 'Student Dashboard')
 
 @section('student-main')
+    @if (isset($earnedBadges) && $earnedBadges->isNotEmpty())
+        <div class="eco-card" style="padding: 1rem 1.25rem; margin-bottom: 1rem;">
+            <h3 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.25rem; color: var(--eco-primary); margin-bottom: 0.75rem;">🏆 Your badges</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                @foreach ($earnedBadges as $badge)
+                    <span style="background: var(--eco-secondary); padding: 0.4rem 0.9rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">{{ $badge->icon ?? '🏆' }} {{ $badge->name }}</span>
+                @endforeach
+            </div>
+        </div>
+    @endif
     <h2 class="eco-game-header" id="ecoGameHeader">Select a topic to start!</h2>
     <div class="eco-game-content" id="ecoGameContent">
         <div style="text-align: center; color: #666;">

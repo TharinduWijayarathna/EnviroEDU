@@ -68,6 +68,11 @@ class StudentLayoutComposer
             })->values()->all();
         }
 
-        $view->with(compact('topics', 'standaloneQuizzes', 'standaloneMiniGames', 'grade', 'topicsPayload'));
+        $badgeCount = 0;
+        if (auth()->check() && auth()->user()->role?->value === 'student') {
+            $badgeCount = auth()->user()->badges()->count();
+        }
+
+        $view->with(compact('topics', 'standaloneQuizzes', 'standaloneMiniGames', 'grade', 'topicsPayload', 'badgeCount'));
     }
 }

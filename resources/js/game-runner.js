@@ -6,7 +6,20 @@
   const mount = document.getElementById('game-mount');
   if (!mount || !window.EnviroEduGame) return;
 
-  const { template, config, storageUrl = '' } = window.EnviroEduGame;
+  const { template, config, storageUrl = '', gameId, progressGameUrl, csrfToken } = window.EnviroEduGame || {};
+
+  function recordGameComplete() {
+    if (!gameId || !progressGameUrl || !csrfToken) return;
+    fetch(progressGameUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+      body: JSON.stringify({ mini_game_id: gameId, completed: true })
+    }).then(r => r.json()).then(function (data) {
+      if (data.new_badges && data.new_badges.length > 0 && window.ecoShowBadgeModal) {
+        data.new_badges.forEach(function (b) { window.ecoShowBadgeModal(b); });
+      }
+    }).catch(function () {});
+  }
 
   function escapeHtml(text) {
     const div = document.createElement('div');
@@ -76,6 +89,7 @@
         item.style.cursor = 'default';
         zone.querySelector('.dropped').appendChild(item);
         if (correctCount === items.length) {
+          recordGameComplete();
           mount.innerHTML = '<div class="game-result"><h2 style="font-family: \'Bubblegum Sans\', cursive; color: var(--eco-primary);">Well done!</h2><p>All sorted correctly.</p></div>';
         }
       });
@@ -89,6 +103,7 @@
 
     function showQuestion() {
       if (qIndex >= questions.length) {
+        recordGameComplete();
         mount.innerHTML = `<div class="game-result"><h2 style="font-family: 'Bubblegum Sans', cursive; color: var(--eco-primary);">Complete!</h2><p>Score: ${score} / ${questions.length}</p></div>`;
         return;
       }
@@ -152,6 +167,7 @@
             this.classList.add('matched');
             matched++;
             if (matched === pairs.length) {
+              recordGameComplete();
               mount.innerHTML = '<div class="game-result"><h2 style="font-family: \'Bubblegum Sans\', cursive; color: var(--eco-primary);">Perfect match!</h2><p>All pairs matched.</p></div>';
             }
           }

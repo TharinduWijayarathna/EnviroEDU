@@ -18,9 +18,15 @@ class DashboardController extends Controller
 
     public function student(): View
     {
+        $earnedBadges = [];
+        if (auth()->check() && auth()->user()->role?->value === 'student') {
+            $earnedBadges = auth()->user()->badges()->orderByPivot('earned_at', 'desc')->get();
+        }
+
         return view('dashboard.student', [
             'studentPage' => 'dashboard',
             'studentLayoutTitle' => 'Student Dashboard',
+            'earnedBadges' => $earnedBadges,
         ]);
     }
 
@@ -33,6 +39,8 @@ class DashboardController extends Controller
 
     public function parent(): View
     {
-        return view('dashboard.parent');
+        $children = auth()->user()->children()->orderBy('name')->get();
+
+        return view('dashboard.parent', compact('children'));
     }
 }

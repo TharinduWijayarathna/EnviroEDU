@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(GameTemplateSeeder::class);
+        $this->call(BadgeSeeder::class);
         $this->call(MiniGameSeeder::class);
 
         // User::factory(10)->create();

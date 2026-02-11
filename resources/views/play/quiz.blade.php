@@ -20,11 +20,11 @@
         <div id="quiz-root">
             <div id="quiz-questions">
                 @foreach ($quiz->questions as $i => $q)
-                    <div class="play-question" data-question-index="{{ $i }}" style="display: {{ $i === 0 ? 'block' : 'none' }};">
+                    <div class="play-question" data-question-index="{{ $i }}" data-question-id="{{ $q->id }}" style="display: {{ $i === 0 ? 'block' : 'none' }};">
                         <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;">{{ $i + 1 }}. {{ $q->question_text }}</p>
                         <div class="options">
                             @foreach ($q->options as $oi => $opt)
-                                <div class="play-option" data-question="{{ $i }}" data-option-index="{{ $oi }}" data-correct="{{ $opt->is_correct ? '1' : '0' }}">
+                                <div class="play-option" data-question="{{ $i }}" data-question-id="{{ $q->id }}" data-option-index="{{ $oi }}" data-correct="{{ $opt->is_correct ? '1' : '0' }}">
                                     {{ $opt->option_text }}
                                 </div>
                             @endforeach
@@ -43,17 +43,46 @@
         const questions = document.querySelectorAll('.play-question[data-question-index]');
         const resultEl = document.getElementById('quiz-result');
         const scoreEl = document.getElementById('quiz-score');
+        const quizId = {{ $quiz->id }};
+        const totalQuestions = {{ $quiz->questions->count() }};
         let currentIndex = 0;
         let score = 0;
+        const answers = [];
 
         function showQuestion(index) {
             questions.forEach((q, i) => { q.style.display = i === index ? 'block' : 'none'; });
+        }
+
+        function buildAnswers() {
+            questions.forEach((q) => {
+                const selected = q.querySelector('.play-option.correct, .play-option.incorrect');
+                if (selected) {
+                    answers.push({
+                        question_id: parseInt(selected.dataset.questionId, 10),
+                        option_index: parseInt(selected.dataset.optionIndex, 10),
+                        correct: selected.dataset.correct === '1'
+                    });
+                }
+            });
         }
 
         function showResult() {
             document.getElementById('quiz-questions').style.display = 'none';
             resultEl.style.display = 'block';
             scoreEl.textContent = score;
+            buildAnswers();
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (token) {
+                fetch('{{ route("progress.quiz") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+                    body: JSON.stringify({ quiz_id: quizId, score, total_questions: totalQuestions, answers })
+                }).then(r => r.json()).then((data) => {
+                    if (data.new_badges && data.new_badges.length > 0 && window.ecoShowBadgeModal) {
+                        data.new_badges.forEach((b) => window.ecoShowBadgeModal(b));
+                    }
+                }).catch(() => {});
+            }
         }
 
         document.querySelectorAll('.play-option').forEach((el) => {

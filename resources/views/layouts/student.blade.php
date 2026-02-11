@@ -35,7 +35,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 48px; width: auto; object-fit: contain;">
             </a>
             <div class="eco-dashboard-nav" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                <div class="eco-badge-count">🏆 <span id="ecoBadgeCount">0</span> Badges</div>
+                <div class="eco-badge-count">🏆 <span id="ecoBadgeCount">{{ $badgeCount ?? 0 }}</span> Badges</div>
                 <form method="GET" action="{{ route('dashboard.student') }}" id="ecoGradeForm" style="display: inline;">
                     <select class="eco-grade-select" id="ecoGradeSelector" name="grade">
                         <option value="">All grades</option>
@@ -116,6 +116,22 @@
         <p id="ecoBadgeDescription"></p>
         <button type="button" class="eco-btn" id="ecoCloseBadgeBtn">Awesome!</button>
     </div>
+    <script>
+        window.ecoShowBadgeModal = function(badge) {
+            var modal = document.getElementById('ecoBadgeModal');
+            var icon = document.getElementById('ecoBadgeIcon');
+            var title = document.getElementById('ecoBadgeTitle');
+            var desc = document.getElementById('ecoBadgeDescription');
+            if (modal && icon && title && desc) {
+                icon.textContent = badge.icon || '🏆';
+                title.textContent = badge.name || 'Badge Earned!';
+                desc.textContent = '';
+                modal.classList.add('show');
+                var countEl = document.getElementById('ecoBadgeCount');
+                if (countEl) { countEl.textContent = parseInt(countEl.textContent, 10) + 1; }
+            }
+        };
+    </script>
 
     <div class="eco-feedback" id="ecoFeedback">
         <p id="ecoFeedbackText"></p>
