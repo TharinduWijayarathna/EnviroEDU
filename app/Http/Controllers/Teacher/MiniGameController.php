@@ -125,7 +125,7 @@ class MiniGameController extends Controller
                 if (empty($c['id'] ?? '') || empty($c['label'] ?? '')) {
                     continue;
                 }
-                $imagePath = $this->resolveImagePath($request, 'config_categories', $i);
+                $imagePath = $this->resolveImagePath($request, 'config_categories', (int) $i);
                 $cat = ['id' => $c['id'], 'label' => $c['label']];
                 if ($imagePath !== null) {
                     $cat['image'] = $imagePath;
@@ -144,7 +144,7 @@ class MiniGameController extends Controller
                 if ($catId === '') {
                     continue;
                 }
-                $imagePath = $this->resolveImagePath($request, 'config_items', $i);
+                $imagePath = $this->resolveImagePath($request, 'config_items', (int) $i);
                 $entry = ['label' => $item['label'], 'category_id' => $catId];
                 if ($imagePath !== null) {
                     $entry['image'] = $imagePath;

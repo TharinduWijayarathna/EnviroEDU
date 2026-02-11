@@ -23,7 +23,7 @@ class UpdateMiniGameRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:1000'],
             'grade_level' => ['nullable', 'integer', Rule::in(config('app.grade_levels', [4, 5]))],
             'is_published' => ['boolean'],
-            'config' => ['required'],
+            'config' => ['nullable'],
         ];
     }
 }
