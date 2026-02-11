@@ -123,7 +123,7 @@
             </div>
             <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                 <label style="font-size: 0.9rem;">Image (optional):</label>
-                <input type="file" accept="image/*" class="cat-image-input" style="max-width: 180px;">
+                <input type="file" accept="image/*" name="config_categories[${i}][image]" class="cat-image-input" style="max-width: 180px;">
                 <input type="hidden" name="config_categories[${i}][image_path]" class="cat-image-path" value="${imagePath || ''}">
                 <span class="cat-image-preview" style="min-width: 48px; min-height: 48px;">${imgPreview ? `<img src="${imgPreview}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">` : ''}</span>
             </div>
@@ -166,7 +166,7 @@
             </div>
             <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                 <label style="font-size: 0.9rem;">Image (optional):</label>
-                <input type="file" accept="image/*" class="item-image-input" style="max-width: 180px;">
+                <input type="file" accept="image/*" name="config_items[${i}][image]" class="item-image-input" style="max-width: 180px;">
                 <input type="hidden" name="config_items[${i}][image_path]" class="item-image-path" value="${imagePath || ''}">
                 <span class="item-image-preview" style="min-width: 48px; min-height: 48px;">${imgPreview ? `<img src="${imgPreview}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">` : ''}</span>
             </div>
