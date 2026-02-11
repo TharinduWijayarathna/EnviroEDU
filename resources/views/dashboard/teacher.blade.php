@@ -41,19 +41,19 @@
             </div>
 
             <div class="eco-dash-grid">
-                <div class="eco-card eco-dash-card">
-                    <h3>📚 My Classes</h3>
-                    <p style="color: #666;">Create and manage classes. Assign topics and track completion.</p>
-                    <button type="button" class="eco-btn" style="margin-top: 1rem;" disabled>Coming soon</button>
-                </div>
-                <div class="eco-card eco-dash-card">
-                    <h3>📋 Assignments</h3>
-                    <p style="color: #666;">Assign topics or activities to students or whole classes.</p>
-                    <button type="button" class="eco-btn" style="margin-top: 1rem;" disabled>Coming soon</button>
-                </div>
+                <a href="{{ route('teacher.quizzes.index') }}" class="eco-card eco-dash-card" style="text-decoration: none; color: inherit;">
+                    <h3>📝 Quizzes</h3>
+                    <p style="color: #666;">Create quizzes with multiple choice questions. Students can take them from their dashboard.</p>
+                    <span class="eco-btn" style="margin-top: 1rem; display: inline-block;">Manage Quizzes</span>
+                </a>
+                <a href="{{ route('teacher.mini-games.index') }}" class="eco-card eco-dash-card" style="text-decoration: none; color: inherit;">
+                    <h3>🎮 Mini Games</h3>
+                    <p style="color: #666;">Create drag-and-drop, multiple choice, or matching games from templates.</p>
+                    <span class="eco-btn" style="margin-top: 1rem; display: inline-block;">Manage Mini Games</span>
+                </a>
                 <div class="eco-card eco-dash-card">
                     <h3>📊 Progress</h3>
-                    <p style="color: #666;">View student progress, badges, and quiz scores.</p>
+                    <p style="color: #666;">View student progress and quiz scores.</p>
                     <button type="button" class="eco-btn" style="margin-top: 1rem;" disabled>Coming soon</button>
                 </div>
             </div>

@@ -1,0 +1,82 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\GameTemplate;
+use Illuminate\Database\Seeder;
+
+class GameTemplateSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $templates = [
+            [
+                'slug' => 'drag_drop',
+                'name' => 'Drag & Drop',
+                'description' => 'Drag items into the correct categories. Great for sorting (e.g. living/non-living, habitats).',
+                'config_schema' => [
+                    'categories' => [
+                        'type' => 'array',
+                        'label' => 'Categories',
+                        'item' => [
+                            'id' => ['type' => 'string', 'label' => 'Category ID (e.g. living)'],
+                            'label' => ['type' => 'string', 'label' => 'Display name'],
+                        ],
+                    ],
+                    'items' => [
+                        'type' => 'array',
+                        'label' => 'Items to sort',
+                        'item' => [
+                            'label' => ['type' => 'string', 'label' => 'Item text (e.g. 🌳 Tree)'],
+                            'category_id' => ['type' => 'string', 'label' => 'Correct category ID'],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'slug' => 'multiple_choice',
+                'name' => 'Multiple Choice',
+                'description' => 'Answer multiple choice questions. One correct answer per question.',
+                'config_schema' => [
+                    'questions' => [
+                        'type' => 'array',
+                        'label' => 'Questions',
+                        'item' => [
+                            'question_text' => ['type' => 'string', 'label' => 'Question'],
+                            'options' => [
+                                'type' => 'array',
+                                'label' => 'Options',
+                                'item' => [
+                                    'text' => ['type' => 'string', 'label' => 'Option text'],
+                                    'is_correct' => ['type' => 'boolean', 'label' => 'Correct?'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'slug' => 'matching',
+                'name' => 'Matching Pairs',
+                'description' => 'Match items from the left column to the right column.',
+                'config_schema' => [
+                    'pairs' => [
+                        'type' => 'array',
+                        'label' => 'Pairs',
+                        'item' => [
+                            'left' => ['type' => 'string', 'label' => 'Left item'],
+                            'right' => ['type' => 'string', 'label' => 'Right item (match)'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        foreach ($templates as $template) {
+            GameTemplate::query()->updateOrCreate(
+                ['slug' => $template['slug']],
+                $template
+            );
+        }
+    }
+}

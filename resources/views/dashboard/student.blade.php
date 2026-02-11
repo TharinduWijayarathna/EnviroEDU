@@ -60,6 +60,28 @@
             <aside class="eco-topics-panel">
                 <h2>Choose Your Topic!</h2>
                 <div id="ecoTopicsList"></div>
+                <h2 style="margin-top: 1.5rem;">Quizzes & Games</h2>
+                @if (isset($quizzes) && $quizzes->isNotEmpty())
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Quizzes</p>
+                    @foreach ($quizzes as $quiz)
+                        <a href="{{ route('play.quiz', $quiz) }}" class="eco-topic-card" style="display: block; text-decoration: none; color: inherit;" target="_blank">
+                            <div class="eco-topic-icon">📝</div>
+                            <div class="eco-topic-title">{{ $quiz->title }}</div>
+                        </a>
+                    @endforeach
+                @endif
+                @if (isset($miniGames) && $miniGames->isNotEmpty())
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem; margin-top: 1rem;">Mini Games</p>
+                    @foreach ($miniGames as $game)
+                        <a href="{{ route('play.mini-game', $game) }}" class="eco-topic-card" style="display: block; text-decoration: none; color: inherit;" target="_blank">
+                            <div class="eco-topic-icon">🎮</div>
+                            <div class="eco-topic-title">{{ $game->title }}</div>
+                        </a>
+                    @endforeach
+                @endif
+                @if ((!isset($quizzes) || $quizzes->isEmpty()) && (!isset($miniGames) || $miniGames->isEmpty()))
+                    <p style="font-size: 0.9rem; color: #666;">No quizzes or games yet. Your teacher will add some!</p>
+                @endif
             </aside>
             <main class="eco-game-area">
                 <h2 class="eco-game-header" id="ecoGameHeader">Select a topic to start!</h2>

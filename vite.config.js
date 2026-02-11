@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/css/eco.css',
                 'resources/js/eco-scene.js',
                 'resources/js/eco-student.js',
+                'resources/js/game-runner.js',
             ],
             refresh: true,
         }),

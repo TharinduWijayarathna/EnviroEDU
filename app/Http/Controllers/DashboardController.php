@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MiniGame;
+use App\Models\Quiz;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -17,7 +19,10 @@ class DashboardController extends Controller
 
     public function student(): View
     {
-        return view('dashboard.student');
+        $quizzes = Quiz::query()->where('is_published', true)->latest()->limit(20)->get();
+        $miniGames = MiniGame::query()->where('is_published', true)->with('gameTemplate')->latest()->limit(20)->get();
+
+        return view('dashboard.student', compact('quizzes', 'miniGames'));
     }
 
     public function teacher(): View
