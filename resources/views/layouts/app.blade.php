@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title', config('app.name')) - EnviroEdu</title>
+    @vite(['resources/css/app.css'])
+    @stack('styles')
+</head>
+<body class="eco-body">
+    @yield('canvas')
+    <div class="eco-ui-overlay">
+        @yield('content')
+    </div>
+    @vite(['resources/js/app.js'])
+    @stack('scripts')
+</body>
+</html>
