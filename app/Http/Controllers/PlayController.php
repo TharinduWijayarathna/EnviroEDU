@@ -16,7 +16,11 @@ class PlayController extends Controller
         }
         $quiz->load('questions.options');
 
-        return view('play.quiz', compact('quiz'));
+        return view('play.quiz', [
+            'quiz' => $quiz,
+            'studentPage' => 'play',
+            'studentLayoutTitle' => $quiz->title,
+        ]);
     }
 
     public function miniGame(MiniGame $miniGame): View
@@ -27,6 +31,10 @@ class PlayController extends Controller
         }
         $miniGame->load('gameTemplate');
 
-        return view('play.mini-game', compact('miniGame'));
+        return view('play.mini-game', [
+            'miniGame' => $miniGame,
+            'studentPage' => 'play',
+            'studentLayoutTitle' => $miniGame->title,
+        ]);
     }
 }

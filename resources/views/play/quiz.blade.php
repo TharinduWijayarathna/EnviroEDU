@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.student')
 
 @section('title', $quiz->title)
 
 @push('styles')
     @vite(['resources/css/eco.css'])
     <style>
-        .play-container { max-width: 700px; margin: 0 auto; padding: 2rem; }
+        .play-container { max-width: 700px; margin: 0 auto; width: 100%; }
         .play-question { background: #fff; border: 2px solid var(--eco-primary); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
         .play-option { background: #fff; border: 2px solid var(--eco-secondary); border-radius: 12px; padding: 0.8rem 1rem; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s; }
         .play-option:hover { background: var(--eco-secondary); }
@@ -15,37 +15,27 @@
     </style>
 @endpush
 
-@section('content')
-    <div style="min-height: 100vh; background: #f5f7f6;">
-        <header class="eco-header" style="background: #fff; border-bottom: 2px solid var(--eco-primary);">
-            <a href="{{ auth()->check() ? route('dashboard.student') : route('home') }}" class="eco-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 48px; width: auto; object-fit: contain;">
-            </a>
-            <nav class="eco-dashboard-nav">
-                <span style="font-weight: 600;">{{ $quiz->title }}</span>
-            </nav>
-        </header>
-        <div class="play-container">
-            <div id="quiz-root">
-                <div id="quiz-questions">
-                    @foreach ($quiz->questions as $i => $q)
-                        <div class="play-question" data-question-index="{{ $i }}" style="display: {{ $i === 0 ? 'block' : 'none' }};">
-                            <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;">{{ $i + 1 }}. {{ $q->question_text }}</p>
-                            <div class="options">
-                                @foreach ($q->options as $oi => $opt)
-                                    <div class="play-option" data-question="{{ $i }}" data-option-index="{{ $oi }}" data-correct="{{ $opt->is_correct ? '1' : '0' }}">
-                                        {{ $opt->option_text }}
-                                    </div>
-                                @endforeach
-                            </div>
+@section('student-main')
+    <div class="play-container">
+        <div id="quiz-root">
+            <div id="quiz-questions">
+                @foreach ($quiz->questions as $i => $q)
+                    <div class="play-question" data-question-index="{{ $i }}" style="display: {{ $i === 0 ? 'block' : 'none' }};">
+                        <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;">{{ $i + 1 }}. {{ $q->question_text }}</p>
+                        <div class="options">
+                            @foreach ($q->options as $oi => $opt)
+                                <div class="play-option" data-question="{{ $i }}" data-option-index="{{ $oi }}" data-correct="{{ $opt->is_correct ? '1' : '0' }}">
+                                    {{ $opt->option_text }}
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-                <div id="quiz-result" style="display: none;" class="play-result play-question">
-                    <h2 style="font-family: 'Bubblegum Sans', cursive; color: var(--eco-primary); margin-bottom: 1rem;">Quiz complete!</h2>
-                    <p style="font-size: 1.5rem;">Score: <strong id="quiz-score">0</strong> / {{ $quiz->questions->count() }}</p>
-                    <a href="{{ auth()->check() ? route('dashboard.student') : route('home') }}" class="eco-btn" style="margin-top: 1rem;">Back</a>
-                </div>
+                    </div>
+                @endforeach
+            </div>
+            <div id="quiz-result" style="display: none;" class="play-result play-question">
+                <h2 style="font-family: 'Bubblegum Sans', cursive; color: var(--eco-primary); margin-bottom: 1rem;">Quiz complete!</h2>
+                <p style="font-size: 1.5rem;">Score: <strong id="quiz-score">0</strong> / {{ $quiz->questions->count() }}</p>
+                <a href="{{ route('dashboard.student') }}" class="eco-btn" style="margin-top: 1rem;">Back to Dashboard</a>
             </div>
         </div>
     </div>
