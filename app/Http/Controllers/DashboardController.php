@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -25,7 +26,9 @@ class DashboardController extends Controller
 
     public function teacher(): View
     {
-        return view('dashboard.teacher');
+        $topicCount = Topic::query()->where('user_id', auth()->id())->count();
+
+        return view('dashboard.teacher', compact('topicCount'));
     }
 
     public function parent(): View

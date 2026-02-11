@@ -37,10 +37,15 @@
             <div class="eco-dash-stats" style="margin-bottom: 2rem;">
                 <div class="eco-stat"><span>0</span> Classes</div>
                 <div class="eco-stat"><span>0</span> Students</div>
-                <div class="eco-stat"><span>0</span> Topics Assigned</div>
+                <div class="eco-stat"><span>{{ $topicCount ?? 0 }}</span> My Topics</div>
             </div>
 
             <div class="eco-dash-grid">
+                <a href="{{ route('teacher.topics.index') }}" class="eco-card eco-dash-card" style="text-decoration: none; color: inherit;">
+                    <h3>📚 Topics</h3>
+                    <p style="color: #666;">Organize content by topic. Attach quizzes and mini games to topics so students see them in their dashboard.</p>
+                    <span class="eco-btn" style="margin-top: 1rem; display: inline-block;">Manage Topics</span>
+                </a>
                 <a href="{{ route('teacher.quizzes.index') }}" class="eco-card eco-dash-card" style="text-decoration: none; color: inherit;">
                     <h3>📝 Quizzes</h3>
                     <p style="color: #666;">Create quizzes with multiple choice questions. Students can take them from their dashboard.</p>
