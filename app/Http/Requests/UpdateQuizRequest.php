@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateQuizRequest extends FormRequest
 {
@@ -20,7 +21,7 @@ class UpdateQuizRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'topic_id' => ['nullable', 'integer', 'exists:topics,id'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'grade_level' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'grade_level' => ['nullable', 'integer', Rule::in(config('app.grade_levels', [4, 5]))],
             'is_published' => ['boolean'],
             'questions' => ['required', 'array', 'min:1'],
             'questions.*.id' => ['nullable', 'integer', 'exists:quiz_questions,id'],

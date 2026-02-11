@@ -39,9 +39,9 @@
                 <form method="GET" action="{{ route('dashboard.student') }}" id="ecoGradeForm" style="display: inline;">
                     <select class="eco-grade-select" id="ecoGradeSelector" name="grade">
                         <option value="">All grades</option>
-                        @for ($g = 1; $g <= 12; $g++)
+                        @foreach (config('app.grade_levels', [4, 5]) as $g)
                             <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>Grade {{ $g }}</option>
-                        @endfor
+                        @endforeach
                     </select>
                 </form>
                 @auth

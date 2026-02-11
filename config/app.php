@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'grade_levels' => [4, 5],
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

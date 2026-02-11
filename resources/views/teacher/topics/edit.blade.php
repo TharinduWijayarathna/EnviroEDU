@@ -21,9 +21,9 @@
             <label for="grade_level" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Grade level (optional)</label>
             <select id="grade_level" name="grade_level" class="eco-input">
                 <option value="">Any</option>
-                @for ($g = 1; $g <= 12; $g++)
+                @foreach (config('app.grade_levels', [4, 5]) as $g)
                     <option value="{{ $g }}" {{ old('grade_level', $topic->grade_level) == $g ? 'selected' : '' }}>Grade {{ $g }}</option>
-                @endfor
+                @endforeach
             </select>
         </div>
         <div style="margin-bottom: 1rem;">

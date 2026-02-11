@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTopicRequest extends FormRequest
 {
@@ -19,7 +20,7 @@ class StoreTopicRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
-            'grade_level' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'grade_level' => ['nullable', 'integer', Rule::in(config('app.grade_levels', [4, 5]))],
             'video_url' => ['nullable', 'string', 'url', 'max:500'],
             'order' => ['nullable', 'integer', 'min:0'],
             'is_published' => ['boolean'],

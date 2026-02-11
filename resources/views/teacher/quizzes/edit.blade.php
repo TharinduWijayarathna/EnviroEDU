@@ -28,7 +28,12 @@
         </div>
         <div style="margin-bottom: 1rem;">
             <label for="grade_level" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Grade level (optional)</label>
-            <input id="grade_level" type="number" name="grade_level" class="eco-input" value="{{ old('grade_level', $quiz->grade_level) }}" min="1" max="12">
+            <select id="grade_level" name="grade_level" class="eco-input">
+                <option value="">Any</option>
+                @foreach (config('app.grade_levels', [4, 5]) as $g)
+                    <option value="{{ $g }}" {{ old('grade_level', $quiz->grade_level) == $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                @endforeach
+            </select>
         </div>
         <div style="margin-bottom: 1.5rem;">
             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
