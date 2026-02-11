@@ -6,7 +6,22 @@
   const mount = document.getElementById('game-mount');
   if (!mount || !window.EnviroEduGame) return;
 
-  const { template, config } = window.EnviroEduGame;
+  const { template, config, storageUrl = '' } = window.EnviroEduGame;
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+  }
+
+  function escapeAttr(text) {
+    return String(text || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function imgUrl(path) {
+    if (!path) return '';
+    return storageUrl ? (storageUrl + '/' + path) : path;
+  }
 
   function renderDragDrop() {
     const categories = config.categories || [];
@@ -16,12 +31,19 @@
     let html = '<p style="margin-bottom: 1rem; font-weight: 600;">Drag each item to the correct category.</p>';
     html += '<div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">';
     categories.forEach((cat) => {
-      html += `<div class="game-drop-zone" data-category="${cat.id}"><strong>${cat.label}</strong><div class="dropped"></div></div>`;
+      const catImg = cat.image
+        ? `<img src="${imgUrl(cat.image)}" alt="${escapeAttr(cat.label)}" style="max-width: 100px; max-height: 100px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto 0.5rem;">`
+        : '';
+      html += `<div class="game-drop-zone" data-category="${cat.id}">${catImg}<strong>${escapeHtml(cat.label)}</strong><div class="dropped"></div></div>`;
     });
     html += '</div>';
-    html += '<div class="draggable-pool" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
+    html += '<div class="draggable-pool" style="display: flex; flex-wrap: wrap; gap: 0.75rem;">';
     items.forEach((item, i) => {
-      html += `<div class="game-draggable" draggable="true" data-category="${item.category_id}" data-index="${i}">${item.label}</div>`;
+      const itemImg = item.image
+        ? `<img src="${imgUrl(item.image)}" alt="${escapeAttr(item.label)}" style="max-width: 80px; max-height: 80px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto 0.35rem;">`
+        : '';
+      const content = itemImg ? (itemImg + (item.label ? `<span style="font-size: 0.9rem;">${escapeHtml(item.label)}</span>` : '')) : escapeHtml(item.label);
+      html += `<div class="game-draggable" draggable="true" data-category="${item.category_id}" data-index="${i}">${content}</div>`;
     });
     html += '</div>';
     mount.innerHTML = html;

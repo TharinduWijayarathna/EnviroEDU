@@ -5,7 +5,7 @@
 @section('teacher')
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 1rem;">Create Mini Game</h1>
 
-    <form method="POST" action="{{ route('teacher.mini-games.store') }}" id="mini-game-form" style="max-width: 700px;">
+    <form method="POST" action="{{ route('teacher.mini-games.store') }}" id="mini-game-form" style="max-width: 700px;" enctype="multipart/form-data">
         @csrf
         <div style="margin-bottom: 1rem;">
             <label for="game_template_id" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Game type</label>
@@ -20,6 +20,15 @@
             <label for="title" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Title</label>
             <input id="title" type="text" name="title" class="eco-input" value="{{ old('title') }}" required>
             @error('title')<span style="color: var(--eco-accent); font-size: 0.9rem;">{{ $message }}</span>@enderror
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label for="topic_id" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Topic (optional)</label>
+            <select id="topic_id" name="topic_id" class="eco-input">
+                <option value="">None – standalone game</option>
+                @foreach ($topics ?? [] as $t)
+                    <option value="{{ $t->id }}" {{ old('topic_id') == $t->id ? 'selected' : '' }}>{{ $t->title }}</option>
+                @endforeach
+            </select>
         </div>
         <div style="margin-bottom: 1rem;">
             <label for="description" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Description (optional)</label>
@@ -37,6 +46,7 @@
 
         {{-- Config: Drag & Drop --}}
         <div id="config-drag_drop" class="config-panel eco-card" style="padding: 1.25rem; margin-bottom: 1rem; display: none;">
+            <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">You can add an optional image to each category and item. Images will be shown in the game.</p>
             <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Categories (students drag items into these)</h3>
             <div id="categories-list"></div>
             <button type="button" id="add-category" class="eco-btn" style="margin-top: 0.5rem; background: #2C3E50; font-size: 0.9rem;">+ Add category</button>
@@ -96,26 +106,44 @@
     const categoriesList = document.getElementById('categories-list');
     const itemsList = document.getElementById('items-list');
 
-    function addCategory(id, label) {
+    const storageUrl = '{{ asset("storage") }}';
+
+    function addCategory(id, label, imagePath) {
         const i = id ?? catIndex++;
         const block = document.createElement('div');
         block.className = 'eco-card';
         block.style.padding = '0.75rem';
         block.style.marginBottom = '0.5rem';
+        const imgPreview = imagePath ? (storageUrl + '/' + imagePath) : '';
         block.innerHTML = `
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
                 <input type="text" name="config_categories[${i}][id]" placeholder="ID (e.g. living)" value="${(id !== undefined && label !== undefined) ? (id || '') : ''}" required style="width: 120px;" class="eco-input cat-id">
                 <input type="text" name="config_categories[${i}][label]" placeholder="Display name" value="${(id !== undefined && label !== undefined) ? (label || '') : ''}" required class="eco-input" style="flex:1;">
                 <button type="button" class="remove-cat eco-logout-btn" style="padding: 0.25rem 0.5rem;">Remove</button>
             </div>
+            <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <label style="font-size: 0.9rem;">Image (optional):</label>
+                <input type="file" accept="image/*" class="cat-image-input" style="max-width: 180px;">
+                <input type="hidden" name="config_categories[${i}][image_path]" class="cat-image-path" value="${imagePath || ''}">
+                <span class="cat-image-preview" style="min-width: 48px; min-height: 48px;">${imgPreview ? `<img src="${imgPreview}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">` : ''}</span>
+            </div>
         `;
         categoriesList.appendChild(block);
         block.querySelector('.remove-cat').onclick = () => block.remove();
+        const fileInput = block.querySelector('.cat-image-input');
+        const pathInput = block.querySelector('.cat-image-path');
+        const previewEl = block.querySelector('.cat-image-preview');
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                previewEl.innerHTML = '<img src="' + URL.createObjectURL(this.files[0]) + '" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">';
+                pathInput.value = '';
+            }
+        });
         return block;
     }
     document.getElementById('add-category').onclick = () => addCategory();
 
-    function addItem(label, categoryIndex) {
+    function addItem(label, categoryIndex, imagePath) {
         const i = itemIndex++;
         const catRows = categoriesList.querySelectorAll('.eco-card');
         let opts = Array.from(catRows).map((row, idx) => {
@@ -125,6 +153,7 @@
             return `<option value="${idx}"${sel}>${(labelIn && labelIn.value) ? labelIn.value : ('Category ' + (idx+1))}</option>`;
         }).join('');
         if (!opts) opts = '<option value="">Add categories first</option>';
+        const imgPreview = imagePath ? (storageUrl + '/' + imagePath) : '';
         const block = document.createElement('div');
         block.className = 'eco-card';
         block.style.padding = '0.75rem';
@@ -132,12 +161,27 @@
         block.innerHTML = `
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
                 <input type="text" name="config_items[${i}][label]" placeholder="Item (e.g. 🌳 Tree)" value="${label || ''}" required class="eco-input" style="flex:1;">
-                <select name="config_items[${i}][category_id]" required class="eco-input" style="width: 160px;">${opts}</select>
+                <select name="config_items[${i}][category_id]" required class="eco-input config-item-cat-select" style="width: 160px;">${opts}</select>
                 <button type="button" class="remove-item eco-logout-btn" style="padding: 0.25rem 0.5rem;">Remove</button>
+            </div>
+            <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <label style="font-size: 0.9rem;">Image (optional):</label>
+                <input type="file" accept="image/*" class="item-image-input" style="max-width: 180px;">
+                <input type="hidden" name="config_items[${i}][image_path]" class="item-image-path" value="${imagePath || ''}">
+                <span class="item-image-preview" style="min-width: 48px; min-height: 48px;">${imgPreview ? `<img src="${imgPreview}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">` : ''}</span>
             </div>
         `;
         itemsList.appendChild(block);
         block.querySelector('.remove-item').onclick = () => block.remove();
+        const fileInput = block.querySelector('.item-image-input');
+        const pathInput = block.querySelector('.item-image-path');
+        const previewEl = block.querySelector('.item-image-preview');
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                previewEl.innerHTML = '<img src="' + URL.createObjectURL(this.files[0]) + '" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">';
+                pathInput.value = '';
+            }
+        });
         return block;
     }
     document.getElementById('add-item').onclick = () => addItem();

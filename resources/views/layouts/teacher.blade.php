@@ -12,6 +12,7 @@
             </a>
             <nav class="eco-dashboard-nav">
                 <a href="{{ route('dashboard.teacher') }}">Dashboard</a>
+                <a href="{{ route('teacher.topics.index') }}">Topics</a>
                 <a href="{{ route('teacher.quizzes.index') }}">Quizzes</a>
                 <a href="{{ route('teacher.mini-games.index') }}">Mini Games</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>

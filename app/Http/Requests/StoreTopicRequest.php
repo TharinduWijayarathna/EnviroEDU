@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMiniGameRequest extends FormRequest
+class StoreTopicRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,11 +18,11 @@ class UpdateMiniGameRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'topic_id' => ['nullable', 'integer', 'exists:topics,id'],
-            'description' => ['nullable', 'string', 'max:1000'],
+            'description' => ['nullable', 'string', 'max:2000'],
             'grade_level' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'video_url' => ['nullable', 'string', 'url', 'max:500'],
+            'order' => ['nullable', 'integer', 'min:0'],
             'is_published' => ['boolean'],
-            'config' => ['required'],
         ];
     }
 }

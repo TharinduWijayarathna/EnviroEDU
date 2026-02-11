@@ -5,7 +5,7 @@
 @section('teacher')
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 1rem;">Edit Mini Game</h1>
 
-    <form method="POST" action="{{ route('teacher.mini-games.update', $miniGame) }}" id="mini-game-form" style="max-width: 700px;">
+    <form method="POST" action="{{ route('teacher.mini-games.update', $miniGame) }}" id="mini-game-form" style="max-width: 700px;" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div style="margin-bottom: 1rem;">
@@ -14,6 +14,15 @@
         <div style="margin-bottom: 1rem;">
             <label for="title" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Title</label>
             <input id="title" type="text" name="title" class="eco-input" value="{{ old('title', $miniGame->title) }}" required>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label for="topic_id" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Topic (optional)</label>
+            <select id="topic_id" name="topic_id" class="eco-input">
+                <option value="">None – standalone game</option>
+                @foreach ($topics ?? [] as $t)
+                    <option value="{{ $t->id }}" {{ old('topic_id', $miniGame->topic_id) == $t->id ? 'selected' : '' }}>{{ $t->title }}</option>
+                @endforeach
+            </select>
         </div>
         <div style="margin-bottom: 1rem;">
             <label for="description" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Description (optional)</label>
@@ -31,14 +40,22 @@
 
         @if ($miniGame->gameTemplate->slug === 'drag_drop')
             <div id="config-drag_drop" class="config-panel eco-card" style="padding: 1.25rem; margin-bottom: 1rem;">
+                <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;">Optional image per category/item. Images are shown in the game.</p>
                 <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Categories</h3>
                 <div id="categories-list">
                     @foreach (old('config_categories', $miniGame->config['categories'] ?? []) as $i => $cat)
+                        @php $catImage = $cat['image'] ?? ''; @endphp
                         <div class="eco-card cat-row" style="padding: 0.75rem; margin-bottom: 0.5rem;">
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
                                 <input type="text" name="config_categories[{{ $i }}][id]" placeholder="ID (e.g. living)" value="{{ $cat['id'] ?? '' }}" required style="width: 120px;" class="eco-input cat-id">
                                 <input type="text" name="config_categories[{{ $i }}][label]" placeholder="Display name" value="{{ $cat['label'] ?? '' }}" required class="eco-input" style="flex:1;">
                                 <button type="button" class="remove-cat eco-logout-btn" style="padding: 0.25rem 0.5rem;">Remove</button>
+                            </div>
+                            <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <label style="font-size: 0.9rem;">Image (optional):</label>
+                                <input type="file" accept="image/*" class="cat-image-input" style="max-width: 180px;">
+                                <input type="hidden" name="config_categories[{{ $i }}][image_path]" class="cat-image-path" value="{{ $catImage }}">
+                                <span class="cat-image-preview" style="min-width: 48px; min-height: 48px;">@if($catImage)<img src="{{ asset('storage/'.$catImage) }}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">@endif</span>
                             </div>
                         </div>
                     @endforeach
@@ -48,6 +65,7 @@
                 <h3 style="font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 1rem;">Items to sort</h3>
                 <div id="items-list">
                     @foreach (old('config_items', $miniGame->config['items'] ?? []) as $i => $item)
+                        @php $itemImage = $item['image'] ?? ''; @endphp
                         <div class="eco-card item-row" style="padding: 0.75rem; margin-bottom: 0.5rem;">
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
                                 <input type="text" name="config_items[{{ $i }}][label]" placeholder="Item (e.g. 🌳 Tree)" value="{{ $item['label'] ?? '' }}" required class="eco-input" style="flex:1;">
@@ -57,6 +75,12 @@
                                     @endforeach
                                 </select>
                                 <button type="button" class="remove-item eco-logout-btn" style="padding: 0.25rem 0.5rem;">Remove</button>
+                            </div>
+                            <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <label style="font-size: 0.9rem;">Image (optional):</label>
+                                <input type="file" accept="image/*" class="item-image-input" style="max-width: 180px;">
+                                <input type="hidden" name="config_items[{{ $i }}][image_path]" class="item-image-path" value="{{ $itemImage }}">
+                                <span class="item-image-preview" style="min-width: 48px; min-height: 48px;">@if($itemImage)<img src="{{ asset('storage/'.$itemImage) }}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">@endif</span>
                             </div>
                         </div>
                     @endforeach
@@ -121,10 +145,38 @@
         @push('scripts')
         <script>
         (function() {
+            const storageUrl = '{{ asset("storage") }}';
             const categoriesList = document.getElementById('categories-list');
             const itemsList = document.getElementById('items-list');
             let catIndex = {{ count($miniGame->config['categories'] ?? []) }};
             let itemIndex = {{ count($miniGame->config['items'] ?? []) }};
+
+            function wireCatImage(block) {
+                const fileInput = block.querySelector('.cat-image-input');
+                const pathInput = block.querySelector('.cat-image-path');
+                const previewEl = block.querySelector('.cat-image-preview');
+                if (!fileInput || !previewEl) return;
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        previewEl.innerHTML = '<img src="' + URL.createObjectURL(this.files[0]) + '" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">';
+                        if (pathInput) pathInput.value = '';
+                    }
+                });
+            }
+            function wireItemImage(block) {
+                const fileInput = block.querySelector('.item-image-input');
+                const pathInput = block.querySelector('.item-image-path');
+                const previewEl = block.querySelector('.item-image-preview');
+                if (!fileInput || !previewEl) return;
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        previewEl.innerHTML = '<img src="' + URL.createObjectURL(this.files[0]) + '" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain;">';
+                        if (pathInput) pathInput.value = '';
+                    }
+                });
+            }
+            categoriesList.querySelectorAll('.cat-row').forEach(wireCatImage);
+            itemsList.querySelectorAll('.item-row').forEach(wireItemImage);
 
             document.getElementById('add-category').onclick = function() {
                 const block = document.createElement('div');
@@ -135,9 +187,16 @@
                     <input type="text" name="config_categories[${catIndex}][id]" placeholder="ID" required style="width: 120px;" class="eco-input cat-id">
                     <input type="text" name="config_categories[${catIndex}][label]" placeholder="Display name" required class="eco-input" style="flex:1;">
                     <button type="button" class="remove-cat eco-logout-btn" style="padding: 0.25rem 0.5rem;">Remove</button>
+                </div>
+                <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <label style="font-size: 0.9rem;">Image (optional):</label>
+                    <input type="file" accept="image/*" class="cat-image-input" style="max-width: 180px;">
+                    <input type="hidden" name="config_categories[${catIndex}][image_path]" class="cat-image-path" value="">
+                    <span class="cat-image-preview" style="min-width: 48px; min-height: 48px;"></span>
                 </div>`;
                 categoriesList.appendChild(block);
                 block.querySelector('.remove-cat').onclick = () => block.remove();
+                wireCatImage(block);
                 catIndex++;
             };
 
@@ -170,9 +229,16 @@
                     <input type="text" name="config_items[${itemIndex}][label]" placeholder="Item" required class="eco-input" style="flex:1;">
                     <select name="config_items[${itemIndex}][category_id]" required class="eco-input config-item-cat-select" style="width: 160px;">${opts}</select>
                     <button type="button" class="remove-item eco-logout-btn" style="padding: 0.25rem 0.5rem;">Remove</button>
+                </div>
+                <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <label style="font-size: 0.9rem;">Image (optional):</label>
+                    <input type="file" accept="image/*" class="item-image-input" style="max-width: 180px;">
+                    <input type="hidden" name="config_items[${itemIndex}][image_path]" class="item-image-path" value="">
+                    <span class="item-image-preview" style="min-width: 48px; min-height: 48px;"></span>
                 </div>`;
                 itemsList.appendChild(block);
                 block.querySelector('.remove-item').onclick = () => block.remove();
+                wireItemImage(block);
                 itemIndex++;
             };
 

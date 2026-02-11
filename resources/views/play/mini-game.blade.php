@@ -39,6 +39,7 @@
         window.EnviroEduGame = {
             template: @json($miniGame->gameTemplate->slug),
             config: @json($miniGame->config),
+            storageUrl: @json(asset('storage')),
         };
     </script>
     @vite(['resources/js/game-runner.js'])

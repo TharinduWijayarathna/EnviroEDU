@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\Teacher\MiniGameController;
 use App\Http\Controllers\Teacher\QuizController;
+use App\Http\Controllers\Teacher\TopicController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('home'))->name('home');
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->name('dashboard.parent')->middleware('role:parent');
 
     Route::middleware('role:teacher')->prefix('teacher')->name('teacher.')->group(function (): void {
+        Route::resource('topics', TopicController::class)->parameters(['topics' => 'topic']);
         Route::resource('quizzes', QuizController::class);
         Route::resource('mini-games', MiniGameController::class)->parameters(['mini-games' => 'miniGame']);
     });

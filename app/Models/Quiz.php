@@ -14,6 +14,7 @@ class Quiz extends Model
 
     protected $fillable = [
         'user_id',
+        'topic_id',
         'title',
         'description',
         'grade_level',
@@ -30,6 +31,11 @@ class Quiz extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function topic(): BelongsTo
+    {
+        return $this->belongsTo(Topic::class);
     }
 
     public function questions(): HasMany

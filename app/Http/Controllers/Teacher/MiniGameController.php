@@ -7,7 +7,9 @@ use App\Http\Requests\StoreMiniGameRequest;
 use App\Http\Requests\UpdateMiniGameRequest;
 use App\Models\GameTemplate;
 use App\Models\MiniGame;
+use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class MiniGameController extends Controller
@@ -26,8 +28,9 @@ class MiniGameController extends Controller
     public function create(): View
     {
         $templates = GameTemplate::query()->orderBy('name')->get();
+        $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
 
-        return view('teacher.mini-games.create', compact('templates'));
+        return view('teacher.mini-games.create', compact('templates', 'topics'));
     }
 
     public function store(StoreMiniGameRequest $request): RedirectResponse
@@ -37,6 +40,7 @@ class MiniGameController extends Controller
 
         MiniGame::query()->create([
             'user_id' => auth()->id(),
+            'topic_id' => $request->input('topic_id') ?: null,
             'game_template_id' => $request->input('game_template_id'),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -64,8 +68,9 @@ class MiniGameController extends Controller
             abort(403);
         }
         $miniGame->load('gameTemplate');
+        $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
 
-        return view('teacher.mini-games.edit', compact('miniGame'));
+        return view('teacher.mini-games.edit', compact('miniGame', 'topics'));
     }
 
     public function update(UpdateMiniGameRequest $request, MiniGame $miniGame): RedirectResponse
@@ -77,6 +82,7 @@ class MiniGameController extends Controller
         $config = $this->buildConfigFromRequest($request, $miniGame->gameTemplate->slug);
 
         $miniGame->update([
+            'topic_id' => $request->input('topic_id') ?: null,
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'config' => $config,
@@ -115,13 +121,19 @@ class MiniGameController extends Controller
 
         if ($templateSlug === 'drag_drop') {
             $categories = [];
-            foreach ($request->input('config_categories', []) as $c) {
-                if (! empty($c['id'] ?? '') && ! empty($c['label'] ?? '')) {
-                    $categories[] = ['id' => $c['id'], 'label' => $c['label']];
+            foreach ($request->input('config_categories', []) as $i => $c) {
+                if (empty($c['id'] ?? '') || empty($c['label'] ?? '')) {
+                    continue;
                 }
+                $imagePath = $this->resolveImagePath($request, 'config_categories', $i);
+                $cat = ['id' => $c['id'], 'label' => $c['label']];
+                if ($imagePath !== null) {
+                    $cat['image'] = $imagePath;
+                }
+                $categories[] = $cat;
             }
             $items = [];
-            foreach ($request->input('config_items', []) as $item) {
+            foreach ($request->input('config_items', []) as $i => $item) {
                 if (empty($item['label'] ?? '')) {
                     continue;
                 }
@@ -129,9 +141,15 @@ class MiniGameController extends Controller
                 if (is_numeric($catId) && isset($categories[(int) $catId])) {
                     $catId = $categories[(int) $catId]['id'];
                 }
-                if ($catId !== '') {
-                    $items[] = ['label' => $item['label'], 'category_id' => $catId];
+                if ($catId === '') {
+                    continue;
                 }
+                $imagePath = $this->resolveImagePath($request, 'config_items', $i);
+                $entry = ['label' => $item['label'], 'category_id' => $catId];
+                if ($imagePath !== null) {
+                    $entry['image'] = $imagePath;
+                }
+                $items[] = $entry;
             }
 
             return ['categories' => $categories, 'items' => $items];
@@ -170,5 +188,20 @@ class MiniGameController extends Controller
         }
 
         return [];
+    }
+
+    private function resolveImagePath(Request $request, string $prefix, int $index): ?string
+    {
+        $path = $request->input("{$prefix}.{$index}.image_path");
+        if (is_string($path) && str_starts_with($path, 'game-images/')) {
+            return $path;
+        }
+
+        $file = $request->file("{$prefix}.{$index}.image");
+        if ($file && $file->isValid()) {
+            return $file->store('game-images', 'public');
+        }
+
+        return null;
     }
 }

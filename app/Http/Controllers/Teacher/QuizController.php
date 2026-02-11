@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
+use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -25,13 +26,16 @@ class QuizController extends Controller
 
     public function create(): View
     {
-        return view('teacher.quizzes.create');
+        $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
+
+        return view('teacher.quizzes.create', compact('topics'));
     }
 
     public function store(StoreQuizRequest $request): RedirectResponse
     {
         $quiz = Quiz::query()->create([
             'user_id' => auth()->id(),
+            'topic_id' => $request->input('topic_id') ?: null,
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'grade_level' => $request->input('grade_level'),
@@ -71,8 +75,9 @@ class QuizController extends Controller
             abort(403);
         }
         $quiz->load('questions.options');
+        $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
 
-        return view('teacher.quizzes.edit', compact('quiz'));
+        return view('teacher.quizzes.edit', compact('quiz', 'topics'));
     }
 
     public function update(UpdateQuizRequest $request, Quiz $quiz): RedirectResponse
@@ -82,6 +87,7 @@ class QuizController extends Controller
         }
 
         $quiz->update([
+            'topic_id' => $request->input('topic_id') ?: null,
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'grade_level' => $request->input('grade_level'),

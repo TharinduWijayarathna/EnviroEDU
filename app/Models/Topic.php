@@ -2,30 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class MiniGame extends Model
+class Topic extends Model
 {
-    /** @use HasFactory<\Database\Factories\MiniGameFactory> */
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
-        'topic_id',
-        'game_template_id',
         'title',
         'description',
-        'config',
         'grade_level',
+        'video_url',
+        'order',
         'is_published',
     ];
 
     protected function casts(): array
     {
         return [
-            'config' => 'array',
+            'grade_level' => 'integer',
+            'order' => 'integer',
             'is_published' => 'boolean',
         ];
     }
@@ -35,13 +32,13 @@ class MiniGame extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function topic(): BelongsTo
+    public function quizzes(): HasMany
     {
-        return $this->belongsTo(Topic::class);
+        return $this->hasMany(Quiz::class)->orderBy('title');
     }
 
-    public function gameTemplate(): BelongsTo
+    public function miniGames(): HasMany
     {
-        return $this->belongsTo(GameTemplate::class);
+        return $this->hasMany(MiniGame::class)->with('gameTemplate')->orderBy('title');
     }
 }

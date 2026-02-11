@@ -13,6 +13,15 @@
             @error('title')<span style="color: var(--eco-accent); font-size: 0.9rem;">{{ $message }}</span>@enderror
         </div>
         <div style="margin-bottom: 1rem;">
+            <label for="topic_id" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Topic (optional)</label>
+            <select id="topic_id" name="topic_id" class="eco-input">
+                <option value="">None – standalone quiz</option>
+                @foreach ($topics ?? [] as $t)
+                    <option value="{{ $t->id }}" {{ old('topic_id') == $t->id ? 'selected' : '' }}>{{ $t->title }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div style="margin-bottom: 1rem;">
             <label for="description" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Description (optional)</label>
             <textarea id="description" name="description" class="eco-input" rows="2">{{ old('description') }}</textarea>
         </div>
