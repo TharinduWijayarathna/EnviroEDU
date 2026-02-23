@@ -608,11 +608,56 @@
     border: 1px solid #e0e0e0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
 }
 
 .eco-edubuddy-suggestion:hover {
     background: #e3f2fd;
     border-color: #4dd0e1;
+}
+
+.eco-edubuddy-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    min-height: 0;
+}
+
+.eco-edubuddy-msg {
+    max-width: 90%;
+    padding: 0.6rem 0.9rem;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.eco-edubuddy-msg p {
+    margin: 0;
+}
+
+.eco-edubuddy-msg-user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #80deea 0%, #4dd0e1 100%);
+    color: #01579b;
+}
+
+.eco-edubuddy-msg-bot {
+    align-self: flex-start;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    color: #333;
+}
+
+.eco-edubuddy-typing {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 0.5rem;
+    font-style: italic;
 }
 
 .eco-edubuddy-footer {

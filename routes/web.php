@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EduBuddyController;
 use App\Http\Controllers\Parent\ChildController as ParentChildController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ProgressController;
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/progress/game', [ProgressController::class, 'recordMiniGame'])->name('progress.game');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->name('dashboard.student')->middleware('role:student');
+    Route::post('/edubuddy/chat', [EduBuddyController::class, 'chat'])->name('edubuddy.chat')->middleware('role:student');
     Route::get('/dashboard/teacher', [DashboardController::class, 'teacher'])->name('dashboard.teacher')->middleware('role:teacher');
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->name('dashboard.parent')->middleware('role:parent');
 

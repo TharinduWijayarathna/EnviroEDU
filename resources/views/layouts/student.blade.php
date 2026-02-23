@@ -118,16 +118,18 @@
                 <button type="button" class="eco-edubuddy-close" id="ecoEdubuddyClose" aria-label="Close chat">×</button>
             </div>
             <div class="eco-edubuddy-body">
-                <p class="eco-edubuddy-greeting">Hi {{ auth()->user()->name ?? 'there' }}! How can I help you today?</p>
-                <div class="eco-edubuddy-suggestions">
-                    <a href="{{ route('dashboard.student') }}#quizzes" class="eco-edubuddy-suggestion">What is living vs non-living? 😕 →</a>
-                    <a href="{{ route('dashboard.student') }}#quizzes" class="eco-edubuddy-suggestion">Explain the water cycle 🌧️ →</a>
-                    <a href="{{ route('dashboard.student') }}#quizzes" class="eco-edubuddy-suggestion">I need a hint for my quiz! 📝 →</a>
+                <p class="eco-edubuddy-greeting" id="ecoEdubuddyGreeting">Hi {{ auth()->user()->name ?? 'there' }}! How can I help you today?</p>
+                <div class="eco-edubuddy-suggestions" id="ecoEdubuddySuggestions">
+                    <button type="button" class="eco-edubuddy-suggestion" data-message="What is living vs non-living? 😕">What is living vs non-living? 😕 →</button>
+                    <button type="button" class="eco-edubuddy-suggestion" data-message="Explain the water cycle 🌧️">Explain the water cycle 🌧️ →</button>
+                    <button type="button" class="eco-edubuddy-suggestion" data-message="I need a hint for my quiz! 📝">I need a hint for my quiz! 📝 →</button>
                 </div>
+                <div class="eco-edubuddy-messages" id="ecoEdubuddyMessages"></div>
+                <div class="eco-edubuddy-typing" id="ecoEdubuddyTyping" style="display: none;">EduBuddy is typing...</div>
             </div>
             <div class="eco-edubuddy-footer">
-                <input type="text" class="eco-edubuddy-input" placeholder="Type a message..." id="ecoEdubuddyInput">
-                <button type="button" class="eco-edubuddy-send" aria-label="Send">🤖</button>
+                <input type="text" class="eco-edubuddy-input" placeholder="Type a message..." id="ecoEdubuddyInput" autocomplete="off">
+                <button type="button" class="eco-edubuddy-send" id="ecoEdubuddySend" aria-label="Send">🤖</button>
             </div>
         </div>
         <script>
@@ -135,7 +137,18 @@
                 var toggle = document.getElementById('ecoEdubuddyToggle');
                 var widget = document.getElementById('ecoEdubuddy');
                 var closeBtn = document.getElementById('ecoEdubuddyClose');
+                var greeting = document.getElementById('ecoEdubuddyGreeting');
+                var suggestions = document.getElementById('ecoEdubuddySuggestions');
+                var messagesEl = document.getElementById('ecoEdubuddyMessages');
+                var typingEl = document.getElementById('ecoEdubuddyTyping');
+                var input = document.getElementById('ecoEdubuddyInput');
+                var sendBtn = document.getElementById('ecoEdubuddySend');
+                var chatUrl = @json(route('edubuddy.chat'));
+                var csrf = document.querySelector('meta[name="csrf-token"]');
+                var csrfToken = csrf ? csrf.getAttribute('content') : '';
+
                 if (!toggle || !widget) return;
+
                 function openChat() {
                     widget.classList.add('is-open');
                     widget.setAttribute('aria-hidden', 'false');
@@ -148,6 +161,83 @@
                 }
                 toggle.addEventListener('click', openChat);
                 closeBtn && closeBtn.addEventListener('click', closeChat);
+
+                function escapeHtml(text) {
+                    var div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+
+                function appendMessage(text, isUser) {
+                    if (greeting) greeting.style.display = 'none';
+                    if (suggestions) suggestions.style.display = 'none';
+                    var wrap = document.createElement('div');
+                    wrap.className = isUser ? 'eco-edubuddy-msg eco-edubuddy-msg-user' : 'eco-edubuddy-msg eco-edubuddy-msg-bot';
+                    var p = document.createElement('p');
+                    p.textContent = text;
+                    wrap.appendChild(p);
+                    messagesEl.appendChild(wrap);
+                    messagesEl.scrollTop = messagesEl.scrollHeight;
+                }
+
+                function setTyping(show) {
+                    typingEl.style.display = show ? 'block' : 'none';
+                    if (show) messagesEl.scrollTop = messagesEl.scrollHeight;
+                }
+
+                function sendMessage(messageText) {
+                    var text = (messageText || (input && input.value)).trim();
+                    if (!text) return;
+                    if (input) input.value = '';
+                    appendMessage(text, true);
+                    setTyping(true);
+                    fetch(chatUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({ message: text })
+                    })
+                    .then(function(r) {
+                        var contentType = r.headers.get('Content-Type') || '';
+                        if (!contentType.includes('application/json')) {
+                            return r.text().then(function(t) { throw new Error('Server did not return JSON. Try again.'); });
+                        }
+                        return r.json().then(function(data) {
+                            if (!r.ok) {
+                                var msg = (data && data.message) ? data.message : (data && data.reply) ? data.reply : 'Something went wrong. Try again!';
+                                throw new Error(msg);
+                            }
+                            return data;
+                        });
+                    })
+                    .then(function(data) {
+                        setTyping(false);
+                        appendMessage((data && data.reply) ? data.reply : 'Sorry, I couldn\'t reply. Try again!', false);
+                    })
+                    .catch(function(err) {
+                        setTyping(false);
+                        appendMessage(err && err.message ? err.message : 'Something went wrong. Please try again in a moment! 😊', false);
+                    });
+                }
+
+                if (sendBtn) sendBtn.addEventListener('click', function() { sendMessage(); });
+                if (input) {
+                    input.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+                    });
+                }
+                if (suggestions) {
+                    suggestions.querySelectorAll('.eco-edubuddy-suggestion').forEach(function(btn) {
+                        btn.addEventListener('click', function() {
+                            var msg = this.getAttribute('data-message');
+                            if (msg) sendMessage(msg);
+                        });
+                    });
+                }
             })();
         </script>
     @endif
