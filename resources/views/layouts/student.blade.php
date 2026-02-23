@@ -111,9 +111,11 @@
     </div>
 
     @if (($studentPage ?? '') === 'dashboard')
-        <div class="eco-edubuddy-widget" id="ecoEdubuddy">
+        <button type="button" class="eco-edubuddy-toggle" id="ecoEdubuddyToggle" aria-label="Open EduBuddy chat">🤖</button>
+        <div class="eco-edubuddy-widget" id="ecoEdubuddy" aria-hidden="true">
             <div class="eco-edubuddy-header">
                 <span class="eco-edubuddy-title">🤖 EduBuddy</span>
+                <button type="button" class="eco-edubuddy-close" id="ecoEdubuddyClose" aria-label="Close chat">×</button>
             </div>
             <div class="eco-edubuddy-body">
                 <p class="eco-edubuddy-greeting">Hi {{ auth()->user()->name ?? 'there' }}! How can I help you today?</p>
@@ -129,6 +131,26 @@
             </div>
             <div class="eco-edubuddy-avatar">🤖</div>
         </div>
+        <script>
+            (function() {
+                var toggle = document.getElementById('ecoEdubuddyToggle');
+                var widget = document.getElementById('ecoEdubuddy');
+                var closeBtn = document.getElementById('ecoEdubuddyClose');
+                if (!toggle || !widget) return;
+                function openChat() {
+                    widget.classList.add('is-open');
+                    widget.setAttribute('aria-hidden', 'false');
+                    toggle.classList.add('is-open');
+                }
+                function closeChat() {
+                    widget.classList.remove('is-open');
+                    widget.setAttribute('aria-hidden', 'true');
+                    toggle.classList.remove('is-open');
+                }
+                toggle.addEventListener('click', openChat);
+                closeBtn && closeBtn.addEventListener('click', closeChat);
+            })();
+        </script>
     @endif
     @if (($studentPage ?? '') === 'dashboard')
         <script>window.ecoStudentData = { topics: @json($topicsPayload ?? []) };</script>
