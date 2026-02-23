@@ -86,4 +86,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(MiniGameAttempt::class);
     }
+
+    public function teachingClasses(): HasMany
+    {
+        return $this->hasMany(ClassRoom::class, 'user_id');
+    }
+
+    public function enrolledClasses(): BelongsToMany
+    {
+        return $this->belongsToMany(ClassRoom::class, 'class_room_user', 'user_id', 'class_room_id')
+            ->withTimestamps();
+    }
 }

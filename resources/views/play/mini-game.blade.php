@@ -6,16 +6,17 @@
     @vite(['resources/css/eco.css'])
     <style>
         .play-game-container { max-width: 900px; margin: 0 auto; width: 100%; }
-        .game-drop-zone { background: #f0f4f3; border: 4px dashed var(--eco-primary); border-radius: 15px; padding: 1rem; min-height: 120px; margin-bottom: 1rem; }
-        .game-drop-zone.drag-over { background: rgba(78, 205, 196, 0.2); }
-        .game-draggable { background: #fff; border: 2px solid var(--eco-secondary); border-radius: 12px; padding: 0.75rem 1rem; cursor: grab; display: inline-block; margin: 0.25rem; }
-        .game-option { background: #fff; border: 2px solid var(--eco-secondary); border-radius: 12px; padding: 0.8rem 1rem; margin-bottom: 0.5rem; cursor: pointer; }
-        .game-option:hover { background: var(--eco-secondary); }
-        .game-option.correct { background: var(--eco-green); }
-        .game-option.incorrect { background: var(--eco-accent); }
+        .play-game-container .eco-game-area { background: linear-gradient(180deg, #fffef5 0%, #fffde7 100%); border: 2px solid #ffc107; box-shadow: 0 4px 20px rgba(255, 193, 7, 0.12); }
+        .game-drop-zone { background: rgba(255, 249, 196, 0.5); border: 3px dashed #ffb74d; border-radius: 16px; padding: 1rem; min-height: 120px; margin-bottom: 1rem; }
+        .game-drop-zone.drag-over { background: rgba(255, 193, 7, 0.2); }
+        .game-draggable { background: #fff; border: 2px solid #e0e0e0; border-radius: 14px; padding: 0.75rem 1rem; cursor: grab; display: inline-block; margin: 0.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .game-option { background: #fff; border: 2px solid #e0e0e0; border-radius: 14px; padding: 0.8rem 1rem; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s; }
+        .game-option:hover { border-color: #ffc107; background: #fffde7; }
+        .game-option.correct { background: #c8e6c9; border-color: #81c784; }
+        .game-option.incorrect { background: #ffcdd2; border-color: var(--eco-accent); }
         .game-match-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.75rem; }
-        .game-match-left, .game-match-right { flex: 1; padding: 0.5rem; border-radius: 8px; }
-        .match-item.selected { border-color: var(--eco-primary); background: rgba(78, 205, 196, 0.2); }
+        .game-match-left, .game-match-right { flex: 1; padding: 0.5rem; border-radius: 12px; }
+        .match-item.selected { border-color: #ffc107; background: rgba(255, 193, 7, 0.15); }
         .match-item.matched { opacity: 0.6; cursor: default; }
         .game-result { text-align: center; padding: 2rem; }
     </style>

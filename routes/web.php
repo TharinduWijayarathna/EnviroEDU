@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Parent\ChildController as ParentChildController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\Teacher\ClassRoomController;
 use App\Http\Controllers\Teacher\MiniGameController;
 use App\Http\Controllers\Teacher\ProgressController as TeacherProgressController;
 use App\Http\Controllers\Teacher\QuizController;
@@ -40,6 +41,9 @@ Route::middleware('auth')->group(function (): void {
     });
 
     Route::middleware('role:teacher')->prefix('teacher')->name('teacher.')->group(function (): void {
+        Route::resource('class-rooms', ClassRoomController::class)->parameters(['class-rooms' => 'classRoom']);
+        Route::post('class-rooms/{classRoom}/students', [ClassRoomController::class, 'addStudent'])->name('class-rooms.students.store');
+        Route::delete('class-rooms/{classRoom}/students/{student}', [ClassRoomController::class, 'removeStudent'])->name('class-rooms.students.destroy');
         Route::resource('topics', TopicController::class)->parameters(['topics' => 'topic']);
         Route::resource('quizzes', QuizController::class);
         Route::resource('mini-games', MiniGameController::class)->parameters(['mini-games' => 'miniGame']);

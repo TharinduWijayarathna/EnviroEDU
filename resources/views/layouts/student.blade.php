@@ -5,39 +5,30 @@
 @push('styles')
     @vite(['resources/css/eco.css'])
     <style>
-        .eco-student-main { display: flex; gap: 1.5rem; padding: 1.5rem; flex: 1; min-height: 0; max-width: 1400px; margin: 0 auto; width: 100%; align-items: flex-start; }
-        .eco-topics-panel { background: #fff; border-radius: 20px; padding: 1.5rem; width: 300px; flex-shrink: 0; overflow-y: auto; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 2px solid var(--eco-primary); max-height: calc(100vh - 100px); }
-        .eco-topics-panel h2 { font-family: 'Bubblegum Sans', cursive; font-size: 1.5rem; color: var(--eco-primary); margin-bottom: 1rem; text-align: center; }
-        .eco-topic-card { background: #fff; border: 3px solid var(--eco-primary); border-radius: 15px; padding: 1rem; margin-bottom: 0.8rem; cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
-        .eco-topic-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3); }
-        .eco-topic-icon { font-size: 2rem; margin-bottom: 0.3rem; }
-        .eco-topic-title { font-weight: 700; font-size: 1.1rem; color: var(--eco-dark); margin-bottom: 0.5rem; }
-        .eco-game-area { flex: 1; min-width: 0; background: #fff; border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 2px solid var(--eco-primary); max-height: calc(100vh - 100px); overflow-y: auto; }
-        .eco-game-header { font-family: 'Bubblegum Sans', cursive; font-size: 1.6rem; color: var(--eco-accent); margin-bottom: 1rem; text-align: center; }
-        .eco-game-content { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 1.5rem; overflow-y: auto; }
-        .eco-badge-count { background: var(--eco-secondary); padding: 0.5rem 1.5rem; border-radius: 25px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(255, 230, 109, 0.4); }
-        .eco-grade-select { background: white; border: 3px solid var(--eco-primary); padding: 0.5rem 1rem; border-radius: 20px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; }
+        :root { --eco-student-bg-image: url('{{ asset("images/student-dashboard-bg.jpeg") }}'); }
         .eco-feedback { position: fixed; top: 100px; right: 2rem; background: white; padding: 1rem 1.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transform: translateX(400px); transition: transform 0.3s; z-index: 100; }
         .eco-feedback.show { transform: translateX(0); }
         .eco-feedback.success { border-left: 5px solid var(--eco-green); }
         .eco-feedback.error { border-left: 5px solid var(--eco-accent); }
-        .eco-badge-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: white; border-radius: 25px; padding: 2rem; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); z-index: 1000; transition: transform 0.3s; max-width: 400px; border: 4px solid var(--eco-primary); }
-        .eco-badge-modal.show { transform: translate(-50%, -50%) scale(1); }
         .eco-video-embed { max-width: 100%; border-radius: 15px; overflow: hidden; background: #2C3E50; aspect-ratio: 16/9; }
-        @media (max-width: 968px) { .eco-student-main { flex-direction: column; } .eco-topics-panel { width: 100%; max-height: 280px; } }
     </style>
 @endpush
 
 @section('content')
-    <div style="display: flex; flex-direction: column; min-height: 100vh; background: #f5f7f6;">
-        <header class="eco-header" style="background: #fff; border-bottom: 2px solid var(--eco-primary);">
-            <a href="{{ route('dashboard.student') }}" class="eco-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 48px; width: auto; object-fit: contain;">
-            </a>
-            <div class="eco-dashboard-nav" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                <div class="eco-badge-count">🏆 <span id="ecoBadgeCount">{{ $badgeCount ?? 0 }}</span> Badges</div>
+    <div class="eco-student-wrap has-bg-image">
+        <header class="eco-student-header">
+            <div class="eco-student-logo-wrap" style="display: flex; align-items: center;">
+                <div class="">
+                    <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height:60px;width:auto;object-fit:contain;display:block;">
+                </div>
+                @auth
+                    <span class="eco-student-user-name" style="margin-left: 1rem;">{{ auth()->user()->name }}</span>
+                @endauth
+            </div>
+            <div class="eco-dashboard-nav" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                <a href="{{ route('dashboard.student') }}#badges" class="eco-badge-btn">🏆 <span id="ecoBadgeCount">{{ $badgeCount ?? 0 }}</span> Badges</a>
                 <form method="GET" action="{{ route('dashboard.student') }}" id="ecoGradeForm" style="display: inline;">
-                    <select class="eco-grade-select" id="ecoGradeSelector" name="grade">
+                    <select id="ecoGradeSelector" name="grade" class="eco-grade-select" style="background:#b3e5fc; border:2px solid #4dd0e1; padding:0.5rem 1rem; border-radius:25px; font-weight:700; cursor:pointer;">
                         <option value="">All grades</option>
                         @foreach (config('app.grade_levels', [4, 5]) as $g)
                             <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>Grade {{ $g }}</option>
@@ -45,7 +36,6 @@
                     </select>
                 </form>
                 @auth
-                    <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
                         <button type="submit" class="eco-logout-btn">Logout</button>
@@ -55,66 +45,104 @@
         </header>
 
         <div class="eco-student-main">
-            <aside class="eco-topics-panel">
-                <h2>Topics</h2>
-                <div id="ecoTopicsList">
-                    @php $studentPage = $studentPage ?? 'dashboard'; @endphp
-                    @foreach ($topics ?? [] as $i => $t)
-                        @if ($studentPage === 'play')
-                            <a href="{{ route('dashboard.student') }}" class="eco-topic-card">
-                                <div class="eco-topic-icon">📚</div>
-                                <div class="eco-topic-title">{{ $t->title }}</div>
-                            </a>
-                        @else
-                            <div class="eco-topic-card" data-index="{{ $i }}" style="cursor: pointer;">
-                                <div class="eco-topic-icon">📚</div>
-                                <div class="eco-topic-title">{{ $t->title }}</div>
-                            </div>
+            <aside class="eco-sidebar-nav">
+                <a href="{{ route('dashboard.student') }}" class="eco-nav-signpost topics">
+                    <span class="nav-icon">💡</span>
+                    <span>Topics</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                <a href="{{ route('dashboard.student') }}#quizzes" class="eco-nav-signpost quizzes-games">
+                    <span class="nav-icon">🎮</span>
+                    <span>Quizzes & Games</span>
+                    <span class="nav-arrow">→</span>
+                </a>
+                <div class="eco-topics-panel">
+                    <h2>🏆 Topics</h2>
+                    <div id="ecoTopicsList">
+                        @php $studentPage = $studentPage ?? 'dashboard'; @endphp
+                        @foreach ($topics ?? [] as $i => $t)
+                            @if ($studentPage === 'play')
+                                <a href="{{ route('dashboard.student') }}" class="eco-topic-card">
+                                    <div class="eco-topic-icon">📚</div>
+                                    <div class="eco-topic-title">{{ $t->title }}</div>
+                                </a>
+                            @else
+                                <div class="eco-topic-card" data-index="{{ $i }}" style="cursor: pointer;">
+                                    <div class="eco-topic-icon">📚</div>
+                                    <div class="eco-topic-title">{{ $t->title }}</div>
+                                </div>
+                            @endif
+                        @endforeach
+                        @if (empty($topics) || $topics->isEmpty())
+                            <p style="font-size: 0.9rem; color: #666;">No topics yet. Check back later or try another grade!</p>
                         @endif
-                    @endforeach
-                    @if (empty($topics) || $topics->isEmpty())
-                        <p style="font-size: 0.9rem; color: #666;">No topics yet.</p>
+                    </div>
+                    <h2 style="margin-top: 1rem;">Quizzes & Games</h2>
+                    @if (isset($standaloneQuizzes) && $standaloneQuizzes->isNotEmpty())
+                        <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Quizzes</p>
+                        @foreach ($standaloneQuizzes as $quiz)
+                            <a href="{{ route('play.quiz', $quiz) }}" class="eco-topic-card">
+                                <div class="eco-topic-icon">📝</div>
+                                <div class="eco-topic-title">{{ $quiz->title }}</div>
+                            </a>
+                        @endforeach
+                    @endif
+                    @if (isset($standaloneMiniGames) && $standaloneMiniGames->isNotEmpty())
+                        <p style="font-size: 0.9rem; margin-bottom: 0.5rem; margin-top: 0.75rem;">Mini Games</p>
+                        @foreach ($standaloneMiniGames as $game)
+                            <div class="eco-topic-card" style="display: block;">
+                                <div class="eco-topic-icon">🎮</div>
+                                <div class="eco-topic-title">{{ $game->title }}</div>
+                                <a href="{{ route('play.mini-game', $game) }}" class="eco-play-game-btn">Play Game →</a>
+                            </div>
+                        @endforeach
+                    @endif
+                    @if ((!isset($standaloneQuizzes) || $standaloneQuizzes->isEmpty()) && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()) && (!isset($topics) || $topics->isEmpty()))
+                        <p style="font-size: 0.9rem; color: #666;">No quizzes or games yet.</p>
+                    @elseif ((!isset($standaloneQuizzes) || $standaloneQuizzes->isEmpty()) && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()))
+                        <p style="font-size: 0.9rem; color: #666;">No standalone quizzes or games.</p>
                     @endif
                 </div>
-                <h2 style="margin-top: 1.5rem;">Quizzes & Games</h2>
-                @if (isset($standaloneQuizzes) && $standaloneQuizzes->isNotEmpty())
-                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Quizzes</p>
-                    @foreach ($standaloneQuizzes as $quiz)
-                        <a href="{{ route('play.quiz', $quiz) }}" class="eco-topic-card">
-                            <div class="eco-topic-icon">📝</div>
-                            <div class="eco-topic-title">{{ $quiz->title }}</div>
-                        </a>
-                    @endforeach
-                @endif
-                @if (isset($standaloneMiniGames) && $standaloneMiniGames->isNotEmpty())
-                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem; margin-top: 1rem;">Mini Games</p>
-                    @foreach ($standaloneMiniGames as $game)
-                        <a href="{{ route('play.mini-game', $game) }}" class="eco-topic-card">
-                            <div class="eco-topic-icon">🎮</div>
-                            <div class="eco-topic-title">{{ $game->title }}</div>
-                        </a>
-                    @endforeach
-                @endif
-                @if ((!isset($standaloneQuizzes) || $standaloneQuizzes->isEmpty()) && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()) && (!isset($topics) || $topics->isEmpty()))
-                    <p style="font-size: 0.9rem; color: #666;">No quizzes or games yet.</p>
-                @elseif ((!isset($standaloneQuizzes) || $standaloneQuizzes->isEmpty()) && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()))
-                    <p style="font-size: 0.9rem; color: #666;">No standalone quizzes or games.</p>
-                @endif
             </aside>
-            <main class="eco-game-area">
+            <main class="eco-game-area" style="position: relative;">
                 @yield('student-main')
             </main>
         </div>
     </div>
+
+    @if (($studentPage ?? '') === 'dashboard')
+        <div class="eco-edubuddy-widget" id="ecoEdubuddy">
+            <div class="eco-edubuddy-header">
+                <span class="eco-edubuddy-title">🤖 EduBuddy</span>
+            </div>
+            <div class="eco-edubuddy-body">
+                <p class="eco-edubuddy-greeting">Hi {{ auth()->user()->name ?? 'there' }}! How can I help you today?</p>
+                <div class="eco-edubuddy-suggestions">
+                    <a href="{{ route('dashboard.student') }}#quizzes" class="eco-edubuddy-suggestion">What is living vs non-living? 😕 →</a>
+                    <a href="{{ route('dashboard.student') }}#quizzes" class="eco-edubuddy-suggestion">Explain the water cycle 🌧️ →</a>
+                    <a href="{{ route('dashboard.student') }}#quizzes" class="eco-edubuddy-suggestion">I need a hint for my quiz! 📝 →</a>
+                </div>
+            </div>
+            <div class="eco-edubuddy-footer">
+                <input type="text" class="eco-edubuddy-input" placeholder="Type a message..." id="ecoEdubuddyInput">
+                <button type="button" class="eco-edubuddy-send" aria-label="Send">➤</button>
+            </div>
+            <div class="eco-edubuddy-avatar">🤖</div>
+        </div>
+    @endif
     @if (($studentPage ?? '') === 'dashboard')
         <script>window.ecoStudentData = { topics: @json($topicsPayload ?? []) };</script>
     @endif
 
     <div class="eco-badge-modal" id="ecoBadgeModal">
+        <div class="eco-badge-modal-ribbon" id="ecoBadgeRibbon">Badge Achieved!</div>
         <div style="font-size: 4rem; margin-bottom: 0.8rem;" id="ecoBadgeIcon">🏆</div>
-        <div style="font-family: 'Bubblegum Sans', cursive; font-size: 1.6rem; color: var(--eco-primary); margin-bottom: 0.8rem;" id="ecoBadgeTitle">Badge Earned!</div>
-        <p id="ecoBadgeDescription"></p>
-        <button type="button" class="eco-btn" id="ecoCloseBadgeBtn">Awesome!</button>
+        <div class="eco-badge-modal-badge-title" id="ecoBadgeTitle">Forest Guardian</div>
+        <p id="ecoBadgeDescription" style="color:#333; margin:0.75rem 0;"></p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="eco-btn" id="ecoCloseBadgeBtn" style="background: #fff8e1; color: #558b2f; border: 2px solid #81c784;">Close</button>
+            <a href="{{ route('dashboard.student') }}#badges" class="eco-btn" id="ecoViewAllBadgesBtn">View All Badges</a>
+        </div>
     </div>
     <script>
         window.ecoShowBadgeModal = function(badge) {
@@ -124,8 +152,8 @@
             var desc = document.getElementById('ecoBadgeDescription');
             if (modal && icon && title && desc) {
                 icon.textContent = badge.icon || '🏆';
-                title.textContent = badge.name || 'Badge Earned!';
-                desc.textContent = '';
+                title.textContent = badge.name || 'Forest Guardian';
+                desc.textContent = badge.description || 'Congratulations! You\'ve earned this badge.';
                 modal.classList.add('show');
                 var countEl = document.getElementById('ecoBadgeCount');
                 if (countEl) { countEl.textContent = parseInt(countEl.textContent, 10) + 1; }

@@ -6,11 +6,26 @@
     @vite(['resources/css/eco.css'])
     <style>
         .play-container { max-width: 700px; margin: 0 auto; width: 100%; }
-        .play-question { background: #fff; border: 2px solid var(--eco-primary); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .play-option { background: #fff; border: 2px solid var(--eco-secondary); border-radius: 12px; padding: 0.8rem 1rem; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s; }
-        .play-option:hover { background: var(--eco-secondary); }
-        .play-option.correct { background: var(--eco-green); border-color: var(--eco-green); }
-        .play-option.incorrect { background: var(--eco-accent); border-color: var(--eco-accent); }
+        .play-question {
+            background: linear-gradient(180deg, #fffef5 0%, #fffde7 100%);
+            border: 2px solid #ffc107;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.15);
+        }
+        .play-option {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .play-option:hover { border-color: #ffc107; background: #fffde7; }
+        .play-option.correct { background: #fff59d; border-color: #ffc107; }
+        .play-option.incorrect { background: #ffcdd2; border-color: var(--eco-accent); }
         .play-result { text-align: center; padding: 2rem; }
     </style>
 @endpush

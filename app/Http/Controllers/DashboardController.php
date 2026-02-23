@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassRoom;
+use App\Models\MiniGame;
+use App\Models\Quiz;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -32,9 +35,18 @@ class DashboardController extends Controller
 
     public function teacher(): View
     {
-        $topicCount = Topic::query()->where('user_id', auth()->id())->count();
+        $userId = auth()->id();
+        $classCount = ClassRoom::query()->where('user_id', $userId)->count();
+        $studentCount = ClassRoom::query()
+            ->where('user_id', $userId)
+            ->withCount('students')
+            ->get()
+            ->sum('students_count');
+        $topicCount = Topic::query()->where('user_id', $userId)->count();
+        $quizCount = Quiz::query()->where('user_id', $userId)->count();
+        $miniGameCount = MiniGame::query()->where('user_id', $userId)->count();
 
-        return view('dashboard.teacher', compact('topicCount'));
+        return view('dashboard.teacher', compact('classCount', 'studentCount', 'topicCount', 'quizCount', 'miniGameCount'));
     }
 
     public function parent(): View
