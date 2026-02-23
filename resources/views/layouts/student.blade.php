@@ -127,9 +127,8 @@
             </div>
             <div class="eco-edubuddy-footer">
                 <input type="text" class="eco-edubuddy-input" placeholder="Type a message..." id="ecoEdubuddyInput">
-                <button type="button" class="eco-edubuddy-send" aria-label="Send">➤</button>
+                <button type="button" class="eco-edubuddy-send" aria-label="Send">🤖</button>
             </div>
-            <div class="eco-edubuddy-avatar">🤖</div>
         </div>
         <script>
             (function() {
