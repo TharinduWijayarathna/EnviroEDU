@@ -57,6 +57,7 @@ class ProgressController extends Controller
                 'id' => $b->id,
                 'name' => $b->name,
                 'icon' => $b->icon,
+                'description' => $b->description,
                 'image_url' => $b->image_path ? asset('storage/'.$b->image_path) : null,
             ])->values()->all(),
         ]);
@@ -97,6 +98,7 @@ class ProgressController extends Controller
                 'id' => $b->id,
                 'name' => $b->name,
                 'icon' => $b->icon,
+                'description' => $b->description,
                 'image_url' => $b->image_path ? asset('storage/'.$b->image_path) : null,
             ])->values()->all(),
         ]);
