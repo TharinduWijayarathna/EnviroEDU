@@ -757,11 +757,21 @@
     background: linear-gradient(160deg, #e8f5e9 0%, #f1f8e9 30%, #fffde7 60%, #f5f7f6 100%);
 }
 
+.eco-landing-wrap {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .eco-landing-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 1.25rem 0;
     flex-wrap: wrap;
     gap: 1rem;
 }
@@ -774,63 +784,100 @@
 
 .eco-landing-nav {
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
     align-items: center;
 }
 
-.eco-landing-nav a {
+.eco-landing-nav-link {
     color: var(--eco-dark);
     text-decoration: none;
     font-weight: 600;
-    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 14px;
     transition: all 0.2s;
 }
 
-.eco-landing-nav a:hover {
-    background: var(--eco-primary);
-    color: white;
+.eco-landing-nav-link:hover {
+    background: rgba(78, 205, 196, 0.2);
+    color: var(--eco-primary);
+}
+
+.eco-landing-nav-btn {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.95rem;
 }
 
 .eco-landing-hero {
-    flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 3rem;
-    padding: 3rem 2rem;
+    justify-content: space-between;
+    gap: 2.5rem;
+    padding: 2.5rem 0 3.5rem;
     flex-wrap: wrap;
+    min-height: 72vh;
 }
 
 .eco-landing-hero-content {
-    max-width: 520px;
+    flex: 1;
+    min-width: 280px;
 }
 
 .eco-landing-title {
     font-family: 'Bubblegum Sans', cursive;
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     color: var(--eco-primary);
-    line-height: 1.2;
-    margin-bottom: 1rem;
+    line-height: 1.25;
+    margin: 0 0 0.75rem;
 }
 
 .eco-landing-tagline {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: var(--eco-dark);
     opacity: 0.95;
-    margin-bottom: 1.75rem;
+    margin: 0 0 1.25rem;
     line-height: 1.5;
+}
+
+/* Hero sliding strip */
+.eco-landing-hero-slider-wrap {
+    overflow: hidden;
+    margin: 0 -1.5rem 1.5rem;
+    padding: 0.6rem 0;
+}
+
+.eco-landing-hero-slider {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: eco-hero-slide 24s linear infinite;
+}
+
+.eco-landing-hero-slide-item {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    background: rgba(78, 205, 196, 0.2);
+    color: var(--eco-primary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 999px;
+    border: 2px solid rgba(78, 205, 196, 0.4);
+}
+
+@keyframes eco-hero-slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
 .eco-landing-hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .eco-btn-hero {
-    padding: 0.9rem 1.75rem;
-    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
 }
 
 .eco-btn-outline {
@@ -846,54 +893,368 @@
 
 .eco-landing-hero-visual {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .eco-landing-emoji {
-    font-size: 4rem;
+    font-size: 3.5rem;
     animation: eco-float 3s ease-in-out infinite;
 }
 
 .eco-landing-emoji:nth-child(2) { animation-delay: 0.5s; }
 .eco-landing-emoji:nth-child(3) { animation-delay: 1s; }
 
-.eco-landing-roles {
-    padding: 3rem 2rem;
-    text-align: center;
+/* Section rhythm */
+.eco-landing-section {
+    padding: 3.5rem 0;
 }
 
-.eco-landing-section-title {
+.eco-landing-section:first-of-type {
+    padding-top: 0;
+}
+
+.eco-landing-h2 {
     font-family: 'Bubblegum Sans', cursive;
-    font-size: 1.75rem;
+    font-size: 1.65rem;
     color: var(--eco-primary);
-    margin-bottom: 0.5rem;
+    text-align: center;
+    margin: 0 0 0.5rem;
 }
 
-.eco-landing-section-desc {
+.eco-landing-desc {
     font-size: 1rem;
     color: var(--eco-dark);
     opacity: 0.9;
+    text-align: center;
+    margin: 0 0 2rem;
+    line-height: 1.5;
+}
+
+.eco-landing-h3 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.25rem;
+    color: var(--eco-dark);
+    margin: 0 0 0.75rem;
+}
+
+/* Join school section */
+.eco-landing-join .eco-landing-h2 {
+    margin-bottom: 0.5rem;
+}
+
+.eco-landing-join .eco-landing-desc {
+    margin-bottom: 1.5rem;
+}
+
+.eco-landing-join-box {
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.75rem;
+    text-align: left;
+}
+
+.eco-landing-join-label {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--eco-dark);
+    margin: 0 0 0.75rem;
+}
+
+.eco-landing-join-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin-bottom: 0.75rem;
+}
+
+.eco-landing-join-input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 260px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+.eco-landing-join-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.eco-btn-join {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+}
+
+.eco-btn-join-student {
+    background: var(--eco-green);
+    color: var(--eco-dark);
+}
+
+.eco-btn-join-student:hover {
+    box-shadow: 0 6px 20px rgba(149, 225, 211, 0.5);
+}
+
+.eco-landing-join-hint {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.eco-landing-join-hint a {
+    color: var(--eco-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.eco-landing-join-hint a:hover {
+    text-decoration: underline;
+}
+
+.eco-landing-how-join {
     margin-bottom: 2rem;
+}
+
+.eco-landing-how-join .eco-landing-h3 {
+    margin-bottom: 0.75rem;
+}
+
+.eco-landing-steps {
+    padding-left: 1.5rem;
+    margin: 0 0 0;
+    color: var(--eco-dark);
+    line-height: 1.65;
+}
+
+.eco-landing-steps li {
+    margin-bottom: 0.6rem;
+}
+
+.eco-landing-steps li:last-child {
+    margin-bottom: 0;
+}
+
+.eco-landing-roles {
+    padding-top: 0.5rem;
+}
+
+.eco-landing-roles .eco-landing-h3 {
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 .eco-landing-role-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1.25rem;
     justify-content: center;
 }
 
 .eco-landing-role-card {
     flex: 1;
-    min-width: 180px;
-    max-width: 260px;
+    min-width: 160px;
+    max-width: 240px;
+}
+
+/* Features section */
+.eco-landing-features {
+    background: rgba(255, 255, 255, 0.55);
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.eco-landing-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .eco-landing-feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.eco-landing-feature-card {
+    padding: 1.25rem 1rem;
+    text-align: center;
+}
+
+.eco-landing-feature-icon {
+    font-size: 2.25rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.eco-landing-feature-card h3 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.05rem;
+    color: var(--eco-primary);
+    margin: 0 0 0.35rem;
+}
+
+.eco-landing-feature-card p {
+    font-size: 0.875rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* How it works */
+.eco-landing-how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 700px) {
+    .eco-landing-how-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.eco-landing-how-item {
+    text-align: center;
+}
+
+.eco-landing-how-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--eco-primary);
+    color: white;
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.eco-landing-how-item h3 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.1rem;
+    color: var(--eco-dark);
+    margin: 0 0 0.4rem;
+}
+
+.eco-landing-how-item p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.45;
 }
 
 .eco-landing-footer {
     text-align: center;
-    padding: 1.5rem 2rem;
+    padding: 2rem 0;
     font-size: 0.9rem;
     color: var(--eco-dark);
     opacity: 0.85;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.eco-landing-footer p {
+    margin: 0;
+}
+
+/* Simple analytical home page */
+.eco-home-hero {
+    padding: 2.5rem 0 3rem;
+    text-align: center;
+}
+
+.eco-home-headline {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    color: var(--eco-dark);
+    line-height: 1.3;
+    margin: 0 0 0.5rem;
+}
+
+.eco-home-sub {
+    font-size: 1.05rem;
+    color: #555;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    line-height: 1.5;
+}
+
+.eco-home-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.eco-home-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+}
+
+.eco-home-stat-value {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--eco-primary);
+    line-height: 1.2;
+}
+
+.eco-home-stat-label {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.eco-home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.eco-home-link {
+    padding: 0.5rem 0.75rem;
+}
+
+.eco-home-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    padding: 2rem 0 3rem;
+}
+
+.eco-home-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.eco-home-card:hover {
+    border-color: var(--eco-primary);
+    box-shadow: 0 4px 16px rgba(78, 205, 196, 0.2);
+}
+
+.eco-home-card-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.1rem;
+    color: var(--eco-primary);
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.eco-home-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
 }

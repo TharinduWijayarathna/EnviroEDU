@@ -1,64 +1,42 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('title', 'EnviroEdu for Schools')
 
-@push('styles')
-    @vite(['resources/css/eco.css'])
-@endpush
+@section('landing')
+    <section class="eco-home-hero">
+        <h1 class="eco-home-headline">Environmental learning in one workspace</h1>
+        <p class="eco-home-sub">One platform per school. Topics, quizzes, games, and badges—with clear progress for teachers and students.</p>
 
-@section('content')
-    <div class="eco-landing">
-        <header class="eco-landing-header">
-            <a href="{{ route('home') }}" class="eco-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" class="eco-landing-logo-img">
-                <span>EnviroEdu</span>
-            </a>
-            <nav class="eco-landing-nav">
-                <a href="{{ route('login', ['role' => 'admin']) }}">School login</a>
-                <a href="#join">Join your school</a>
-            </nav>
-        </header>
-
-        <section class="eco-landing-hero">
-            <div class="eco-landing-hero-content">
-                <h1 class="eco-landing-title">Environmental learning, one school at a time</h1>
-                <p class="eco-landing-tagline">Give your school a workspace where teachers and students explore topics, quizzes, games, and badges—all in one place.</p>
-                <div class="eco-landing-hero-actions">
-                    <a href="{{ route('register', ['role' => 'admin']) }}" class="eco-btn eco-btn-hero">Register your school</a>
-                    <a href="{{ route('login', ['role' => 'admin']) }}" class="eco-btn eco-btn-outline">School admin login</a>
-                </div>
+        <div class="eco-home-stats">
+            <div class="eco-home-stat">
+                <span class="eco-home-stat-value">{{ $schoolCount }}</span>
+                <span class="eco-home-stat-label">Schools</span>
             </div>
-            <div class="eco-landing-hero-visual" aria-hidden="true">
-                <span class="eco-landing-emoji">🌱</span>
-                <span class="eco-landing-emoji">📚</span>
-                <span class="eco-landing-emoji">🏫</span>
+            <div class="eco-home-stat">
+                <span class="eco-home-stat-value">{{ $userCount }}</span>
+                <span class="eco-home-stat-label">Teachers & students</span>
             </div>
-        </section>
-
-        <section class="eco-landing-roles" id="join">
-            <h2 class="eco-landing-section-title">Join your school</h2>
-            <p class="eco-landing-section-desc">Teachers and students: sign in or register with your school.</p>
-            <div class="eco-landing-role-cards">
-                <a href="{{ route('login', ['role' => 'teacher']) }}" class="eco-card eco-role-card eco-landing-role-card">
-                    <span class="eco-role-icon">👩‍🏫</span>
-                    <h3>Teacher</h3>
-                    <p>Manage classes, topics & track progress</p>
-                </a>
-                <a href="{{ route('login', ['role' => 'student']) }}" class="eco-card eco-role-card eco-landing-role-card">
-                    <span class="eco-role-icon">🎒</span>
-                    <h3>Student</h3>
-                    <p>Learn & play with quizzes, games & badges</p>
-                </a>
-                <a href="{{ route('login', ['role' => 'parent']) }}" class="eco-card eco-role-card eco-landing-role-card">
-                    <span class="eco-role-icon">👨‍👩‍👧</span>
-                    <h3>Parent</h3>
-                    <p>View your child's progress & badges</p>
-                </a>
+            <div class="eco-home-stat">
+                <span class="eco-home-stat-value">1</span>
+                <span class="eco-home-stat-label">Workspace per school</span>
             </div>
-        </section>
+        </div>
 
-        <footer class="eco-landing-footer">
-            <p>&copy; {{ date('Y') }} EnviroEdu. Environmental Science Adventure.</p>
-        </footer>
-    </div>
+        <div class="eco-home-actions">
+            <a href="{{ route('register', ['role' => 'admin']) }}" class="eco-btn eco-btn-hero">Register your school</a>
+            <a href="{{ route('landing.join') }}" class="eco-btn eco-btn-outline">Join your school</a>
+            <a href="{{ route('login', ['role' => 'admin']) }}" class="eco-landing-nav-link eco-home-link">School login</a>
+        </div>
+    </section>
+
+    <section class="eco-home-links">
+        <a href="{{ route('landing.platform') }}" class="eco-home-card eco-card">
+            <span class="eco-home-card-title">What’s on the platform</span>
+            <p>Topics, quizzes, mini games, badges, and progress tracking.</p>
+        </a>
+        <a href="{{ route('landing.how-it-works') }}" class="eco-home-card eco-card">
+            <span class="eco-home-card-title">How it works</span>
+            <p>School registers → share code → teachers & students join → admin approves.</p>
+        </a>
+    </section>
 @endsection

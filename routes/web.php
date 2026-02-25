@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ApprovalController as AdminApprovalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EduBuddyController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Parent\ChildController as ParentChildController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ProgressController;
@@ -15,7 +16,10 @@ use App\Http\Controllers\Teacher\QuizController;
 use App\Http\Controllers\Teacher\TopicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('home'))->name('home');
+Route::get('/', [LandingController::class, 'home'])->name('home');
+Route::get('/join', [LandingController::class, 'join'])->name('landing.join');
+Route::get('/platform', [LandingController::class, 'platform'])->name('landing.platform');
+Route::get('/how-it-works', [LandingController::class, 'howItWorks'])->name('landing.how-it-works');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login')->where('role', 'admin|teacher|student|parent');

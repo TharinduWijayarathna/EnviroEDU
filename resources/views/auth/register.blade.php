@@ -47,7 +47,7 @@
                 @if (in_array($role, ['teacher', 'student']))
                     <div style="margin-bottom: 1rem;">
                         <label for="school_code" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">School code</label>
-                        <input id="school_code" type="text" name="school_code" class="eco-input" value="{{ old('school_code') }}" required placeholder="Ask your school admin for the code">
+                        <input id="school_code" type="text" name="school_code" class="eco-input" value="{{ old('school_code', request('school_code')) }}" required placeholder="Ask your school admin for the code">
                     </div>
                 @endif
 
