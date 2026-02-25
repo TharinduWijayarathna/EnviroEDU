@@ -53,7 +53,12 @@ class ProgressController extends Controller
 
         return response()->json([
             'attempt_id' => $attempt->id,
-            'new_badges' => collect($newBadges)->map(fn ($b) => ['id' => $b->id, 'name' => $b->name, 'icon' => $b->icon])->values()->all(),
+            'new_badges' => collect($newBadges)->map(fn ($b) => [
+                'id' => $b->id,
+                'name' => $b->name,
+                'icon' => $b->icon,
+                'image_url' => $b->image_path ? asset('storage/'.$b->image_path) : null,
+            ])->values()->all(),
         ]);
     }
 
@@ -88,7 +93,12 @@ class ProgressController extends Controller
 
         return response()->json([
             'attempt_id' => $attempt->id,
-            'new_badges' => collect($newBadges)->map(fn ($b) => ['id' => $b->id, 'name' => $b->name, 'icon' => $b->icon])->values()->all(),
+            'new_badges' => collect($newBadges)->map(fn ($b) => [
+                'id' => $b->id,
+                'name' => $b->name,
+                'icon' => $b->icon,
+                'image_url' => $b->image_path ? asset('storage/'.$b->image_path) : null,
+            ])->values()->all(),
         ]);
     }
 }

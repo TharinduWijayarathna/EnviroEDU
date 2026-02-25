@@ -28,6 +28,7 @@ class StoreBadgeRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'icon' => ['nullable', 'string', 'max:50'],
+            'image_path' => ['nullable', 'string', 'max:500'],
             'award_for' => ['required', 'string', Rule::enum(BadgeAwardFor::class)],
         ];
     }

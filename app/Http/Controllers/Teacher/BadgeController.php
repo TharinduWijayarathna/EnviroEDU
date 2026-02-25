@@ -7,7 +7,10 @@ use App\Http\Requests\StoreBadgeRequest;
 use App\Http\Requests\UpdateBadgeRequest;
 use App\Models\Badge;
 use App\Models\Topic;
+use App\Services\BadgeImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -57,6 +60,7 @@ class BadgeController extends Controller
             'slug' => $slug,
             'description' => $request->input('description'),
             'icon' => $request->input('icon') ?: '🏆',
+            'image_path' => $request->input('image_path') ?: null,
             'award_for' => $request->input('award_for'),
             'order' => 0,
         ]);
@@ -95,6 +99,7 @@ class BadgeController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'icon' => $request->input('icon') ?: '🏆',
+            'image_path' => $request->input('image_path') ?: null,
             'award_for' => $request->input('award_for'),
         ]);
 
@@ -109,5 +114,32 @@ class BadgeController extends Controller
         $badge->delete();
 
         return redirect()->route('teacher.badges.index')->with('status', 'Badge deleted.');
+    }
+
+    public function generateImage(Request $request, BadgeImageService $badgeImageService): JsonResponse
+    {
+        $request->validate(['prompt' => ['required', 'string', 'max:1000']]);
+
+        $result = $badgeImageService->generateAndStore($request->input('prompt'));
+
+        if ($result === null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Image generation failed. Try a different prompt or check the logs.',
+            ], 422);
+        }
+
+        if (isset($result['success']) && $result['success'] === false) {
+            return response()->json([
+                'success' => false,
+                'message' => $result['message'] ?? 'Image generation failed.',
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'path' => $result['path'],
+            'url' => $result['url'],
+        ]);
     }
 }

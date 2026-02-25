@@ -26,7 +26,11 @@
     <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2rem;">
         @forelse ($student->badges as $badge)
             <span class="eco-card" style="padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
-                <span style="font-size: 1.5rem;">{{ $badge->icon ?? '🏆' }}</span>
+                @if($badge->image_path)
+                    <img src="{{ asset('storage/'.$badge->image_path) }}" alt="" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px;">
+                @else
+                    <span style="font-size: 1.5rem;">{{ $badge->icon ?? '🏆' }}</span>
+                @endif
                 <span>{{ $badge->name }}</span>
             </span>
         @empty

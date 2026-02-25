@@ -8,7 +8,14 @@
         @if (isset($earnedBadges) && $earnedBadges->isNotEmpty())
             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                 @foreach ($earnedBadges as $badge)
-                    <span style="background: var(--eco-secondary); padding: 0.4rem 0.9rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">{{ $badge->icon ?? '🏆' }} {{ $badge->name }}</span>
+                    <span style="background: var(--eco-secondary); padding: 0.4rem 0.9rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+                        @if($badge->image_path)
+                            <img src="{{ asset('storage/'.$badge->image_path) }}" alt="" style="width: 24px; height: 24px; object-fit: contain; border-radius: 4px;">
+                        @else
+                            {{ $badge->icon ?? '🏆' }}
+                        @endif
+                        {{ $badge->name }}
+                    </span>
                 @endforeach
             </div>
         @else

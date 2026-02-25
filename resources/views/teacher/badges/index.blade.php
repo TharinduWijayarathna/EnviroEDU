@@ -13,7 +13,11 @@
         @forelse ($badges as $badge)
             <div class="eco-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span style="font-size: 2rem;">{{ $badge->icon ?? '🏆' }}</span>
+                    @if($badge->image_path)
+                        <img src="{{ asset('storage/'.$badge->image_path) }}" alt="" style="width: 48px; height: 48px; object-fit: contain; border-radius: 8px;">
+                    @else
+                        <span style="font-size: 2rem;">{{ $badge->icon ?? '🏆' }}</span>
+                    @endif
                     <div>
                         <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">{{ $badge->name }}</h3>
                         <p style="color: #666; font-size: 0.9rem;">

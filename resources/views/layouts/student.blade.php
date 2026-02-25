@@ -247,7 +247,7 @@
 
     <div class="eco-badge-modal" id="ecoBadgeModal">
         <div class="eco-badge-modal-ribbon" id="ecoBadgeRibbon">Badge Achieved!</div>
-        <div style="font-size: 4rem; margin-bottom: 0.8rem;" id="ecoBadgeIcon">🏆</div>
+        <div style="font-size: 4rem; margin-bottom: 0.8rem; min-height: 4rem; display: flex; align-items: center; justify-content: center;" id="ecoBadgeIcon">🏆</div>
         <div class="eco-badge-modal-badge-title" id="ecoBadgeTitle">Forest Guardian</div>
         <p id="ecoBadgeDescription" style="color:#333; margin:0.75rem 0;"></p>
         <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
@@ -262,7 +262,11 @@
             var title = document.getElementById('ecoBadgeTitle');
             var desc = document.getElementById('ecoBadgeDescription');
             if (modal && icon && title && desc) {
-                icon.textContent = badge.icon || '🏆';
+                if (badge.image_url) {
+                    icon.innerHTML = '<img src="' + badge.image_url + '" alt="" style="width:80px;height:80px;object-fit:contain;border-radius:12px;">';
+                } else {
+                    icon.textContent = badge.icon || '🏆';
+                }
                 title.textContent = badge.name || 'Forest Guardian';
                 desc.textContent = badge.description || 'Congratulations! You\'ve earned this badge.';
                 modal.classList.add('show');

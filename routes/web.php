@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function (): void {
         Route::resource('topics', TopicController::class)->parameters(['topics' => 'topic']);
         Route::resource('quizzes', QuizController::class);
         Route::resource('mini-games', MiniGameController::class)->parameters(['mini-games' => 'miniGame']);
+        Route::post('badges/generate-image', [BadgeController::class, 'generateImage'])->name('badges.generate-image');
         Route::resource('badges', BadgeController::class);
         Route::get('progress', [TeacherProgressController::class, 'index'])->name('progress.index');
         Route::get('progress/students/{student}', [TeacherProgressController::class, 'show'])->name('progress.show');

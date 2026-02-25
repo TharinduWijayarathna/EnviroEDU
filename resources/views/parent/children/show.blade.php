@@ -49,7 +49,11 @@
                         </div>
                         @forelse ($child->badges->take(1) as $badge)
                             <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                                <span style="font-size: 2.5rem;">{{ $badge->icon ?? '🏆' }}</span>
+                                @if($badge->image_path)
+                                    <img src="{{ asset('storage/'.$badge->image_path) }}" alt="" style="width: 48px; height: 48px; object-fit: contain; border-radius: 8px;">
+                                @else
+                                    <span style="font-size: 2.5rem;">{{ $badge->icon ?? '🏆' }}</span>
+                                @endif
                                 <div>
                                     <strong style="display: block; color: #333;">{{ $badge->name }}</strong>
                                     <p style="font-size: 0.9rem; color: #666; margin: 0.25rem 0;">Earned for completing activities!</p>
