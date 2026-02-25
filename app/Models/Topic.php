@@ -41,4 +41,9 @@ class Topic extends Model
     {
         return $this->hasMany(MiniGame::class)->with('gameTemplate')->orderBy('title');
     }
+
+    public function badges(): HasMany
+    {
+        return $this->hasMany(Badge::class)->orderBy('order');
+    }
 }

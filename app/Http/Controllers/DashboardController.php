@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Badge;
 use App\Models\ClassRoom;
 use App\Models\MiniGame;
 use App\Models\Quiz;
@@ -45,8 +46,10 @@ class DashboardController extends Controller
         $topicCount = Topic::query()->where('user_id', $userId)->count();
         $quizCount = Quiz::query()->where('user_id', $userId)->count();
         $miniGameCount = MiniGame::query()->where('user_id', $userId)->count();
+        $topicIds = Topic::query()->where('user_id', $userId)->pluck('id');
+        $badgeCount = Badge::query()->whereIn('topic_id', $topicIds)->count();
 
-        return view('dashboard.teacher', compact('classCount', 'studentCount', 'topicCount', 'quizCount', 'miniGameCount'));
+        return view('dashboard.teacher', compact('classCount', 'studentCount', 'topicCount', 'quizCount', 'miniGameCount', 'badgeCount'));
     }
 
     public function parent(): View

@@ -3,6 +3,7 @@
 @section('title', 'Create Quiz')
 
 @section('teacher')
+    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.quizzes.index') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Quizzes</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 1rem;">Create Quiz</h1>
 
     <form method="POST" action="{{ route('teacher.quizzes.store') }}" id="quiz-form" style="max-width: 700px;">

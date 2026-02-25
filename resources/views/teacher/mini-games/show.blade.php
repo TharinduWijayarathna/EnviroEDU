@@ -3,6 +3,7 @@
 @section('title', $miniGame->title)
 
 @section('teacher')
+    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.mini-games.index') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Mini Games</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">{{ $miniGame->title }}</h1>
     <p style="color: #555; margin-bottom: 0.5rem;">{{ $miniGame->gameTemplate->name }}</p>
     @if ($miniGame->description)

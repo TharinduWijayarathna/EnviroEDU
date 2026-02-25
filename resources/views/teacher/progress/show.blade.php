@@ -3,7 +3,7 @@
 @section('title', 'Progress: ' . $student->name)
 
 @section('teacher')
-    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.progress.index') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to students</a></p>
+    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.progress.index') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Student Progress</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">{{ $student->name }}</h1>
     <p style="margin-bottom: 1.5rem; color: #555;">Quiz attempts, game attempts, and earned badges.</p>
 

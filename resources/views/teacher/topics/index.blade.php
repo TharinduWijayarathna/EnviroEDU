@@ -3,6 +3,7 @@
 @section('title', 'My Topics')
 
 @section('teacher')
+    <p style="margin-bottom: 1rem;"><a href="{{ route('dashboard.teacher') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Dashboard</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">My Topics</h1>
     <p style="margin-bottom: 1.5rem; color: #555;">Create topics (lessons) with optional video and attach quizzes or games. Students see topics first, then video and activities.</p>
 

@@ -3,7 +3,8 @@
 @section('title', 'My Quizzes')
 
 @section('teacher')
-        <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">My Quizzes</h1>
+    <p style="margin-bottom: 1rem;"><a href="{{ route('dashboard.teacher') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Dashboard</a></p>
+    <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">My Quizzes</h1>
         <p style="margin-bottom: 1.5rem; color: #555;">Create and manage quizzes for your students.</p>
 
         <a href="{{ route('teacher.quizzes.create') }}" class="eco-btn" style="margin-bottom: 1.5rem;">+ New Quiz</a>

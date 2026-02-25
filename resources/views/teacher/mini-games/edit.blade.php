@@ -3,6 +3,7 @@
 @section('title', 'Edit Mini Game')
 
 @section('teacher')
+    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.mini-games.show', $miniGame) }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Mini Game</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 1rem;">Edit Mini Game</h1>
 
     <form method="POST" action="{{ route('teacher.mini-games.update', $miniGame) }}" id="mini-game-form" style="max-width: 700px;" enctype="multipart/form-data">

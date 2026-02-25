@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\BadgeAwardFor;
 use App\Models\Badge;
 use App\Models\MiniGameAttempt;
 use App\Models\QuizAttempt;
@@ -35,6 +36,19 @@ class BadgeService
             }
         }
 
+        $topicId = $attempt->quiz->topic_id;
+        if ($topicId) {
+            $topicBadges = Badge::query()
+                ->where('topic_id', $topicId)
+                ->whereIn('award_for', [BadgeAwardFor::Quiz->value, BadgeAwardFor::Both->value])
+                ->get();
+            foreach ($topicBadges as $badge) {
+                if ($this->award($user, $badge, 'quiz_attempt', $attempt->id)) {
+                    $newBadges[] = $badge;
+                }
+            }
+        }
+
         return $newBadges;
     }
 
@@ -47,6 +61,19 @@ class BadgeService
         $badge = Badge::query()->where('criteria_type', 'first_game_complete')->first();
         if ($badge && $firstGame && $this->award($user, $badge, 'mini_game_attempt', $attempt->id)) {
             $newBadges[] = $badge;
+        }
+
+        $topicId = $attempt->miniGame->topic_id;
+        if ($topicId) {
+            $topicBadges = Badge::query()
+                ->where('topic_id', $topicId)
+                ->whereIn('award_for', [BadgeAwardFor::Game->value, BadgeAwardFor::Both->value])
+                ->get();
+            foreach ($topicBadges as $topicBadge) {
+                if ($this->award($user, $topicBadge, 'mini_game_attempt', $attempt->id)) {
+                    $newBadges[] = $topicBadge;
+                }
+            }
         }
 
         return $newBadges;

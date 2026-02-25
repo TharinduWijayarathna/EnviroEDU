@@ -3,6 +3,7 @@
 @section('title', 'Create Topic')
 
 @section('teacher')
+    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.topics.index') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Topics</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 1rem;">Create Topic</h1>
 
     <form method="POST" action="{{ route('teacher.topics.store') }}" style="max-width: 700px;">

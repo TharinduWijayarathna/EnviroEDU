@@ -3,6 +3,7 @@
 @section('title', $quiz->title)
 
 @section('teacher')
+    <p style="margin-bottom: 1rem;"><a href="{{ route('teacher.quizzes.index') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Quizzes</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">{{ $quiz->title }}</h1>
     @if ($quiz->description)
         <p style="color: #555; margin-bottom: 1rem;">{{ $quiz->description }}</p>

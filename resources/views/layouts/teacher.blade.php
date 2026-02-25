@@ -16,6 +16,7 @@
                 <a href="{{ route('teacher.topics.index') }}">Topics</a>
                 <a href="{{ route('teacher.quizzes.index') }}">Quizzes</a>
                 <a href="{{ route('teacher.mini-games.index') }}">Mini Games</a>
+                <a href="{{ route('teacher.badges.index') }}">Badges</a>
                 <a href="{{ route('teacher.progress.index') }}">Student Progress</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
