@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="eco-platform-summary">
+        <div class="eco-platform-summary eco-card">
             <h3 class="eco-landing-h3">For teachers</h3>
             <p>Create classes and invite students by email. Build topics, then add quizzes and mini games from templates. Track who has completed what and award badges when criteria are met.</p>
             <h3 class="eco-landing-h3">For students</h3>

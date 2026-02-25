@@ -7,17 +7,17 @@
         <h1 class="eco-home-headline">Environmental learning in one workspace</h1>
         <p class="eco-home-sub">One platform per school. Topics, quizzes, games, and badges—with clear progress for teachers and students.</p>
 
-        <div class="eco-home-stats">
-            <div class="eco-home-stat">
-                <span class="eco-home-stat-value">{{ $schoolCount }}</span>
+        <div class="eco-home-stats" role="region" aria-label="Platform stats">
+            <div class="eco-home-stat eco-card">
+                <span class="eco-home-stat-value" aria-hidden="true">{{ $schoolCount }}</span>
                 <span class="eco-home-stat-label">Schools</span>
             </div>
-            <div class="eco-home-stat">
-                <span class="eco-home-stat-value">{{ $userCount }}</span>
+            <div class="eco-home-stat eco-card">
+                <span class="eco-home-stat-value" aria-hidden="true">{{ $userCount }}</span>
                 <span class="eco-home-stat-label">Teachers & students</span>
             </div>
-            <div class="eco-home-stat">
-                <span class="eco-home-stat-value">1</span>
+            <div class="eco-home-stat eco-card">
+                <span class="eco-home-stat-value" aria-hidden="true">1</span>
                 <span class="eco-home-stat-label">Workspace per school</span>
             </div>
         </div>
@@ -31,8 +31,10 @@
 
     <section class="eco-home-about">
         <h2 class="eco-home-h2">Built for schools</h2>
-        <p class="eco-home-prose">EnviroEdu gives each school its own secure workspace. School admins register once and receive a unique <strong>school code</strong>. Teachers and students join using that code and wait for admin approval, so only your people get access. No mixing between schools—your data stays in your workspace.</p>
-        <p class="eco-home-prose">Teachers create <strong>topics</strong>, add <strong>quizzes</strong> and <strong>mini games</strong>, and award <strong>badges</strong> when students complete activities. Students see their progress and earned badges; parents can link to a child and view the same. Everything is focused on environmental science and built to be simple for all ages.</p>
+        <div class="eco-home-prose-block">
+            <p class="eco-home-prose">EnviroEdu gives each school its own secure workspace. School admins register once and receive a unique <strong>school code</strong>. Teachers and students join using that code and wait for admin approval, so only your people get access. No mixing between schools—your data stays in your workspace.</p>
+            <p class="eco-home-prose">Teachers create <strong>topics</strong>, add <strong>quizzes</strong> and <strong>mini games</strong>, and award <strong>badges</strong> when students complete activities. Students see their progress and earned badges; parents can link to a child and view the same. Everything is focused on environmental science and built to be simple for all ages.</p>
+        </div>
     </section>
 
     <section class="eco-home-who">
@@ -51,10 +53,12 @@
             <a href="{{ route('landing.platform') }}" class="eco-home-card eco-card">
                 <span class="eco-home-card-title">What’s on the platform</span>
                 <p>Topics, quizzes, mini games, badges, and progress tracking. See what teachers and students can do in your workspace.</p>
+                <span class="eco-home-card-arrow" aria-hidden="true">→</span>
             </a>
             <a href="{{ route('landing.how-it-works') }}" class="eco-home-card eco-card">
                 <span class="eco-home-card-title">How it works</span>
                 <p>From school registration to sharing the code and approving members—the full flow in three steps.</p>
+                <span class="eco-home-card-arrow" aria-hidden="true">→</span>
             </a>
         </div>
     </section>

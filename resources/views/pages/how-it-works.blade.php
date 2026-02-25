@@ -16,19 +16,19 @@
                 <span class="eco-landing-how-num">1</span>
                 <h3>School registers</h3>
                 <p>A school admin signs up and enters the school name and a unique <strong>school code</strong>. The code is like a password for your workspace—only people with this code can request to join your school.</p>
-                <p class="eco-landing-how-note">Keep the code safe and share it only with your teachers and students.</p>
+                <p class="eco-landing-how-note eco-callout">Keep the code safe and share it only with your teachers and students.</p>
             </div>
             <div class="eco-landing-how-item">
                 <span class="eco-landing-how-num">2</span>
                 <h3>Share the code</h3>
                 <p>Share the school code with teachers and students. They go to the <a href="{{ route('landing.join') }}">Join your school</a> page, enter the code, and register with their name and email. Until you approve them, they cannot use the platform.</p>
-                <p class="eco-landing-how-note">Teachers and students both use the same code; their role is chosen during registration.</p>
+                <p class="eco-landing-how-note eco-callout">Teachers and students both use the same code; their role is chosen during registration.</p>
             </div>
             <div class="eco-landing-how-item">
                 <span class="eco-landing-how-num">3</span>
                 <h3>Approve & learn</h3>
                 <p>In the school admin dashboard, you’ll see a list of pending teachers and students. Approve each person when ready. Once approved, they can log in: teachers can create classes and content, students can join classes and complete quizzes and games.</p>
-                <p class="eco-landing-how-note">Parents can register separately and link to their child; they don’t need to be approved by the school.</p>
+                <p class="eco-landing-how-note eco-callout">Parents can register separately and link to their child; they don’t need to be approved by the school.</p>
             </div>
         </div>
 
