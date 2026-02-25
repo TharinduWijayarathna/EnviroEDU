@@ -11,6 +11,37 @@ use Illuminate\Support\Str;
 class BadgeImageService
 {
     /**
+     * Generate a badge image from topic, name and description (no user prompt).
+     * Builds an image prompt from the badge context and calls the API.
+     *
+     * @return array{path: string, url: string}|array{success: false, message: string}|null
+     */
+    public function generateFromBadgeContext(string $topicTitle, string $badgeName, ?string $badgeDescription = null): ?array
+    {
+        $prompt = $this->buildPromptFromContext($topicTitle, $badgeName, $badgeDescription);
+
+        return $this->generateAndStore($prompt);
+    }
+
+    /**
+     * Build an image generation prompt from badge topic, name and description.
+     */
+    public function buildPromptFromContext(string $topicTitle, string $badgeName, ?string $badgeDescription = null): string
+    {
+        $parts = [
+            'A small, simple educational badge or icon, square, suitable for a child-friendly app.',
+            'Topic: '.$topicTitle.'.',
+            'Badge name: '.$badgeName.'.',
+        ];
+        if (! empty($badgeDescription)) {
+            $parts[] = 'Meaning: '.trim($badgeDescription);
+        }
+        $parts[] = 'Style: friendly, clean, colourful, no text in the image. Single recognisable symbol or scene.';
+
+        return implode(' ', $parts);
+    }
+
+    /**
      * Generate a badge image using Gemini API (generateContent with image output) and store it.
      * Uses GEMINI_API_KEY from .env (Google AI Studio: https://aistudio.google.com/app/apikey).
      *
@@ -92,7 +123,7 @@ class BadgeImageService
             'contents' => [
                 [
                     'parts' => [
-                        ['text' => 'Generate a single small, simple badge or icon image (square, suitable for an app badge). No text in the image. Style: friendly, clean, suitable for children. Prompt: '.$prompt],
+                        ['text' => $prompt],
                     ],
                 ],
             ],

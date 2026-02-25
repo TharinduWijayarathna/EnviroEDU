@@ -11,6 +11,7 @@ use App\Services\BadgeImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -54,13 +55,20 @@ class BadgeController extends Controller
             $slug = $baseSlug.'-'.(++$i);
         }
 
+        $imagePath = null;
+        if ($request->hasFile('badge_image')) {
+            $imagePath = $request->file('badge_image')->store('badges', 'public');
+        } elseif ($request->filled('image_path')) {
+            $imagePath = $request->input('image_path');
+        }
+
         Badge::query()->create([
             'topic_id' => $request->input('topic_id'),
             'name' => $request->input('name'),
             'slug' => $slug,
             'description' => $request->input('description'),
             'icon' => $request->input('icon') ?: '🏆',
-            'image_path' => $request->input('image_path') ?: null,
+            'image_path' => $imagePath,
             'award_for' => $request->input('award_for'),
             'order' => 0,
         ]);
@@ -94,12 +102,22 @@ class BadgeController extends Controller
 
     public function update(UpdateBadgeRequest $request, Badge $badge): RedirectResponse
     {
+        $imagePath = $badge->image_path;
+        if ($request->hasFile('badge_image')) {
+            if ($badge->image_path && Storage::disk('public')->exists($badge->image_path)) {
+                Storage::disk('public')->delete($badge->image_path);
+            }
+            $imagePath = $request->file('badge_image')->store('badges', 'public');
+        } elseif ($request->filled('image_path')) {
+            $imagePath = $request->input('image_path');
+        }
+
         $badge->update([
             'topic_id' => $request->input('topic_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'icon' => $request->input('icon') ?: '🏆',
-            'image_path' => $request->input('image_path') ?: null,
+            'image_path' => $imagePath,
             'award_for' => $request->input('award_for'),
         ]);
 
@@ -118,14 +136,34 @@ class BadgeController extends Controller
 
     public function generateImage(Request $request, BadgeImageService $badgeImageService): JsonResponse
     {
-        $request->validate(['prompt' => ['required', 'string', 'max:1000']]);
+        $request->validate([
+            'topic_id' => ['required', 'integer', 'exists:topics,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+        ]);
 
-        $result = $badgeImageService->generateAndStore($request->input('prompt'));
+        $topic = Topic::query()
+            ->where('id', $request->input('topic_id'))
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (! $topic) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Topic not found or you do not own it.',
+            ], 422);
+        }
+
+        $result = $badgeImageService->generateFromBadgeContext(
+            $topic->title,
+            $request->input('name'),
+            $request->input('description')
+        );
 
         if ($result === null) {
             return response()->json([
                 'success' => false,
-                'message' => 'Image generation failed. Try a different prompt or check the logs.',
+                'message' => 'Image generation failed. Check the logs or try again.',
             ], 422);
         }
 
