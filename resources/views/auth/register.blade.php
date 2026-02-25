@@ -14,7 +14,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 56px; width: auto; object-fit: contain;">
                 </a>
                 <h2 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.5rem; color: var(--eco-primary); margin-top: 1rem;">
-                    Register as {{ $roleLabel }}
+                    {{ $role === 'admin' ? 'Register your school' : 'Register as ' . $roleLabel }}
                 </h2>
             </div>
 
@@ -32,9 +32,28 @@
                 @csrf
                 <input type="hidden" name="role" value="{{ $role }}">
 
+                @if ($role === 'admin')
+                    <div style="margin-bottom: 1rem;">
+                        <label for="school_name" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">School name</label>
+                        <input id="school_name" type="text" name="school_name" class="eco-input" value="{{ old('school_name') }}" required autofocus>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="school_code" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">School code</label>
+                        <input id="school_code" type="text" name="school_code" class="eco-input" value="{{ old('school_code') }}" required placeholder="e.g. my-school-2024" maxlength="60">
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 0.35rem;">Teachers and students will use this code to join your school. Letters, numbers, and hyphens only.</p>
+                    </div>
+                @endif
+
+                @if (in_array($role, ['teacher', 'student']))
+                    <div style="margin-bottom: 1rem;">
+                        <label for="school_code" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">School code</label>
+                        <input id="school_code" type="text" name="school_code" class="eco-input" value="{{ old('school_code') }}" required placeholder="Ask your school admin for the code">
+                    </div>
+                @endif
+
                 <div style="margin-bottom: 1rem;">
-                    <label for="name" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Name</label>
-                    <input id="name" type="text" name="name" class="eco-input" value="{{ old('name') }}" required autofocus autocomplete="name">
+                    <label for="name" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">{{ $role === 'admin' ? 'Your name' : 'Name' }}</label>
+                    <input id="name" type="text" name="name" class="eco-input" value="{{ old('name') }}" required {{ $role !== 'admin' && !in_array($role, ['teacher', 'student']) ? 'autofocus' : '' }} autocomplete="name">
                 </div>
 
                 <div style="margin-bottom: 1rem;">
@@ -57,7 +76,7 @@
 
             <p style="text-align: center; margin-top: 1.25rem; font-size: 0.9rem;">
                 Already have an account?
-                <a href="{{ route('login', ['role' => $role]) }}" style="color: var(--eco-primary); font-weight: 700;">Login as {{ $roleLabel }}</a>
+                <a href="{{ route('login', ['role' => $role]) }}" style="color: var(--eco-primary); font-weight: 700;">Login as {{ $role === 'admin' ? 'school admin' : $roleLabel }}</a>
             </p>
 
             <p style="text-align: center; margin-top: 0.75rem;">

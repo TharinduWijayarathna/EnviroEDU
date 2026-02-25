@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ApprovalController as AdminApprovalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EduBuddyController;
@@ -17,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn () => view('home'))->name('home');
 
 Route::middleware('guest')->group(function (): void {
-    Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login')->where('role', 'student|teacher|parent');
+    Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login')->where('role', 'admin|teacher|student|parent');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
-    Route::get('/register/{role}', [AuthController::class, 'showRegister'])->name('register')->where('role', 'student|teacher|parent');
+    Route::get('/register/{role}', [AuthController::class, 'showRegister'])->name('register')->where('role', 'admin|teacher|student|parent');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 });
 
@@ -28,14 +29,22 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::get('/play/quiz/{quiz}', [PlayController::class, 'quiz'])->name('play.quiz');
 Route::get('/play/game/{miniGame}', [PlayController::class, 'miniGame'])->name('play.mini-game');
 
-Route::middleware('auth')->group(function (): void {
+Route::get('/approval/pending', fn () => view('auth.approval-pending'))->name('approval.pending')->middleware('auth');
+
+Route::middleware(['auth', 'approved'])->group(function (): void {
     Route::post('/progress/quiz', [ProgressController::class, 'recordQuiz'])->name('progress.quiz');
     Route::post('/progress/game', [ProgressController::class, 'recordMiniGame'])->name('progress.game');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin')->middleware('role:admin');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->name('dashboard.student')->middleware('role:student');
     Route::post('/edubuddy/chat', [EduBuddyController::class, 'chat'])->name('edubuddy.chat')->middleware('role:student');
     Route::get('/dashboard/teacher', [DashboardController::class, 'teacher'])->name('dashboard.teacher')->middleware('role:teacher');
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->name('dashboard.parent')->middleware('role:parent');
+
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function (): void {
+        Route::get('approvals', [AdminApprovalController::class, 'index'])->name('approvals.index');
+        Route::post('approvals/{user}/approve', [AdminApprovalController::class, 'approve'])->name('approvals.approve');
+    });
 
     Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function (): void {
         Route::get('children', [ParentChildController::class, 'index'])->name('children.index');

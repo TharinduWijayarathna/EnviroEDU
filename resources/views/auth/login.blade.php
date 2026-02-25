@@ -14,7 +14,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 56px; width: auto; object-fit: contain;">
                 </a>
                 <h2 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.5rem; color: var(--eco-primary); margin-top: 1rem;">
-                    {{ $roleLabel }} Login
+                    {{ $role === 'admin' ? 'School admin login' : $roleLabel . ' login' }}
                 </h2>
             </div>
 
@@ -50,7 +50,7 @@
 
             <p style="text-align: center; margin-top: 1.25rem; font-size: 0.9rem;">
                 New here?
-                <a href="{{ route('register', ['role' => $role]) }}" style="color: var(--eco-primary); font-weight: 700;">Register as {{ $roleLabel }}</a>
+                <a href="{{ route('register', ['role' => $role]) }}" style="color: var(--eco-primary); font-weight: 700;">Register as {{ $role === 'admin' ? 'school admin' : $roleLabel }}</a>
             </p>
 
             <p style="text-align: center; margin-top: 0.75rem;">

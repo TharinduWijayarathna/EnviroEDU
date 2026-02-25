@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,6 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'school_id',
+        'is_approved',
     ];
 
     /**
@@ -48,6 +51,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => Role::class,
+            'is_approved' => 'boolean',
         ];
     }
 
@@ -96,5 +100,19 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(ClassRoom::class, 'class_room_user', 'user_id', 'class_room_id')
             ->withTimestamps();
+    }
+
+    public function school(): BelongsTo
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function isApproved(): bool
+    {
+        if ($this->role === Role::SchoolAdmin || $this->role === Role::Parent) {
+            return true;
+        }
+
+        return (bool) $this->is_approved;
     }
 }

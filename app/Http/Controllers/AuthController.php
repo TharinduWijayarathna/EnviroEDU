@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Enums\Role;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -33,9 +35,13 @@ class AuthController extends Controller
             if (! $user->hasRole($role)) {
                 Auth::logout();
 
-                return back()->withErrors(['email' => 'This account is not registered as a ' . $role . '.']);
+                return back()->withErrors(['email' => 'This account is not registered as a '.$role.'.']);
             }
             $request->session()->regenerate();
+
+            if (! $user->isApproved()) {
+                return redirect()->route('approval.pending');
+            }
 
             return redirect()->intended(route("dashboard.{$role}"));
         }
@@ -58,12 +64,40 @@ class AuthController extends Controller
         $role = $request->input('role', 'student');
         $roleEnum = Role::from($role);
 
-        $user = User::query()->create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-            'role' => $roleEnum,
-        ]);
+        if ($role === 'admin') {
+            $user = DB::transaction(function () use ($request, $roleEnum) {
+                $user = User::query()->create([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email'),
+                    'password' => $request->input('password'),
+                    'role' => $roleEnum,
+                ]);
+                $school = School::query()->create([
+                    'name' => $request->input('school_name'),
+                    'slug' => $request->input('school_code'),
+                    'admin_id' => $user->id,
+                ]);
+                $user->update(['school_id' => $school->id]);
+
+                return $user->fresh();
+            });
+        } else {
+            $schoolId = null;
+            $isApproved = true;
+            if (in_array($role, ['teacher', 'student'], true)) {
+                $school = School::query()->where('slug', $request->input('school_code'))->firstOrFail();
+                $schoolId = $school->id;
+                $isApproved = false;
+            }
+            $user = User::query()->create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+                'role' => $roleEnum,
+                'school_id' => $schoolId,
+                'is_approved' => $isApproved,
+            ]);
+        }
 
         Auth::login($user);
         $request->session()->regenerate();

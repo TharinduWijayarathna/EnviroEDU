@@ -748,3 +748,152 @@
     .eco-topics-panel { width: 100%; max-height: 280px; }
     .eco-sidebar-nav { width: 100%; flex-direction: row; flex-wrap: wrap; }
 }
+
+/* Landing / home page for schools */
+.eco-landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(160deg, #e8f5e9 0%, #f1f8e9 30%, #fffde7 60%, #f5f7f6 100%);
+}
+
+.eco-landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.eco-landing-logo-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
+.eco-landing-nav {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.eco-landing-nav a {
+    color: var(--eco-dark);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 14px;
+    transition: all 0.2s;
+}
+
+.eco-landing-nav a:hover {
+    background: var(--eco-primary);
+    color: white;
+}
+
+.eco-landing-hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    flex-wrap: wrap;
+}
+
+.eco-landing-hero-content {
+    max-width: 520px;
+}
+
+.eco-landing-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--eco-primary);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.eco-landing-tagline {
+    font-size: 1.15rem;
+    color: var(--eco-dark);
+    opacity: 0.95;
+    margin-bottom: 1.75rem;
+    line-height: 1.5;
+}
+
+.eco-landing-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.eco-btn-hero {
+    padding: 0.9rem 1.75rem;
+    font-size: 1.1rem;
+}
+
+.eco-btn-outline {
+    background: transparent;
+    color: var(--eco-primary);
+    border: 3px solid var(--eco-primary);
+}
+
+.eco-btn-outline:hover {
+    background: var(--eco-primary);
+    color: white;
+}
+
+.eco-landing-hero-visual {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.eco-landing-emoji {
+    font-size: 4rem;
+    animation: eco-float 3s ease-in-out infinite;
+}
+
+.eco-landing-emoji:nth-child(2) { animation-delay: 0.5s; }
+.eco-landing-emoji:nth-child(3) { animation-delay: 1s; }
+
+.eco-landing-roles {
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.eco-landing-section-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.75rem;
+    color: var(--eco-primary);
+    margin-bottom: 0.5rem;
+}
+
+.eco-landing-section-desc {
+    font-size: 1rem;
+    color: var(--eco-dark);
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.eco-landing-role-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.eco-landing-role-card {
+    flex: 1;
+    min-width: 180px;
+    max-width: 260px;
+}
+
+.eco-landing-footer {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    font-size: 0.9rem;
+    color: var(--eco-dark);
+    opacity: 0.85;
+}

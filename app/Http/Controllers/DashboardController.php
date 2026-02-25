@@ -20,6 +20,19 @@ class DashboardController extends Controller
         return redirect()->route("dashboard.{$role}");
     }
 
+    public function admin(): View
+    {
+        $school = auth()->user()->school;
+        $pendingTeachersCount = $school?->pendingTeachers()->count() ?? 0;
+        $pendingStudentsCount = $school?->pendingStudents()->count() ?? 0;
+
+        return view('dashboard.admin', [
+            'school' => $school,
+            'pendingTeachersCount' => $pendingTeachersCount,
+            'pendingStudentsCount' => $pendingStudentsCount,
+        ]);
+    }
+
     public function student(): View
     {
         $earnedBadges = [];
