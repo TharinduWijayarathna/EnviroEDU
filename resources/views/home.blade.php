@@ -29,14 +29,41 @@
         </div>
     </section>
 
+    <section class="eco-home-about">
+        <h2 class="eco-home-h2">Built for schools</h2>
+        <p class="eco-home-prose">EnviroEdu gives each school its own secure workspace. School admins register once and receive a unique <strong>school code</strong>. Teachers and students join using that code and wait for admin approval, so only your people get access. No mixing between schools—your data stays in your workspace.</p>
+        <p class="eco-home-prose">Teachers create <strong>topics</strong>, add <strong>quizzes</strong> and <strong>mini games</strong>, and award <strong>badges</strong> when students complete activities. Students see their progress and earned badges; parents can link to a child and view the same. Everything is focused on environmental science and built to be simple for all ages.</p>
+    </section>
+
+    <section class="eco-home-who">
+        <h2 class="eco-home-h2">Who uses EnviroEdu</h2>
+        <ul class="eco-home-who-list">
+            <li><strong>School admins</strong> — Register the school, get the code, and approve teachers and students.</li>
+            <li><strong>Teachers</strong> — Create classes, topics, quizzes, and games; track student progress.</li>
+            <li><strong>Students</strong> — Join with the school code, complete quizzes and games, earn badges.</li>
+            <li><strong>Parents</strong> — Link to a child’s account and view their progress and badges.</li>
+        </ul>
+    </section>
+
     <section class="eco-home-links">
-        <a href="{{ route('landing.platform') }}" class="eco-home-card eco-card">
-            <span class="eco-home-card-title">What’s on the platform</span>
-            <p>Topics, quizzes, mini games, badges, and progress tracking.</p>
-        </a>
-        <a href="{{ route('landing.how-it-works') }}" class="eco-home-card eco-card">
-            <span class="eco-home-card-title">How it works</span>
-            <p>School registers → share code → teachers & students join → admin approves.</p>
-        </a>
+        <h2 class="eco-home-h2">Learn more</h2>
+        <div class="eco-home-links-grid">
+            <a href="{{ route('landing.platform') }}" class="eco-home-card eco-card">
+                <span class="eco-home-card-title">What’s on the platform</span>
+                <p>Topics, quizzes, mini games, badges, and progress tracking. See what teachers and students can do in your workspace.</p>
+            </a>
+            <a href="{{ route('landing.how-it-works') }}" class="eco-home-card eco-card">
+                <span class="eco-home-card-title">How it works</span>
+                <p>From school registration to sharing the code and approving members—the full flow in three steps.</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="eco-home-cta">
+        <p class="eco-home-cta-text">Ready to get started?</p>
+        <div class="eco-home-actions">
+            <a href="{{ route('register', ['role' => 'admin']) }}" class="eco-btn eco-btn-hero">Register your school</a>
+            <a href="{{ route('landing.join') }}" class="eco-btn eco-btn-outline">Join your school</a>
+        </div>
     </section>
 @endsection

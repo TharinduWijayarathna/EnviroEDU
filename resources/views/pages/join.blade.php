@@ -7,6 +7,10 @@
         <h2 class="eco-landing-h2">Join your school</h2>
         <p class="eco-landing-desc">Get your school code from your teacher or school admin, then sign in or create an account.</p>
 
+        <div class="eco-landing-prose">
+            <p>If your school is already on EnviroEdu, you need the <strong>school code</strong> to join. The code is created when a school admin registers and can be shared with staff and students. Enter it below to go to registration, or use the role cards further down to log in if you already have an account.</p>
+        </div>
+
         <div class="eco-landing-join-box eco-card">
             <p class="eco-landing-join-label">Have a school code? Enter it here:</p>
             <div class="eco-landing-join-row">
@@ -29,25 +33,31 @@
             </ol>
         </div>
 
-        <div class="eco-landing-roles" id="login-links">
+                <div class="eco-landing-roles" id="login-links">
             <h3 class="eco-landing-h3">Sign in or register by role</h3>
+            <p class="eco-landing-desc eco-landing-desc-small">Choose your role to log in or create an account. Teachers and students must enter the school code when registering.</p>
             <div class="eco-landing-role-cards">
                 <a href="{{ route('login', ['role' => 'teacher']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">👩‍🏫</span>
                     <h3>Teacher</h3>
-                    <p>Manage classes, topics & track progress</p>
+                    <p>Manage classes, topics & track progress. Register with your school code; your admin will approve your account.</p>
                 </a>
                 <a href="{{ route('login', ['role' => 'student']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">🎒</span>
                     <h3>Student</h3>
-                    <p>Learn & play with quizzes, games & badges</p>
+                    <p>Learn & play with quizzes, games & badges. Join with your school code; once approved, you can start learning.</p>
                 </a>
                 <a href="{{ route('login', ['role' => 'parent']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">👨‍👩‍👧</span>
                     <h3>Parent</h3>
-                    <p>View your child's progress & badges</p>
+                    <p>View your child's progress & badges. You can register without a school code and link to your child from the parent dashboard.</p>
                 </a>
             </div>
+        </div>
+
+        <div class="eco-landing-prose eco-landing-prose-end">
+            <h3 class="eco-landing-h3">Don’t have a school code?</h3>
+            <p>If your school isn’t on EnviroEdu yet, ask your principal or admin to <a href="{{ route('register', ['role' => 'admin']) }}">register your school</a> first. They’ll receive the school code to share with you.</p>
         </div>
     </section>
 
