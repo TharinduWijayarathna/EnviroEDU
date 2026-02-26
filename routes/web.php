@@ -62,6 +62,7 @@ Route::middleware(['auth', 'approved'])->group(function (): void {
         Route::delete('class-rooms/{classRoom}/students/{student}', [ClassRoomController::class, 'removeStudent'])->name('class-rooms.students.destroy');
         Route::resource('topics', TopicController::class)->parameters(['topics' => 'topic']);
         Route::resource('quizzes', QuizController::class);
+        Route::post('mini-games/generate', [MiniGameController::class, 'generate'])->name('mini-games.generate');
         Route::resource('mini-games', MiniGameController::class)->parameters(['mini-games' => 'miniGame']);
         Route::post('badges/generate-image', [BadgeController::class, 'generateImage'])->name('badges.generate-image');
         Route::resource('badges', BadgeController::class);

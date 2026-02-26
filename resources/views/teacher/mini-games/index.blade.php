@@ -5,9 +5,9 @@
 @section('teacher')
     <p style="margin-bottom: 1rem;"><a href="{{ route('dashboard.teacher') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Dashboard</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">My Mini Games</h1>
-    <p style="margin-bottom: 1.5rem; color: #555;">Create customizable mini games from templates.</p>
+    <p style="margin-bottom: 1.5rem; color: #555;">Create environmental quiz games with AI. Describe a topic (e.g. recycling, ecosystems) and get a 3D game your students can play.</p>
 
-    <a href="{{ route('teacher.mini-games.create') }}" class="eco-btn" style="margin-bottom: 1.5rem;">+ New Mini Game</a>
+    <a href="{{ route('teacher.mini-games.create') }}" class="eco-btn" style="margin-bottom: 1.5rem;">+ Create environmental game with AI</a>
 
     <div style="display: flex; flex-direction: column; gap: 1rem;">
         @forelse ($miniGames as $game)
@@ -28,8 +28,8 @@
             </div>
         @empty
             <div class="eco-card" style="text-align: center; color: #666;">
-                <p>No mini games yet. Create one from a template!</p>
-                <a href="{{ route('teacher.mini-games.create') }}" class="eco-btn" style="margin-top: 1rem;">Create Mini Game</a>
+                <p>No games yet. Create an environmental quiz with AI.</p>
+                <a href="{{ route('teacher.mini-games.create') }}" class="eco-btn" style="margin-top: 1rem;">Create game with AI</a>
             </div>
         @endforelse
     </div>

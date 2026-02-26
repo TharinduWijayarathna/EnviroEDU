@@ -18,6 +18,7 @@ class MiniGame extends Model
         'game_template_id',
         'title',
         'description',
+        'prompt',
         'config',
         'grade_level',
         'is_published',

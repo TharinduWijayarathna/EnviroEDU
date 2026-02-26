@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GenerateMiniGameRequest;
 use App\Http\Requests\StoreMiniGameRequest;
 use App\Http\Requests\UpdateMiniGameRequest;
 use App\Models\GameTemplate;
 use App\Models\MiniGame;
 use App\Models\Topic;
+use App\Services\MiniGameGeneratorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -27,10 +29,42 @@ class MiniGameController extends Controller
 
     public function create(): View
     {
-        $templates = GameTemplate::query()->orderBy('name')->get();
         $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
 
-        return view('teacher.mini-games.create', compact('templates', 'topics'));
+        return view('teacher.mini-games.create', compact('topics'));
+    }
+
+    public function generate(GenerateMiniGameRequest $request, MiniGameGeneratorService $generator): RedirectResponse
+    {
+        $gradeLevel = $request->input('grade_level') ? (int) $request->input('grade_level') : null;
+        $result = $generator->generate(
+            $request->input('prompt'),
+            $request->input('game_type'),
+            $gradeLevel
+        );
+
+        if (isset($result['error'])) {
+            return back()->withErrors(['prompt' => $result['error']])->withInput();
+        }
+
+        $template = GameTemplate::query()->where('slug', 'environment_3d')->first();
+        if (! $template) {
+            return back()->withErrors(['prompt' => 'Environment 3D game template is not set up. Run: php artisan db:seed --class=GameTemplateSeeder'])->withInput();
+        }
+
+        $miniGame = MiniGame::query()->create([
+            'user_id' => auth()->id(),
+            'topic_id' => $request->input('topic_id') ?: null,
+            'game_template_id' => $template->id,
+            'title' => $result['title'],
+            'description' => $result['description'] ?? null,
+            'prompt' => $request->input('prompt'),
+            'config' => $result['config'],
+            'grade_level' => $gradeLevel,
+            'is_published' => false,
+        ]);
+
+        return redirect()->route('teacher.mini-games.show', $miniGame)->with('status', 'Game generated. You can publish it or edit the title.');
     }
 
     public function store(StoreMiniGameRequest $request): RedirectResponse
@@ -79,16 +113,20 @@ class MiniGameController extends Controller
             abort(403);
         }
 
-        $config = $this->buildConfigFromRequest($request, $miniGame->gameTemplate->slug);
-
-        $miniGame->update([
+        $templateSlug = $miniGame->gameTemplate->slug;
+        $update = [
             'topic_id' => $request->input('topic_id') ?: null,
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'config' => $config,
             'grade_level' => $request->input('grade_level') ? (int) $request->input('grade_level') : null,
             'is_published' => $request->boolean('is_published'),
-        ]);
+        ];
+
+        if ($templateSlug !== 'environment_3d') {
+            $update['config'] = $this->buildConfigFromRequest($request, $templateSlug);
+        }
+
+        $miniGame->update($update);
 
         return redirect()->route('teacher.mini-games.index')->with('status', 'Mini game updated.');
     }
