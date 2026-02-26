@@ -37,17 +37,17 @@
             <h3 class="eco-landing-h3">Sign in or register by role</h3>
             <p class="eco-landing-desc eco-landing-desc-small">Choose your role to log in or create an account. Teachers and students must enter the school code when registering.</p>
             <div class="eco-landing-role-cards">
-                <a href="{{ route('login', ['role' => 'teacher']) }}" class="eco-card eco-role-card eco-landing-role-card">
+                <a href="{{ route('login.role', ['role' => 'teacher']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">👩‍🏫</span>
                     <h3>Teacher</h3>
                     <p>Manage classes, topics & track progress. Register with your school code; your admin will approve your account.</p>
                 </a>
-                <a href="{{ route('login', ['role' => 'student']) }}" class="eco-card eco-role-card eco-landing-role-card">
+                <a href="{{ route('login.role', ['role' => 'student']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">🎒</span>
                     <h3>Student</h3>
                     <p>Learn & play with quizzes, games & badges. Join with your school code; once approved, you can start learning.</p>
                 </a>
-                <a href="{{ route('login', ['role' => 'parent']) }}" class="eco-card eco-role-card eco-landing-role-card">
+                <a href="{{ route('login.role', ['role' => 'parent']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">👨‍👩‍👧</span>
                     <h3>Parent</h3>
                     <p>View your child's progress & badges. You can register without a school code and link to your child from the parent dashboard.</p>

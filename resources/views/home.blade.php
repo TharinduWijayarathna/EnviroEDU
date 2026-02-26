@@ -25,7 +25,6 @@
         <div class="eco-home-actions">
             <a href="{{ route('register', ['role' => 'admin']) }}" class="eco-btn eco-btn-hero">Register your school</a>
             <a href="{{ route('landing.join') }}" class="eco-btn eco-btn-outline">Join your school</a>
-            <a href="{{ route('login', ['role' => 'admin']) }}" class="eco-landing-nav-link eco-home-link">School login</a>
         </div>
     </section>
 

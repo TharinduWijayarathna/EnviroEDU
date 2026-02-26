@@ -15,6 +15,11 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
+    public function showLoginRoleChoice(): View
+    {
+        return view('auth.login-choose');
+    }
+
     public function showLogin(string $role): View
     {
         $this->validateRole($role);

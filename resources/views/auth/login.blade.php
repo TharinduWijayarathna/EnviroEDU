@@ -54,7 +54,9 @@
             </p>
 
             <p style="text-align: center; margin-top: 0.75rem;">
-                <a href="{{ route('home') }}" style="color: var(--eco-dark); font-size: 0.9rem;">← Back to home</a>
+                <a href="{{ route('login') }}" style="color: var(--eco-dark); font-size: 0.9rem;">← Different role?</a>
+                ·
+                <a href="{{ route('home') }}" style="color: var(--eco-dark); font-size: 0.9rem;">Back to home</a>
             </p>
         </div>
     </div>

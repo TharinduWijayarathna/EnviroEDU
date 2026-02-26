@@ -22,7 +22,8 @@ Route::get('/platform', [LandingController::class, 'platform'])->name('landing.p
 Route::get('/how-it-works', [LandingController::class, 'howItWorks'])->name('landing.how-it-works');
 
 Route::middleware('guest')->group(function (): void {
-    Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login')->where('role', 'admin|teacher|student|parent');
+    Route::get('/login', [AuthController::class, 'showLoginRoleChoice'])->name('login');
+    Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login.role')->where('role', 'admin|teacher|student|parent');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
     Route::get('/register/{role}', [AuthController::class, 'showRegister'])->name('register')->where('role', 'admin|teacher|student|parent');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');

@@ -76,7 +76,7 @@
 
             <p style="text-align: center; margin-top: 1.25rem; font-size: 0.9rem;">
                 Already have an account?
-                <a href="{{ route('login', ['role' => $role]) }}" style="color: var(--eco-primary); font-weight: 700;">Login as {{ $role === 'admin' ? 'school admin' : $roleLabel }}</a>
+                <a href="{{ route('login.role', ['role' => $role]) }}" style="color: var(--eco-primary); font-weight: 700;">Login as {{ $role === 'admin' ? 'school admin' : $roleLabel }}</a>
             </p>
 
             <p style="text-align: center; margin-top: 0.75rem;">

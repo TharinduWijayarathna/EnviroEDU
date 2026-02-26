@@ -17,7 +17,7 @@
                     <a href="{{ route('landing.join') }}" class="eco-landing-nav-link">Join</a>
                     <a href="{{ route('landing.platform') }}" class="eco-landing-nav-link">Platform</a>
                     <a href="{{ route('landing.how-it-works') }}" class="eco-landing-nav-link">How it works</a>
-                    <a href="{{ route('login', ['role' => 'admin']) }}" class="eco-btn eco-landing-nav-btn">School login</a>
+                    <a href="{{ route('login') }}" class="eco-btn eco-landing-nav-btn">Login</a>
                 </nav>
             </header>
             @yield('landing')
