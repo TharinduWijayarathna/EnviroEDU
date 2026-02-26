@@ -32,12 +32,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::get('/play/quiz/{quiz}', [PlayController::class, 'quiz'])->name('play.quiz');
 Route::get('/play/game/{miniGame}', [PlayController::class, 'miniGame'])->name('play.mini-game');
+Route::get('/play/platform-game/{platformGame:slug}', [PlayController::class, 'platformGame'])->name('play.platform-game');
 
 Route::get('/approval/pending', fn () => view('auth.approval-pending'))->name('approval.pending')->middleware('auth');
 
 Route::middleware(['auth', 'approved'])->group(function (): void {
     Route::post('/progress/quiz', [ProgressController::class, 'recordQuiz'])->name('progress.quiz');
     Route::post('/progress/game', [ProgressController::class, 'recordMiniGame'])->name('progress.game');
+    Route::post('/progress/platform-game', [ProgressController::class, 'recordPlatformGame'])->name('progress.platform-game');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin')->middleware('role:admin');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->name('dashboard.student')->middleware('role:student');

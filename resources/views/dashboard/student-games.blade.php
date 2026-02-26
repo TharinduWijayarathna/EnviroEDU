@@ -9,8 +9,26 @@
             <a href="{{ url('/dashboard/student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-back">← Back to My Learning</a>
             <div class="eco-env-panel">
                 <h1 class="eco-env-panel-title">🎮 Games</h1>
-                <p class="eco-env-panel-desc">Standalone games. More games are inside each topic.</p>
+                <p class="eco-env-panel-desc">Platform games and standalone games. More games are inside each topic.</p>
+
+                @php $platformGames = $platformGames ?? collect(); @endphp
+                @if ($platformGames->isNotEmpty())
+                    <h2 class="eco-env-section-title">🌟 Platform Games</h2>
+                    <ul class="eco-env-list">
+                        @foreach ($platformGames as $game)
+                            <li>
+                                <a href="{{ route('play.platform-game', $game->slug) }}" class="eco-env-list-item eco-env-list-item-platform">
+                                    <span class="eco-env-list-icon">🌟</span>
+                                    <span class="eco-env-list-text">{{ $game->title }}</span>
+                                    <span class="eco-env-list-go">Play →</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+
                 @if (isset($standaloneMiniGames) && $standaloneMiniGames->isNotEmpty())
+                    <h2 class="eco-env-section-title">🎮 Teacher Games</h2>
                     <ul class="eco-env-list">
                         @foreach ($standaloneMiniGames as $game)
                             <li>
@@ -22,8 +40,10 @@
                             </li>
                         @endforeach
                     </ul>
-                @else
-                    <p class="eco-env-empty">No standalone games. Open a topic to play its games! 🎮</p>
+                @endif
+
+                @if ($platformGames->isEmpty() && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()))
+                    <p class="eco-env-empty">No games yet. Open a topic to play its games! 🎮</p>
                 @endif
             </div>
         </div>
@@ -42,6 +62,10 @@
         .eco-env-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
         .eco-env-list-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.1rem; border-radius: 14px; text-decoration: none; color: #1a3c34; font-weight: 600; background: #f8fcfb; border: 2px solid transparent; transition: all 0.2s; }
         .eco-env-list-item:hover { background: #e8f7f5; border-color: var(--eco-primary); }
+        .eco-env-section-title { font-size: 1.1rem; color: #1a3c34; margin: 1rem 0 0.5rem; }
+        .eco-env-section-title:first-of-type { margin-top: 0; }
+        .eco-env-list-item-platform { background: #fff8e1; }
+        .eco-env-list-item-platform:hover { border-color: #ffb74d; background: #ffecb3; }
         .eco-env-list-item-game { background: #f5f8fa; }
         .eco-env-list-item-game:hover { border-color: #5a8ab0; background: #e3eef5; }
         .eco-env-list-icon { font-size: 1.3rem; }

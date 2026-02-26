@@ -25,7 +25,7 @@
 /* Student dashboard Three.js environment (shared) */
 .eco-env-wrap {
     position: relative;
-    min-height: 420px;
+    min-height: 80vh;
     width: 100%;
 }
 .eco-env-canvas {

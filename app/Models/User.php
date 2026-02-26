@@ -91,6 +91,11 @@ class User extends Authenticatable
         return $this->hasMany(MiniGameAttempt::class);
     }
 
+    public function platformGameAttempts(): HasMany
+    {
+        return $this->hasMany(PlatformGameAttempt::class);
+    }
+
     public function teachingClasses(): HasMany
     {
         return $this->hasMany(ClassRoom::class, 'user_id');

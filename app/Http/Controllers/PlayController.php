@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MiniGame;
+use App\Models\PlatformGame;
 use App\Models\Quiz;
 use Illuminate\View\View;
 
@@ -36,6 +37,16 @@ class PlayController extends Controller
             'miniGame' => $miniGame,
             'studentPage' => 'play',
             'studentLayoutTitle' => $miniGame->title,
+            'studentFullWidth' => true,
+        ]);
+    }
+
+    public function platformGame(PlatformGame $platformGame): View
+    {
+        return view('play.platform-game', [
+            'platformGame' => $platformGame,
+            'studentPage' => 'play',
+            'studentLayoutTitle' => $platformGame->title,
             'studentFullWidth' => true,
         ]);
     }

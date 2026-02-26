@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\MiniGame;
 use App\Models\MiniGameAttempt;
+use App\Models\PlatformGame;
+use App\Models\PlatformGameAttempt;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Services\BadgeService;
@@ -91,6 +93,43 @@ class ProgressController extends Controller
         ]);
 
         $newBadges = $this->badgeService->awardForMiniGameAttempt($user, $attempt);
+
+        return response()->json([
+            'attempt_id' => $attempt->id,
+            'new_badges' => collect($newBadges)->map(fn ($b) => [
+                'id' => $b->id,
+                'name' => $b->name,
+                'icon' => $b->icon,
+                'description' => $b->description,
+                'image_url' => $b->image_path ? asset('storage/'.$b->image_path) : null,
+            ])->values()->all(),
+        ]);
+    }
+
+    public function recordPlatformGame(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'platform_game_slug' => ['required', 'string', 'exists:platform_games,slug'],
+            'completed' => ['boolean'],
+            'details' => ['nullable', 'array'],
+        ]);
+
+        $platformGame = PlatformGame::query()->where('slug', $validated['platform_game_slug'])->firstOrFail();
+
+        $user = Auth::user();
+        if (! $user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $attempt = PlatformGameAttempt::query()->create([
+            'user_id' => $user->id,
+            'platform_game_id' => $platformGame->id,
+            'completed' => $validated['completed'] ?? true,
+            'details' => $validated['details'] ?? [],
+            'completed_at' => now(),
+        ]);
+
+        $newBadges = $this->badgeService->awardForPlatformGameAttempt($user, $attempt);
 
         return response()->json([
             'attempt_id' => $attempt->id,

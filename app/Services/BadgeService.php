@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\BadgeAwardFor;
 use App\Models\Badge;
 use App\Models\MiniGameAttempt;
+use App\Models\PlatformGameAttempt;
 use App\Models\QuizAttempt;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +74,26 @@ class BadgeService
                 if ($this->award($user, $topicBadge, 'mini_game_attempt', $attempt->id)) {
                     $newBadges[] = $topicBadge;
                 }
+            }
+        }
+
+        return $newBadges;
+    }
+
+    public function awardForPlatformGameAttempt(User $user, PlatformGameAttempt $attempt): array
+    {
+        $newBadges = [];
+        $slug = $attempt->platformGame->slug;
+
+        $candidates = Badge::query()
+            ->where('criteria_type', 'platform_game_complete')
+            ->get();
+
+        foreach ($candidates as $badge) {
+            $config = $badge->criteria_config ?? [];
+            $gameSlug = is_array($config) ? ($config['platform_game_slug'] ?? null) : null;
+            if ($gameSlug === $slug && $this->award($user, $badge, 'platform_game_attempt', $attempt->id)) {
+                $newBadges[] = $badge;
             }
         }
 

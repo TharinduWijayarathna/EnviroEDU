@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Badge;
 use App\Models\ClassRoom;
 use App\Models\MiniGame;
+use App\Models\PlatformGame;
 use App\Models\Quiz;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
@@ -65,10 +66,16 @@ class DashboardController extends Controller
 
     public function studentGames(): View
     {
+        $platformGames = PlatformGame::query()
+            ->orderBy('order')
+            ->orderBy('title')
+            ->get();
+
         return view('dashboard.student-games', [
             'studentPage' => 'dashboard',
             'studentLayoutTitle' => 'Games',
             'studentFullWidth' => true,
+            'platformGames' => $platformGames,
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\View\Composers;
 
 use App\Models\MiniGame;
+use App\Models\PlatformGame;
 use App\Models\Quiz;
 use App\Models\Topic;
 use Illuminate\View\View;
@@ -14,6 +15,7 @@ class StudentLayoutComposer
         $topics = collect();
         $standaloneQuizzes = collect();
         $standaloneMiniGames = collect();
+        $platformGames = collect();
         $grade = request()->integer('grade', 0);
         $topicsPayload = [];
 
@@ -48,6 +50,11 @@ class StudentLayoutComposer
                 ->limit(20)
                 ->get();
 
+            $platformGames = PlatformGame::query()
+                ->orderBy('order')
+                ->orderBy('title')
+                ->get();
+
             $topicsPayload = $topics->map(function ($t) {
                 return [
                     'id' => $t->id,
@@ -73,6 +80,6 @@ class StudentLayoutComposer
             $badgeCount = auth()->user()->badges()->count();
         }
 
-        $view->with(compact('topics', 'standaloneQuizzes', 'standaloneMiniGames', 'grade', 'topicsPayload', 'badgeCount'));
+        $view->with(compact('topics', 'standaloneQuizzes', 'standaloneMiniGames', 'platformGames', 'grade', 'topicsPayload', 'badgeCount'));
     }
 }
