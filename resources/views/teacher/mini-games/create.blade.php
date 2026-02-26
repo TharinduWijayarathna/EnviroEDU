@@ -43,7 +43,7 @@
             <label for="grade_level" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Grade level (optional)</label>
             <select id="grade_level" name="grade_level" class="eco-input">
                 <option value="">Any</option>
-                @foreach (range(1, 8) as $g)
+                @foreach (config('app.grade_levels', [4, 5]) as $g)
                     <option value="{{ $g }}" {{ old('grade_level') == $g ? 'selected' : '' }}>Grade {{ $g }}</option>
                 @endforeach
             </select>

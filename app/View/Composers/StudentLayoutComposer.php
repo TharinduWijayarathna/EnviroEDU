@@ -16,7 +16,9 @@ class StudentLayoutComposer
         $standaloneQuizzes = collect();
         $standaloneMiniGames = collect();
         $platformGames = collect();
-        $grade = request()->integer('grade', 0);
+        $requestedGrade = request()->integer('grade', 0);
+        $allowedGrades = config('app.grade_levels', [4, 5]);
+        $grade = in_array($requestedGrade, $allowedGrades, true) ? $requestedGrade : 0;
         $topicsPayload = [];
 
         if (auth()->check() && auth()->user()->role?->value === 'student') {

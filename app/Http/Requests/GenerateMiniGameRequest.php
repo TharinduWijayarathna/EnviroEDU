@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class GenerateMiniGameRequest extends FormRequest
 {
@@ -20,7 +21,7 @@ class GenerateMiniGameRequest extends FormRequest
             'game_type' => ['required', 'string', 'in:drag_drop,matching'],
             'prompt' => ['required', 'string', 'min:15', 'max:2000'],
             'topic_id' => ['nullable', 'integer', 'exists:topics,id'],
-            'grade_level' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'grade_level' => ['nullable', 'integer', Rule::in(config('app.grade_levels', [4, 5]))],
         ];
     }
 
