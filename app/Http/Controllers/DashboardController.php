@@ -35,15 +35,67 @@ class DashboardController extends Controller
 
     public function student(): View
     {
-        $earnedBadges = [];
-        if (auth()->check() && auth()->user()->role?->value === 'student') {
-            $earnedBadges = auth()->user()->badges()->orderByPivot('earned_at', 'desc')->get();
-        }
-
         return view('dashboard.student', [
             'studentPage' => 'dashboard',
-            'studentLayoutTitle' => 'Student Dashboard',
+            'studentLayoutTitle' => 'My Learning',
+            'studentFullWidth' => true,
+        ]);
+    }
+
+    public function studentBadges(): View
+    {
+        $earnedBadges = auth()->user()->badges()->orderByPivot('earned_at', 'desc')->get();
+
+        return view('dashboard.student-badges', [
+            'studentPage' => 'dashboard',
+            'studentLayoutTitle' => 'My badges',
+            'studentFullWidth' => true,
             'earnedBadges' => $earnedBadges,
+        ]);
+    }
+
+    public function studentTopics(): View
+    {
+        return view('dashboard.student-topics', [
+            'studentPage' => 'dashboard',
+            'studentLayoutTitle' => 'Topics',
+            'studentFullWidth' => true,
+        ]);
+    }
+
+    public function studentGames(): View
+    {
+        return view('dashboard.student-games', [
+            'studentPage' => 'dashboard',
+            'studentLayoutTitle' => 'Games',
+            'studentFullWidth' => true,
+        ]);
+    }
+
+    public function studentQuizzes(): View
+    {
+        return view('dashboard.student-quizzes', [
+            'studentPage' => 'dashboard',
+            'studentLayoutTitle' => 'Quizzes',
+            'studentFullWidth' => true,
+        ]);
+    }
+
+    public function studentTopic(Topic $topic): View
+    {
+        if (! $topic->is_published) {
+            abort(404);
+        }
+        $topic->load([
+            'quizzes' => fn ($q) => $q->where('is_published', true),
+            'miniGames' => fn ($q) => $q->where('is_published', true)->with('gameTemplate'),
+        ]);
+
+        return view('dashboard.student-topic', [
+            'studentPage' => 'dashboard',
+            'studentLayoutTitle' => $topic->title,
+            'studentFullWidth' => true,
+            'topic' => $topic,
         ]);
     }
 

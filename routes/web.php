@@ -41,6 +41,11 @@ Route::middleware(['auth', 'approved'])->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin')->middleware('role:admin');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->name('dashboard.student')->middleware('role:student');
+    Route::get('/dashboard/student/badges', [DashboardController::class, 'studentBadges'])->name('dashboard.student.badges')->middleware('role:student');
+    Route::get('/dashboard/student/topics', [DashboardController::class, 'studentTopics'])->name('dashboard.student.topics')->middleware('role:student');
+    Route::get('/dashboard/student/games', [DashboardController::class, 'studentGames'])->name('dashboard.student.games')->middleware('role:student');
+    Route::get('/dashboard/student/quizzes', [DashboardController::class, 'studentQuizzes'])->name('dashboard.student.quizzes')->middleware('role:student');
+    Route::get('/dashboard/student/topic/{topic}', [DashboardController::class, 'studentTopic'])->name('dashboard.student.topic')->middleware('role:student');
     Route::post('/edubuddy/chat', [EduBuddyController::class, 'chat'])->name('edubuddy.chat')->middleware('role:student');
     Route::get('/dashboard/teacher', [DashboardController::class, 'teacher'])->name('dashboard.teacher')->middleware('role:teacher');
     Route::get('/dashboard/parent', [DashboardController::class, 'parent'])->name('dashboard.parent')->middleware('role:parent');

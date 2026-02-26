@@ -22,6 +22,30 @@
     box-sizing: border-box;
 }
 
+/* Student dashboard Three.js environment (shared) */
+.eco-env-wrap {
+    position: relative;
+    min-height: 420px;
+    width: 100%;
+}
+.eco-env-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.eco-env-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.eco-env-overlay a,
+.eco-env-overlay button,
+.eco-env-overlay [tabindex]:not([tabindex="-1"]) {
+    pointer-events: auto;
+}
+
 #canvas-container,
 #eco-canvas {
     position: fixed;
@@ -419,7 +443,7 @@
     min-width: 0;
     background: #fff;
     border-radius: 20px;
-    padding: 1.5rem;
+    /* padding: 1.5rem; */
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);

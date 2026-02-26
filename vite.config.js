@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/eco-student.js',
                 'resources/js/game-runner.js',
                 'resources/js/game-environment-3d.js',
+                'resources/js/eco-student-env.js',
             ],
             refresh: true,
         }),

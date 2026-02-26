@@ -1,6 +1,6 @@
 /**
- * Student dashboard: dynamic topics with optional video lesson and quizzes/games.
- * Data comes from window.ecoStudentData.topics (set by Blade).
+ * Student dashboard for small kids (grade 5 and below): topics, video, quizzes & games.
+ * Data from window.ecoStudentData.topics (set by Blade).
  */
 
 (function () {
@@ -29,7 +29,7 @@
   function renderTopics() {
     if (!topicsListEl) return;
     if (topics.length === 0) {
-      topicsListEl.innerHTML = '<p style="font-size: 0.9rem; color: #666;">No topics yet. Check back later or try another grade!</p>';
+      topicsListEl.innerHTML = '<p class="eco-kid-empty">No topics yet. Try another grade or come back later! 🌟</p>';
       return;
     }
     topicsListEl.innerHTML = topics
@@ -59,53 +59,53 @@
 
     let html = '';
     if (topic.description) {
-      html += '<p style="text-align: center; color: #555; margin-bottom: 1rem;">' + escapeHtml(topic.description) + '</p>';
+      html += '<p class="eco-kid-topic-desc">' + escapeHtml(topic.description) + '</p>';
     }
     if (topic.video_url) {
       const embedUrl = toEmbedUrl(topic.video_url);
       if (embedUrl && (embedUrl.includes('youtube.com/embed') || embedUrl.includes('youtu.be'))) {
         html += `
           <div class="eco-video-embed" style="width: 100%; max-width: 700px;">
-            <iframe width="100%" height="100%" src="${escapeHtml(embedUrl)}" title="Video lesson" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="100%" height="100%" src="${escapeHtml(embedUrl)}" title="Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         `;
       } else {
-        html += '<p style="margin-bottom: 1rem;"><a href="' + escapeHtml(topic.video_url) + '" target="_blank" rel="noopener" class="eco-btn">📺 Watch Video Lesson</a></p>';
+        html += '<p style="margin-bottom: 1rem;"><a href="' + escapeHtml(topic.video_url) + '" target="_blank" rel="noopener" class="eco-btn">📺 Watch video</a></p>';
       }
     }
     const hasQuizzes = topic.quizzes && topic.quizzes.length > 0;
     const hasGames = topic.mini_games && topic.mini_games.length > 0;
     if (hasQuizzes || hasGames) {
-      html += '<div style="text-align: center; width: 100%; max-width: 600px;"><h3 style="font-family: \'Bubblegum Sans\', cursive; margin-bottom: 1rem;">Quizzes &amp; Games</h3>';
-      html += '<div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">';
+      html += '<div class="eco-kid-actions"><h3 class="eco-kid-actions-title">Play a quiz or game 🎮</h3>';
+      html += '<div class="eco-kid-action-buttons">';
       if (topic.quizzes) {
         topic.quizzes.forEach((q) => {
-          html += '<a href="' + escapeHtml(q.play_url) + '" target="_blank" class="eco-btn" style="width: 100%; max-width: 320px; text-align: center;">📝 ' + escapeHtml(q.title) + '</a>';
+          html += '<a href="' + escapeHtml(q.play_url) + '" class="eco-btn eco-kid-action-btn">📝 ' + escapeHtml(q.title) + '</a>';
         });
       }
       if (topic.mini_games) {
         topic.mini_games.forEach((g) => {
-          html += '<a href="' + escapeHtml(g.play_url) + '" target="_blank" class="eco-btn" style="width: 100%; max-width: 320px; text-align: center; background: #2C3E50;">🎮 ' + escapeHtml(g.title) + '</a>';
+          html += '<a href="' + escapeHtml(g.play_url) + '" class="eco-btn eco-kid-action-btn eco-kid-game-btn">🎮 ' + escapeHtml(g.title) + '</a>';
         });
       }
       html += '</div></div>';
     } else {
-      html += '<p style="color: #666;">No quizzes or games in this topic yet.</p>';
+      html += '<p class="eco-kid-no-games">No games here yet. Try another topic! 🌟</p>';
     }
     contentEl.innerHTML = html;
   }
 
   function showWelcome() {
     if (!headerEl || !contentEl) return;
-    headerEl.textContent = 'Select a topic to start!';
+    headerEl.textContent = 'Choose something to do! 👇';
     contentEl.innerHTML = `
-      <div style="text-align: center; color: #555;">
-        <div class="eco-books-stack">
-          <div class="eco-book green"></div>
-          <div class="eco-book blue"></div>
-          <div class="eco-book orange"></div>
+      <div class="eco-kid-placeholder">
+        <div class="eco-kid-placeholder-visual" aria-hidden="true">
+          <span class="eco-kid-placeholder-emoji">📚</span>
+          <span class="eco-kid-placeholder-emoji">🎮</span>
+          <span class="eco-kid-placeholder-emoji">🌟</span>
         </div>
-        <p style="font-size: 1.15rem;">Pick a topic from the left, watch the video lesson (if any), then play the quiz or game!</p>
+        <p class="eco-kid-placeholder-text">Tap a topic on the left to learn, or pick a quiz or game to play!</p>
       </div>
     `;
   }

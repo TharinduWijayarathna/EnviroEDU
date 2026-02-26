@@ -20,6 +20,7 @@ class PlayController extends Controller
             'quiz' => $quiz,
             'studentPage' => 'play',
             'studentLayoutTitle' => $quiz->title,
+            'studentFullWidth' => true,
         ]);
     }
 
@@ -35,6 +36,7 @@ class PlayController extends Controller
             'miniGame' => $miniGame,
             'studentPage' => 'play',
             'studentLayoutTitle' => $miniGame->title,
+            'studentFullWidth' => true,
         ]);
     }
 }

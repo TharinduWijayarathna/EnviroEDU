@@ -64,6 +64,9 @@
 @endpush
 
 @section('student-main')
+    <div class="eco-student-back-bar">
+        <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">← Back to My Learning</a>
+    </div>
     <div class="play-game-container">
         <div id="game-mount"></div>
     </div>

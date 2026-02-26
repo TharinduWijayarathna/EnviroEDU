@@ -1,41 +1,62 @@
 @extends('layouts.student')
 
-@section('title', 'Student Dashboard')
+@section('title', 'My Learning')
 
 @section('student-main')
-    <div id="badges" class="eco-card" style="padding: 1rem 1.25rem; margin-bottom: 1rem;">
-        <h3 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.25rem; color: var(--eco-primary); margin-bottom: 0.75rem;">🏆 Earned badges</h3>
-        @if (isset($earnedBadges) && $earnedBadges->isNotEmpty())
-            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                @foreach ($earnedBadges as $badge)
-                    <span style="background: var(--eco-secondary); padding: 0.4rem 0.9rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.35rem;">
-                        @if($badge->image_path)
-                            <img src="{{ asset('storage/'.$badge->image_path) }}" alt="" style="width: 24px; height: 24px; object-fit: contain; border-radius: 4px;">
-                        @else
-                            {{ $badge->icon ?? '🏆' }}
-                        @endif
-                        {{ $badge->name }}
-                    </span>
-                @endforeach
+    <div class="eco-env-wrap">
+        <div id="eco-env-container" class="eco-env-canvas" aria-hidden="true"></div>
+        <div class="eco-env-overlay">
+            <div class="eco-env-card">
+                <h1 class="eco-env-hero">Hi, {{ \Illuminate\Support\Str::before(auth()->user()->name ?? 'Friend', ' ') }}! 👋</h1>
+                <p class="eco-env-hero-sub">Choose where to go:</p>
+                <div class="eco-env-gateways">
+                <a href="{{ url('/dashboard/student/topics') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-topics">
+                    <span class="eco-env-gate-icon">📚</span>
+                    <span class="eco-env-gate-label">Topics</span>
+                    <span class="eco-env-gate-arrow">→</span>
+                </a>
+                <a href="{{ url('/dashboard/student/games') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-games">
+                    <span class="eco-env-gate-icon">🎮</span>
+                    <span class="eco-env-gate-label">Games</span>
+                    <span class="eco-env-gate-arrow">→</span>
+                </a>
+                <a href="{{ url('/dashboard/student/quizzes') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-quizzes">
+                    <span class="eco-env-gate-icon">📝</span>
+                    <span class="eco-env-gate-label">Quizzes</span>
+                    <span class="eco-env-gate-arrow">→</span>
+                </a>
+                </div>
             </div>
-        @else
-            <p style="color: #666; margin: 0;">No badges earned yet. Complete quizzes and games in topics to earn badges!</p>
-        @endif
-    </div>
-    <div class="eco-butterfly" aria-hidden="true">🦋</div>
-    <h2 class="eco-game-header" id="ecoGameHeader">Select a topic to start!</h2>
-    <div class="eco-game-content" id="ecoGameContent">
-        <div style="text-align: center; color: #555;">
-            <div class="eco-books-stack">
-                <div class="eco-book green"></div>
-                <div class="eco-book blue"></div>
-                <div class="eco-book orange"></div>
-            </div>
-            <p style="font-size: 1.15rem;">Pick a topic from the left, watch the video lesson (if any), then play the quiz or game!</p>
         </div>
     </div>
 @endsection
 
+@push('styles')
+    <style>
+        .eco-game-area:has(.eco-env-wrap) { overflow: hidden; padding: 0; max-height: none; height: calc(100vh - 100px); min-height: 0; }
+    .eco-env-wrap { position: relative; height: 100%; min-height: 480px; width: 100%; overflow: hidden; }
+        .eco-env-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .eco-env-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; pointer-events: none; }
+        .eco-env-card { pointer-events: auto; background: #fff; border-radius: 24px; padding: 2rem 2.5rem; border: 3px solid rgba(78, 205, 196, 0.5); box-shadow: 0 4px 16px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
+        .eco-env-overlay .eco-env-gateways { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; margin-top: 1rem; }
+        .eco-env-hero { font-family: 'Bubblegum Sans', cursive; font-size: 1.9rem; color: #1a3c34; margin: 0 0 0.2rem; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }
+        .eco-env-hero-sub { font-size: 1.05rem; color: #2d5a52; margin: 0; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }
+        .eco-env-gate { display: flex; align-items: center; gap: 0.75rem; padding: 1.1rem 1.6rem; border-radius: 20px; text-decoration: none; color: #1a3c34; font-weight: 700; font-size: 1.2rem; background: rgba(255,255,255,0.92); border: 3px solid rgba(78, 205, 196, 0.6); box-shadow: 0 6px 24px rgba(0,0,0,0.12); transition: all 0.3s; cursor: pointer; position: relative; z-index: 10; animation: eco-float 4s ease-in-out infinite; }
+        .eco-env-gate:nth-child(1) { animation-delay: 0s; }
+        .eco-env-gate:nth-child(2) { animation-delay: 0.4s; }
+        .eco-env-gate:nth-child(3) { animation-delay: 0.8s; }
+        .eco-env-gate:hover { transform: scale(1.08); border-color: var(--eco-primary); box-shadow: 0 10px 32px rgba(78, 205, 196, 0.35); background: #fff; }
+        .eco-env-gate-icon { font-size: 2rem; }
+        .eco-env-gate-label { flex: 1; }
+        .eco-env-gate-arrow { font-size: 1.1rem; color: var(--eco-primary); }
+        .eco-env-gate-games { border-color: rgba(90, 138, 176, 0.6); }
+        .eco-env-gate-games:hover { border-color: #5a8ab0; }
+        .eco-env-gate-quizzes { border-color: rgba(212, 168, 75, 0.6); }
+        .eco-env-gate-quizzes:hover { border-color: #d4a84b; }
+        @keyframes eco-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    </style>
+@endpush
+
 @push('scripts')
-    @vite(['resources/js/eco-student.js'])
+    @vite(['resources/js/eco-student-env.js'])
 @endpush
