@@ -68,47 +68,65 @@ TEXT;
             ],
         ];
 
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='.$apiKey;
+        $models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'];
+        $lastError = null;
 
-        try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->timeout(60)->post($url, $payload);
+        foreach (['v1', 'v1beta'] as $apiVersion) {
+            foreach ($models as $model) {
+                $url = 'https://generativelanguage.googleapis.com/'.$apiVersion.'/models/'.$model.':generateContent?key='.$apiKey;
 
-            if (! $response->successful()) {
-                $data = $response->json();
-                $message = $data['error']['message'] ?? 'API error '.$response->status();
-                Log::warning('MiniGameGeneratorService: Gemini API error', ['status' => $response->status(), 'body' => $response->body()]);
+                try {
+                    $response = Http::withHeaders([
+                        'Content-Type' => 'application/json',
+                    ])->timeout(60)->post($url, $payload);
 
-                return ['error' => $message];
+                    if (! $response->successful()) {
+                        $data = $response->json();
+                        $lastError = $data['error']['message'] ?? 'API error '.$response->status();
+                        Log::warning('MiniGameGeneratorService: Gemini API error', [
+                            'model' => $model,
+                            'version' => $apiVersion,
+                            'status' => $response->status(),
+                            'body' => $response->body(),
+                        ]);
+
+                        continue;
+                    }
+
+                    $data = $response->json();
+                    $candidates = $data['candidates'] ?? [];
+                    $first = $candidates[0] ?? null;
+                    if (! $first) {
+                        $lastError = 'No response from AI. Try again.';
+
+                        continue;
+                    }
+
+                    $parts = $first['content']['parts'] ?? [];
+                    $text = $parts[0]['text'] ?? '';
+                    if ($text === '') {
+                        $lastError = 'Empty response from AI. Try a different prompt.';
+
+                        continue;
+                    }
+
+                    $decoded = json_decode(trim($text), true);
+                    if (! is_array($decoded)) {
+                        Log::warning('MiniGameGeneratorService: Invalid JSON from Gemini', ['text' => substr($text, 0, 500)]);
+                        $lastError = 'AI returned invalid format. Try again.';
+
+                        continue;
+                    }
+
+                    return $this->normalizeGeneratedGame($decoded, $gameType);
+                } catch (RequestException $e) {
+                    $lastError = 'Request failed: '.$e->getMessage();
+                    Log::warning('MiniGameGeneratorService: Request failed', ['message' => $e->getMessage()]);
+                }
             }
-
-            $data = $response->json();
-            $candidates = $data['candidates'] ?? [];
-            $first = $candidates[0] ?? null;
-            if (! $first) {
-                return ['error' => 'No response from AI. Try again.'];
-            }
-
-            $parts = $first['content']['parts'] ?? [];
-            $text = $parts[0]['text'] ?? '';
-            if ($text === '') {
-                return ['error' => 'Empty response from AI. Try a different prompt.'];
-            }
-
-            $decoded = json_decode(trim($text), true);
-            if (! is_array($decoded)) {
-                Log::warning('MiniGameGeneratorService: Invalid JSON from Gemini', ['text' => substr($text, 0, 500)]);
-
-                return ['error' => 'AI returned invalid format. Try again.'];
-            }
-
-            return $this->normalizeGeneratedGame($decoded, $gameType);
-        } catch (RequestException $e) {
-            Log::warning('MiniGameGeneratorService: Request failed', ['message' => $e->getMessage()]);
-
-            return ['error' => 'Request failed: '.$e->getMessage()];
         }
+
+        return ['error' => $lastError ?? 'AI generation failed. Try again.'];
     }
 
     /**

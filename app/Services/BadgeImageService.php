@@ -58,7 +58,7 @@ class BadgeImageService
 
         $result = $this->callGeminiImageApi($apiKey, $prompt);
 
-        if (isset($result['success']) && $result['success'] === false) {
+        if (is_array($result) && isset($result['success']) && $result['success'] === false) {
             return $result;
         }
 
@@ -85,32 +85,31 @@ class BadgeImageService
 
     /**
      * Call Gemini API generateContent with image generation (works with Google AI Studio API key).
-     * Tries image-generation model first, then gemini-2.0-flash-exp.
+     * Uses production image models; gemini-2.0-flash-exp was deprecated.
      *
      * @return string|null base64 image data, or array{success: false, message: string} on API error, or null.
      */
     private function callGeminiImageApi(string $apiKey, string $prompt): string|array|null
     {
-        $models = [
-            'gemini-2.0-flash-exp-image-generation',
-            'gemini-2.0-flash-exp',
-        ];
+        $models = ['gemini-2.5-flash-image'];
         $payload = $this->buildImageRequestPayload($prompt);
         $lastError = null;
 
-        foreach ($models as $model) {
-            $url = 'https://generativelanguage.googleapis.com/v1beta/models/'.$model.':generateContent?key='.$apiKey;
-            $result = $this->postGenerateContent($url, $payload);
-            if (is_string($result)) {
-                return $result;
-            }
-            if (is_array($result) && isset($result['success']) && $result['success'] === false) {
-                $lastError = $result;
-                if (str_contains($result['message'] ?? '', '404') || str_contains($result['message'] ?? '', 'not found')) {
-                    continue;
+        foreach (['v1', 'v1beta'] as $apiVersion) {
+            foreach ($models as $model) {
+                $url = 'https://generativelanguage.googleapis.com/'.$apiVersion.'/models/'.$model.':generateContent?key='.$apiKey;
+                $result = $this->postGenerateContent($url, $payload);
+                if (is_string($result)) {
+                    return $result;
                 }
+                if (is_array($result) && isset($result['success']) && $result['success'] === false) {
+                    $lastError = $result;
+                    if (str_contains($result['message'] ?? '', '404') || str_contains($result['message'] ?? '', 'not found')) {
+                        continue;
+                    }
 
-                return $result;
+                    return $result;
+                }
             }
         }
 

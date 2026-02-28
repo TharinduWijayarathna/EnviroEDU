@@ -41,7 +41,7 @@ TEXT;
             return response()->json(['reply' => 'Type something and I\'ll try to help! 😊']);
         }
 
-        $models = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+        $models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
 
         $lastError = null;
         foreach ($models as $model) {
@@ -66,7 +66,7 @@ TEXT;
                 $payload['contents'][0]['parts'][0]['text'] = self::SYSTEM_INSTRUCTION."\n\nStudent asks: ".$message->toString();
             }
 
-            foreach (['v1beta', 'v1'] as $apiVersion) {
+            foreach (['v1', 'v1beta'] as $apiVersion) {
                 $url = "https://generativelanguage.googleapis.com/{$apiVersion}/models/{$model}:generateContent";
                 $response = Http::withHeaders([
                     'Content-Type' => 'application/json',
@@ -92,7 +92,6 @@ TEXT;
                     return response()->json(['reply' => trim($text)]);
                 }
             }
-
         }
 
         Log::warning('EduBuddy: No text from Gemini after trying all models', ['last_error' => $lastError]);
