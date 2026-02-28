@@ -11,9 +11,13 @@
                 <h1 class="eco-env-panel-title">🎮 {{ __('messages.dashboard.games_title') }}</h1>
                 <p class="eco-env-panel-desc">{{ __('messages.dashboard.games_desc') }}</p>
 
-                @php $platformGames = $platformGames ?? collect(); @endphp
+                @php
+                    $platformGames = $platformGames ?? collect();
+                    $standaloneMiniGames = $standaloneMiniGames ?? collect();
+                @endphp
+                {{-- 1. Default platform games (always show this section first) --}}
+                <h2 class="eco-env-section-title">🌟 {{ __('messages.dashboard.platform_games') }}</h2>
                 @if ($platformGames->isNotEmpty())
-                    <h2 class="eco-env-section-title">🌟 {{ __('messages.dashboard.platform_games') }}</h2>
                     <ul class="eco-env-list">
                         @foreach ($platformGames as $game)
                             <li>
@@ -25,10 +29,13 @@
                             </li>
                         @endforeach
                     </ul>
+                @else
+                    <p class="eco-env-empty eco-env-empty-sub">{{ __('messages.dashboard.no_platform_games') }}</p>
                 @endif
 
-                @if (isset($standaloneMiniGames) && $standaloneMiniGames->isNotEmpty())
-                    <h2 class="eco-env-section-title">🎮 {{ __('messages.dashboard.teacher_games') }}</h2>
+                {{-- 2. Teacher-created mini games (same school, published) --}}
+                <h2 class="eco-env-section-title">🎮 {{ __('messages.dashboard.teacher_games') }}</h2>
+                @if ($standaloneMiniGames->isNotEmpty())
                     <ul class="eco-env-list">
                         @foreach ($standaloneMiniGames as $game)
                             <li>
@@ -40,10 +47,8 @@
                             </li>
                         @endforeach
                     </ul>
-                @endif
-
-                @if ($platformGames->isEmpty() && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()))
-                    <p class="eco-env-empty">{{ __('messages.dashboard.no_games') }}</p>
+                @else
+                    <p class="eco-env-empty eco-env-empty-sub">{{ __('messages.dashboard.no_teacher_games') }}</p>
                 @endif
             </div>
         </div>
@@ -72,6 +77,7 @@
         .eco-env-list-text { flex: 1; }
         .eco-env-list-go { font-size: 0.9rem; color: var(--eco-primary); }
         .eco-env-empty { margin: 0; color: #5a6c64; font-size: 1rem; }
+        .eco-env-empty-sub { font-size: 0.9rem; margin-top: 0; margin-bottom: 0.5rem; }
     </style>
 @endpush
 

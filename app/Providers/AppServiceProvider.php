@@ -26,6 +26,13 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        View::composer('layouts.student', StudentLayoutComposer::class);
+        View::composer([
+            'layouts.student',
+            'dashboard.student',
+            'dashboard.student-topics',
+            'dashboard.student-quizzes',
+            'dashboard.student-games',
+            'dashboard.student-badges',
+        ], StudentLayoutComposer::class);
     }
 }

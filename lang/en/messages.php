@@ -203,6 +203,8 @@ return [
         'games_desc' => 'Platform games and standalone games. More games are inside each topic.',
         'platform_games' => 'Platform Games',
         'teacher_games' => 'Teacher Games',
+        'no_platform_games' => 'No default games in this section yet.',
+        'no_teacher_games' => 'No teacher-created games yet. Your teacher may add games to topics.',
         'no_games' => 'No games yet. Open a topic to play its games!',
         'my_badges' => 'My badges',
         'badges_count' => 'You have <strong>:count</strong> :badge! Great job!',

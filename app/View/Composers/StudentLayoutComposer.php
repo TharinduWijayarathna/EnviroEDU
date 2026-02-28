@@ -22,10 +22,14 @@ class StudentLayoutComposer
         $topicsPayload = [];
 
         if (auth()->check() && auth()->user()->role?->value === 'student') {
+            $student = auth()->user();
+            $schoolId = $student->school_id;
             $gradeFilter = fn ($q) => $q->where(fn ($q2) => $q2->whereNull('grade_level')->orWhere('grade_level', $grade));
+            $sameSchool = fn ($q) => $q->whereHas('user', fn ($uq) => $uq->where('school_id', $schoolId));
 
             $topics = Topic::query()
                 ->where('is_published', true)
+                ->when($schoolId, $sameSchool)
                 ->when($grade > 0, $gradeFilter)
                 ->orderBy('order')
                 ->orderBy('title')
@@ -38,6 +42,7 @@ class StudentLayoutComposer
             $standaloneQuizzes = Quiz::query()
                 ->where('is_published', true)
                 ->whereNull('topic_id')
+                ->when($schoolId, $sameSchool)
                 ->when($grade > 0, $gradeFilter)
                 ->latest()
                 ->limit(20)
@@ -46,12 +51,14 @@ class StudentLayoutComposer
             $standaloneMiniGames = MiniGame::query()
                 ->where('is_published', true)
                 ->whereNull('topic_id')
+                ->when($schoolId, $sameSchool)
                 ->when($grade > 0, $gradeFilter)
                 ->with('gameTemplate')
                 ->latest()
                 ->limit(20)
                 ->get();
 
+            // Default platform games: global for all students (no school filter)
             $platformGames = PlatformGame::query()
                 ->orderBy('order')
                 ->orderBy('title')
