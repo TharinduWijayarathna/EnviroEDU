@@ -34,6 +34,11 @@
                     <h3>Student</h3>
                     <p>Learn & play with quizzes, games & badges. Sign in to continue learning.</p>
                 </a>
+                <a href="{{ route('login.role', ['role' => 'parent']) }}" class="eco-card eco-role-card eco-landing-role-card">
+                    <span class="eco-role-icon">👨‍👩‍👧</span>
+                    <h3>Parent</h3>
+                    <p>View your child's progress & badges. Sign in to track their learning.</p>
+                </a>
             </div>
 
             <p style="text-align: center; margin-top: 1.5rem;">

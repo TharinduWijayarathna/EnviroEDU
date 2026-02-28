@@ -51,6 +51,3 @@
     </style>
 @endpush
 
-@push('scripts')
-    @vite(['resources/js/eco-student-env.js'])
-@endpush

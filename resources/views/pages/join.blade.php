@@ -18,6 +18,7 @@
                 <div class="eco-landing-join-btns">
                     <a href="{{ route('register', ['role' => 'teacher']) }}" id="join-as-teacher" class="eco-btn eco-btn-join" data-base="{{ route('register', ['role' => 'teacher']) }}">Join as teacher</a>
                     <a href="{{ route('register', ['role' => 'student']) }}" id="join-as-student" class="eco-btn eco-btn-join eco-btn-join-student" data-base="{{ route('register', ['role' => 'student']) }}">Join as student</a>
+                    <a href="{{ route('register', ['role' => 'parent']) }}" class="eco-btn eco-btn-join eco-btn-join-parent">Join as parent</a>
                 </div>
             </div>
             <p class="eco-landing-join-hint">New? You’ll enter the code on the next page. Already have an account? <a href="#login-links">Log in here</a>.</p>
@@ -27,7 +28,7 @@
             <h3 class="eco-landing-h3">How to join</h3>
             <ol class="eco-landing-steps">
                 <li>Get your <strong>school code</strong> from your school admin or teacher.</li>
-                <li>Click <strong>Join as teacher</strong> or <strong>Join as student</strong> above (or use the cards below).</li>
+                <li>Click <strong>Join as teacher</strong>, <strong>Join as student</strong>, or <strong>Join as parent</strong> above (or use the cards below).</li>
                 <li>Register with your name, email, and password, and enter the school code when asked.</li>
                 <li>After your school admin approves you, you can log in and use the platform.</li>
             </ol>
