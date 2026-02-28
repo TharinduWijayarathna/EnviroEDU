@@ -95,7 +95,7 @@ class BadgeImageService
         $payload = $this->buildImageRequestPayload($prompt);
         $lastError = null;
 
-        foreach (['v1', 'v1beta'] as $apiVersion) {
+        foreach (['v1beta', 'v1'] as $apiVersion) {
             foreach ($models as $model) {
                 $url = 'https://generativelanguage.googleapis.com/'.$apiVersion.'/models/'.$model.':generateContent?key='.$apiKey;
                 $result = $this->postGenerateContent($url, $payload);
@@ -127,8 +127,7 @@ class BadgeImageService
                 ],
             ],
             'generationConfig' => [
-                'responseModalities' => ['TEXT', 'IMAGE'],
-                'responseMimeType' => 'text/plain',
+                'response_modalities' => ['TEXT', 'IMAGE'],
             ],
         ];
     }
