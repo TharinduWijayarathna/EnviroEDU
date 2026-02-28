@@ -37,6 +37,26 @@ class RegisterRequest extends FormRequest
             $rules['school_code'] = ['required', 'string', 'exists:schools,slug'];
         }
 
+        if ($role === 'parent') {
+            $rules['child_email'] = [
+                'nullable',
+                'email',
+                'exists:users,email',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (blank($value)) {
+                        return;
+                    }
+                    $student = \App\Models\User::query()
+                        ->where('email', $value)
+                        ->where('role', \App\Enums\Role::Student)
+                        ->first();
+                    if (! $student) {
+                        $fail(__('messages.auth.child_email_not_student'));
+                    }
+                },
+            ];
+        }
+
         return $rules;
     }
 

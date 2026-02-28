@@ -102,6 +102,16 @@ class AuthController extends Controller
                 'school_id' => $schoolId,
                 'is_approved' => $isApproved,
             ]);
+
+            if ($role === 'parent' && $request->filled('child_email')) {
+                $student = User::query()
+                    ->where('email', $request->input('child_email'))
+                    ->where('role', Role::Student)
+                    ->first();
+                if ($student) {
+                    $user->children()->attach($student->id);
+                }
+            }
         }
 
         Auth::login($user);

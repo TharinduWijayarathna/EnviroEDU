@@ -52,6 +52,14 @@
                     </div>
                 @endif
 
+                @if ($role === 'parent')
+                    <div style="margin-bottom: 1rem;">
+                        <label for="child_email" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">{{ __('messages.auth.child_email') }}</label>
+                        <input id="child_email" type="email" name="child_email" class="eco-input" value="{{ old('child_email') }}" placeholder="{{ __('messages.auth.child_email_placeholder') }}" autocomplete="off">
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 0.35rem;">{{ __('messages.auth.child_email_register_hint') }}</p>
+                    </div>
+                @endif
+
                 <div style="margin-bottom: 1rem;">
                     <label for="name" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">{{ $role === 'admin' ? __('messages.auth.your_name') : __('messages.auth.name') }}</label>
                     <input id="name" type="text" name="name" class="eco-input" value="{{ old('name') }}" required {{ $role !== 'admin' && !in_array($role, ['teacher', 'student']) ? 'autofocus' : '' }} autocomplete="name">
