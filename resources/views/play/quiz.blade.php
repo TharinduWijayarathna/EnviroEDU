@@ -32,7 +32,7 @@
 
 @section('student-main')
     <div class="eco-student-back-bar">
-        <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">← Back to My Learning</a>
+        <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">{{ __('messages.play.back_to_my_learning') }}</a>
     </div>
     <div class="play-container">
         <div id="quiz-root">
@@ -51,9 +51,9 @@
                 @endforeach
             </div>
             <div id="quiz-result" style="display: none;" class="play-result play-question">
-                <h2 style="font-family: 'Bubblegum Sans', cursive; color: var(--eco-primary); margin-bottom: 1rem;">Quiz complete!</h2>
-                <p style="font-size: 1.5rem;">Score: <strong id="quiz-score">0</strong> / {{ $quiz->questions->count() }}</p>
-                <a href="{{ route('dashboard.student') }}" class="eco-btn" style="margin-top: 1rem;">← Back to My Learning</a>
+                <h2 style="font-family: 'Bubblegum Sans', cursive; color: var(--eco-primary); margin-bottom: 1rem;">{{ __('messages.play.quiz_complete') }}</h2>
+                <p style="font-size: 1.5rem;">{{ __('messages.play.score') }} <strong id="quiz-score">0</strong> / {{ $quiz->questions->count() }}</p>
+                <a href="{{ route('dashboard.student') }}" class="eco-btn" style="margin-top: 1rem;">{{ __('messages.play.back_to_my_learning') }}</a>
             </div>
         </div>
     </div>

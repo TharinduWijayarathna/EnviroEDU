@@ -1,15 +1,15 @@
 @extends('layouts.student')
 
-@section('title', 'Quizzes')
+@section('title', __('messages.dashboard.quizzes'))
 
 @section('student-main')
     <div class="eco-env-wrap eco-env-wrap-list">
         <div id="eco-env-container" class="eco-env-canvas" aria-hidden="true"></div>
         <div class="eco-env-overlay eco-env-overlay-list">
-            <a href="{{ url('/dashboard/student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-back">← Back to My Learning</a>
+            <a href="{{ url('/dashboard/student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-back">{{ __('messages.dashboard.back_to_my_learning') }}</a>
             <div class="eco-env-panel">
-                <h1 class="eco-env-panel-title">📝 Quizzes</h1>
-                <p class="eco-env-panel-desc">Standalone quizzes. More quizzes are inside each topic.</p>
+                <h1 class="eco-env-panel-title">📝 {{ __('messages.dashboard.quizzes_title') }}</h1>
+                <p class="eco-env-panel-desc">{{ __('messages.dashboard.quizzes_desc') }}</p>
                 @if (isset($standaloneQuizzes) && $standaloneQuizzes->isNotEmpty())
                     <ul class="eco-env-list">
                         @foreach ($standaloneQuizzes as $quiz)
@@ -17,13 +17,13 @@
                                 <a href="{{ url('/play/quiz/'.$quiz->id) }}" class="eco-env-list-item eco-env-list-item-quiz">
                                     <span class="eco-env-list-icon">📝</span>
                                     <span class="eco-env-list-text">{{ $quiz->title }}</span>
-                                    <span class="eco-env-list-go">Play →</span>
+                                    <span class="eco-env-list-go">{{ __('messages.dashboard.play') }} →</span>
                                 </a>
                             </li>
                         @endforeach
                     </ul>
                 @else
-                    <p class="eco-env-empty">No standalone quizzes. Open a topic to take its quizzes! 📝</p>
+                    <p class="eco-env-empty">{{ __('messages.dashboard.no_standalone_quizzes') }}</p>
                 @endif
             </div>
         </div>

@@ -12,7 +12,7 @@
 
 @section('student-main')
     <div class="eco-student-back-bar">
-        <a href="{{ route('dashboard.student.games') }}" class="eco-student-back-link">← Back to Games</a>
+        <a href="{{ route('dashboard.student.games') }}" class="eco-student-back-link">{{ __('messages.play.back_to_games') }}</a>
     </div>
     <div class="play-platform-game-container">
         <div id="platform-game-mount"></div>

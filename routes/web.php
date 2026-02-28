@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EduBuddyController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Parent\ChildController as ParentChildController;
 use App\Http\Controllers\PlayController;
 use App\Http\Controllers\ProgressController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\Teacher\ProgressController as TeacherProgressController
 use App\Http\Controllers\Teacher\QuizController;
 use App\Http\Controllers\Teacher\TopicController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/locale/{locale}', [LanguageController::class, 'switch'])->name('locale.switch')->where('locale', 'en|si');
 
 Route::get('/', [LandingController::class, 'home'])->name('home');
 Route::get('/join', [LandingController::class, 'join'])->name('landing.join');

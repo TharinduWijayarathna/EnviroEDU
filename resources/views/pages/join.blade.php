@@ -1,64 +1,64 @@
 @extends('layouts.landing')
 
-@section('title', 'Join your school')
+@section('title', __('messages.join.title'))
 
 @section('landing')
     <section class="eco-landing-section eco-landing-join">
-        <h2 class="eco-landing-h2">Join your school</h2>
-        <p class="eco-landing-desc">Get your school code from your teacher or school admin, then sign in or create an account.</p>
+        <h2 class="eco-landing-h2">{{ __('messages.join.headline') }}</h2>
+        <p class="eco-landing-desc">{{ __('messages.join.desc') }}</p>
 
         <div class="eco-landing-prose">
-            <p>If your school is already on EnviroEdu, you need the <strong>school code</strong> to join. The code is created when a school admin registers and can be shared with staff and students. Enter it below to go to registration, or use the role cards further down to log in if you already have an account.</p>
+            <p>{!! __('messages.join.prose') !!}</p>
         </div>
 
         <div class="eco-landing-join-box eco-card">
-            <p class="eco-landing-join-label">Have a school code? Enter it here:</p>
+            <p class="eco-landing-join-label">{{ __('messages.join.have_code') }}</p>
             <div class="eco-landing-join-row">
-                <input type="text" id="school-code-input" class="eco-input eco-landing-join-input" placeholder="e.g. my-school-2024" maxlength="60" autocomplete="off">
+                <input type="text" id="school-code-input" class="eco-input eco-landing-join-input" placeholder="{{ __('messages.auth.school_code_placeholder') }}" maxlength="60" autocomplete="off">
                 <div class="eco-landing-join-btns">
-                    <a href="{{ route('register', ['role' => 'teacher']) }}" id="join-as-teacher" class="eco-btn eco-btn-join" data-base="{{ route('register', ['role' => 'teacher']) }}">Join as teacher</a>
-                    <a href="{{ route('register', ['role' => 'student']) }}" id="join-as-student" class="eco-btn eco-btn-join eco-btn-join-student" data-base="{{ route('register', ['role' => 'student']) }}">Join as student</a>
-                    <a href="{{ route('register', ['role' => 'parent']) }}" class="eco-btn eco-btn-join eco-btn-join-parent">Join as parent</a>
+                    <a href="{{ route('register', ['role' => 'teacher']) }}" id="join-as-teacher" class="eco-btn eco-btn-join" data-base="{{ route('register', ['role' => 'teacher']) }}">{{ __('messages.join.join_as_teacher') }}</a>
+                    <a href="{{ route('register', ['role' => 'student']) }}" id="join-as-student" class="eco-btn eco-btn-join eco-btn-join-student" data-base="{{ route('register', ['role' => 'student']) }}">{{ __('messages.join.join_as_student') }}</a>
+                    <a href="{{ route('register', ['role' => 'parent']) }}" class="eco-btn eco-btn-join eco-btn-join-parent">{{ __('messages.join.join_as_parent') }}</a>
                 </div>
             </div>
-            <p class="eco-landing-join-hint">New? You’ll enter the code on the next page. Already have an account? <a href="#login-links">Log in here</a>.</p>
+            <p class="eco-landing-join-hint">{{ __('messages.join.new_enter_code') }} <a href="#login-links">{{ __('messages.join.log_in_here') }}</a>.</p>
         </div>
 
         <div class="eco-landing-how-join">
-            <h3 class="eco-landing-h3">How to join</h3>
+            <h3 class="eco-landing-h3">{{ __('messages.join.how_to_join') }}</h3>
             <ol class="eco-landing-steps">
-                <li>Get your <strong>school code</strong> from your school admin or teacher.</li>
-                <li>Click <strong>Join as teacher</strong>, <strong>Join as student</strong>, or <strong>Join as parent</strong> above (or use the cards below).</li>
-                <li>Register with your name, email, and password, and enter the school code when asked.</li>
-                <li>After your school admin approves you, you can log in and use the platform.</li>
+                <li>{!! __('messages.join.step1') !!}</li>
+                <li>{!! __('messages.join.step2') !!}</li>
+                <li>{{ __('messages.join.step3') }}</li>
+                <li>{{ __('messages.join.step4') }}</li>
             </ol>
         </div>
 
-                <div class="eco-landing-roles" id="login-links">
-            <h3 class="eco-landing-h3">Sign in or register by role</h3>
-            <p class="eco-landing-desc eco-landing-desc-small">Choose your role to log in or create an account. Teachers and students must enter the school code when registering.</p>
+        <div class="eco-landing-roles" id="login-links">
+            <h3 class="eco-landing-h3">{{ __('messages.join.sign_in_by_role') }}</h3>
+            <p class="eco-landing-desc eco-landing-desc-small">{{ __('messages.join.sign_in_by_role_desc') }}</p>
             <div class="eco-landing-role-cards">
                 <a href="{{ route('login.role', ['role' => 'teacher']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">👩‍🏫</span>
-                    <h3>Teacher</h3>
-                    <p>Manage classes, topics & track progress. Register with your school code; your admin will approve your account.</p>
+                    <h3>{{ __('messages.auth.teacher') }}</h3>
+                    <p>{{ __('messages.join.teacher_join_desc') }}</p>
                 </a>
                 <a href="{{ route('login.role', ['role' => 'student']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">🎒</span>
-                    <h3>Student</h3>
-                    <p>Learn & play with quizzes, games & badges. Join with your school code; once approved, you can start learning.</p>
+                    <h3>{{ __('messages.auth.student') }}</h3>
+                    <p>{{ __('messages.join.student_join_desc') }}</p>
                 </a>
                 <a href="{{ route('login.role', ['role' => 'parent']) }}" class="eco-card eco-role-card eco-landing-role-card">
                     <span class="eco-role-icon">👨‍👩‍👧</span>
-                    <h3>Parent</h3>
-                    <p>View your child's progress & badges. You can register without a school code and link to your child from the parent dashboard.</p>
+                    <h3>{{ __('messages.auth.parent') }}</h3>
+                    <p>{{ __('messages.join.parent_join_desc') }}</p>
                 </a>
             </div>
         </div>
 
         <div class="eco-landing-prose eco-landing-prose-end">
-            <h3 class="eco-landing-h3">Don’t have a school code?</h3>
-            <p>If your school isn’t on EnviroEdu yet, ask your principal or admin to <a href="{{ route('register', ['role' => 'admin']) }}">register your school</a> first. They’ll receive the school code to share with you.</p>
+            <h3 class="eco-landing-h3">{{ __('messages.join.no_school_code') }}</h3>
+            <p>{!! __('messages.join.no_school_code_desc', ['url' => route('register', ['role' => 'admin'])]) !!}</p>
         </div>
     </section>
 

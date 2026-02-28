@@ -8,20 +8,21 @@
     <div style="display: flex; flex-direction: column; min-height: 100vh; background: #f5f7f6;">
         <header class="eco-header" style="background: #fff; border-bottom: 2px solid var(--eco-primary);">
             <a href="{{ route('dashboard.teacher') }}" class="eco-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 48px; width: auto; object-fit: contain;">
+                <img src="{{ asset('images/logo.png') }}" alt="{{ __('messages.common.app_name') }}" style="height: 48px; width: auto; object-fit: contain;">
             </a>
             <nav class="eco-dashboard-nav">
-                <a href="{{ route('dashboard.teacher') }}">Dashboard</a>
-                <a href="{{ route('teacher.class-rooms.index') }}">Classes</a>
-                <a href="{{ route('teacher.topics.index') }}">Topics</a>
-                <a href="{{ route('teacher.quizzes.index') }}">Quizzes</a>
-                <a href="{{ route('teacher.mini-games.index') }}">Mini Games</a>
-                <a href="{{ route('teacher.badges.index') }}">Badges</a>
-                <a href="{{ route('teacher.progress.index') }}">Student Progress</a>
+                @include('components.language-switcher')
+                <a href="{{ route('dashboard.teacher') }}">{{ __('messages.nav.dashboard') }}</a>
+                <a href="{{ route('teacher.class-rooms.index') }}">{{ __('messages.teacher.classes') }}</a>
+                <a href="{{ route('teacher.topics.index') }}">{{ __('messages.teacher.topics') }}</a>
+                <a href="{{ route('teacher.quizzes.index') }}">{{ __('messages.teacher.quizzes') }}</a>
+                <a href="{{ route('teacher.mini-games.index') }}">{{ __('messages.teacher.mini_games') }}</a>
+                <a href="{{ route('teacher.badges.index') }}">{{ __('messages.teacher.badges') }}</a>
+                <a href="{{ route('teacher.progress.index') }}">{{ __('messages.teacher.student_progress') }}</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
-                    <button type="submit" class="eco-logout-btn">Logout</button>
+                    <button type="submit" class="eco-logout-btn">{{ __('messages.nav.logout') }}</button>
                 </form>
             </nav>
         </header>

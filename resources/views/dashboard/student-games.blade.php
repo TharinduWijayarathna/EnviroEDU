@@ -1,26 +1,26 @@
 @extends('layouts.student')
 
-@section('title', 'Games')
+@section('title', __('messages.dashboard.games'))
 
 @section('student-main')
     <div class="eco-env-wrap eco-env-wrap-list">
         <div id="eco-env-container" class="eco-env-canvas" aria-hidden="true"></div>
         <div class="eco-env-overlay eco-env-overlay-list">
-            <a href="{{ url('/dashboard/student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-back">← Back to My Learning</a>
+            <a href="{{ url('/dashboard/student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-back">{{ __('messages.dashboard.back_to_my_learning') }}</a>
             <div class="eco-env-panel">
-                <h1 class="eco-env-panel-title">🎮 Games</h1>
-                <p class="eco-env-panel-desc">Platform games and standalone games. More games are inside each topic.</p>
+                <h1 class="eco-env-panel-title">🎮 {{ __('messages.dashboard.games_title') }}</h1>
+                <p class="eco-env-panel-desc">{{ __('messages.dashboard.games_desc') }}</p>
 
                 @php $platformGames = $platformGames ?? collect(); @endphp
                 @if ($platformGames->isNotEmpty())
-                    <h2 class="eco-env-section-title">🌟 Platform Games</h2>
+                    <h2 class="eco-env-section-title">🌟 {{ __('messages.dashboard.platform_games') }}</h2>
                     <ul class="eco-env-list">
                         @foreach ($platformGames as $game)
                             <li>
                                 <a href="{{ route('play.platform-game', $game->slug) }}" class="eco-env-list-item eco-env-list-item-platform">
                                     <span class="eco-env-list-icon">🌟</span>
                                     <span class="eco-env-list-text">{{ $game->title }}</span>
-                                    <span class="eco-env-list-go">Play →</span>
+                                    <span class="eco-env-list-go">{{ __('messages.dashboard.play') }} →</span>
                                 </a>
                             </li>
                         @endforeach
@@ -28,14 +28,14 @@
                 @endif
 
                 @if (isset($standaloneMiniGames) && $standaloneMiniGames->isNotEmpty())
-                    <h2 class="eco-env-section-title">🎮 Teacher Games</h2>
+                    <h2 class="eco-env-section-title">🎮 {{ __('messages.dashboard.teacher_games') }}</h2>
                     <ul class="eco-env-list">
                         @foreach ($standaloneMiniGames as $game)
                             <li>
                                 <a href="{{ url('/play/game/'.$game->id) }}" class="eco-env-list-item eco-env-list-item-game">
                                     <span class="eco-env-list-icon">🎮</span>
                                     <span class="eco-env-list-text">{{ $game->title }}</span>
-                                    <span class="eco-env-list-go">Play →</span>
+                                    <span class="eco-env-list-go">{{ __('messages.dashboard.play') }} →</span>
                                 </a>
                             </li>
                         @endforeach
@@ -43,7 +43,7 @@
                 @endif
 
                 @if ($platformGames->isEmpty() && (!isset($standaloneMiniGames) || $standaloneMiniGames->isEmpty()))
-                    <p class="eco-env-empty">No games yet. Open a topic to play its games! 🎮</p>
+                    <p class="eco-env-empty">{{ __('messages.dashboard.no_games') }}</p>
                 @endif
             </div>
         </div>

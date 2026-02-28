@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Parent Dashboard')
+@section('title', __('messages.parent.dashboard'))
 
 @push('styles')
     @vite(['resources/css/eco.css'])
@@ -15,21 +15,22 @@
     <div style="display: flex; flex-direction: column; min-height: 100vh; background: #f5f7f6;">
         <header class="eco-header" style="background: #fff; border-bottom: 2px solid var(--eco-primary);">
             <a href="{{ route('dashboard.parent') }}" class="eco-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 48px; width: auto; object-fit: contain;">
+                <img src="{{ asset('images/logo.png') }}" alt="{{ __('messages.common.app_name') }}" style="height: 48px; width: auto; object-fit: contain;">
             </a>
             <nav class="eco-dashboard-nav">
-                <a href="{{ route('dashboard.parent') }}">Dashboard</a>
+                @include('components.language-switcher')
+                <a href="{{ route('dashboard.parent') }}">{{ __('messages.nav.dashboard') }}</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
-                    <button type="submit" class="eco-logout-btn">Logout</button>
+                    <button type="submit" class="eco-logout-btn">{{ __('messages.nav.logout') }}</button>
                 </form>
             </nav>
         </header>
 
         <main style="flex: 1; padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%;">
-            <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">Parent Dashboard</h1>
-            <p style="margin-bottom: 2rem; font-size: 1.1rem; color: #555;">Link your child's account to see their badges, progress, and areas to improve.</p>
+            <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">{{ __('messages.parent.dashboard') }}</h1>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem; color: #555;">{{ __('messages.parent.dashboard_desc') }}</p>
 
             @if (session('status'))
                 <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 0.75rem 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
@@ -43,22 +44,22 @@
             @endif
 
             <div class="eco-card eco-dash-card" style="margin-bottom: 2rem;">
-                <h3>👤 Link a child</h3>
-                <p style="color: #666; margin-bottom: 1rem;">Enter your child's EnviroEdu account email to link their progress to your dashboard.</p>
+                <h3>👤 {{ __('messages.parent.link_child') }}</h3>
+                <p style="color: #666; margin-bottom: 1rem;">{{ __('messages.parent.link_child_desc') }}</p>
                 <form method="POST" action="{{ route('parent.children.store') }}" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end;">
                     @csrf
                     <div>
-                        <label for="email" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Child's email</label>
+                        <label for="email" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">{{ __('messages.parent.child_email') }}</label>
                         <input id="email" type="email" name="email" class="eco-input" value="{{ old('email') }}" required placeholder="student@example.com" style="min-width: 220px;">
                     </div>
-                    <button type="submit" class="eco-btn">Link account</button>
+                    <button type="submit" class="eco-btn">{{ __('messages.parent.link_account') }}</button>
                 </form>
             </div>
 
-            <h2 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.35rem; color: var(--eco-primary); margin-bottom: 1rem;">My Children</h2>
+            <h2 style="font-family: 'Bubblegum Sans', cursive; font-size: 1.35rem; color: var(--eco-primary); margin-bottom: 1rem;">{{ __('messages.parent.my_children') }}</h2>
             @if ($children->isEmpty())
                 <div class="eco-card" style="padding: 1.5rem; color: #666;">
-                    <p>No children linked yet. Use the form above to link your child's account by email.</p>
+                    <p>{{ __('messages.parent.no_children') }}</p>
                 </div>
             @else
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -68,7 +69,7 @@
                                 <strong>{{ $child->name }}</strong>
                                 <span style="color: #666;">{{ $child->email }}</span>
                             </div>
-                            <a href="{{ route('parent.children.show', $child) }}" class="eco-btn" style="padding: 0.5rem 1rem;">View badges & progress</a>
+                            <a href="{{ route('parent.children.show', $child) }}" class="eco-btn" style="padding: 0.5rem 1rem;">{{ __('messages.parent.view_badges_progress') }}</a>
                         </div>
                     @endforeach
                 </div>

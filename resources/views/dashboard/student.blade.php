@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'My Learning')
+@section('title', __('messages.dashboard.my_learning'))
 
 @section('student-main')
     <div class="eco-env-wrap">
@@ -8,21 +8,21 @@
         <div class="eco-env-overlay">
             <div class="eco-env-card">
                 <h1 class="eco-env-hero">Hi, {{ \Illuminate\Support\Str::before(auth()->user()->name ?? 'Friend', ' ') }}! 👋</h1>
-                <p class="eco-env-hero-sub">Choose where to go:</p>
+                <p class="eco-env-hero-sub">{{ __('messages.dashboard.choose_where') }}</p>
                 <div class="eco-env-gateways">
                 <a href="{{ url('/dashboard/student/topics') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-topics">
                     <span class="eco-env-gate-icon">📚</span>
-                    <span class="eco-env-gate-label">Topics</span>
+                    <span class="eco-env-gate-label">{{ __('messages.dashboard.topics') }}</span>
                     <span class="eco-env-gate-arrow">→</span>
                 </a>
                 <a href="{{ url('/dashboard/student/games') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-games">
                     <span class="eco-env-gate-icon">🎮</span>
-                    <span class="eco-env-gate-label">Games</span>
+                    <span class="eco-env-gate-label">{{ __('messages.dashboard.games') }}</span>
                     <span class="eco-env-gate-arrow">→</span>
                 </a>
                 <a href="{{ url('/dashboard/student/quizzes') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-quizzes">
                     <span class="eco-env-gate-icon">📝</span>
-                    <span class="eco-env-gate-label">Quizzes</span>
+                    <span class="eco-env-gate-label">{{ __('messages.dashboard.quizzes') }}</span>
                     <span class="eco-env-gate-arrow">→</span>
                 </a>
                 </div>

@@ -8,15 +8,16 @@
     <div style="display: flex; flex-direction: column; min-height: 100vh; background: #f5f7f6;">
         <header class="eco-header" style="background: #fff; border-bottom: 2px solid var(--eco-primary);">
             <a href="{{ route('dashboard.admin') }}" class="eco-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" style="height: 48px; width: auto; object-fit: contain;">
+                <img src="{{ asset('images/logo.png') }}" alt="{{ __('messages.common.app_name') }}" style="height: 48px; width: auto; object-fit: contain;">
             </a>
             <nav class="eco-dashboard-nav">
-                <a href="{{ route('dashboard.admin') }}">Dashboard</a>
-                <a href="{{ route('admin.approvals.index') }}">Pending approvals</a>
+                @include('components.language-switcher')
+                <a href="{{ route('dashboard.admin') }}">{{ __('messages.nav.dashboard') }}</a>
+                <a href="{{ route('admin.approvals.index') }}">{{ __('messages.admin.pending_approvals') }}</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
-                    <button type="submit" class="eco-logout-btn">Logout</button>
+                    <button type="submit" class="eco-logout-btn">{{ __('messages.nav.logout') }}</button>
                 </form>
             </nav>
         </header>

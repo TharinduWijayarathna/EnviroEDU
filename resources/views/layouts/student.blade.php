@@ -39,26 +39,27 @@
     <div class="eco-student-wrap has-bg-image">
         <header class="eco-student-header eco-kid-header">
             <div class="eco-student-logo-wrap">
-                <img src="{{ asset('images/logo.png') }}" alt="EnviroEdu" class="eco-student-logo-img">
+                <img src="{{ asset('images/logo.png') }}" alt="{{ __('messages.common.app_name') }}" class="eco-student-logo-img">
                 @auth
                     <span class="eco-student-user-name">Hi, {{ \Illuminate\Support\Str::before(auth()->user()->name ?? 'Friend', ' ') }}! 👋</span>
                 @endauth
             </div>
             <div class="eco-dashboard-nav">
-                <a href="{{ route('dashboard.student.badges') }}" class="eco-badge-btn">🏆 <span id="ecoBadgeCount">{{ $badgeCount ?? 0 }}</span> badges</a>
+                @include('components.language-switcher')
+                <a href="{{ route('dashboard.student.badges') }}" class="eco-badge-btn">🏆 <span id="ecoBadgeCount">{{ $badgeCount ?? 0 }}</span> {{ __('messages.dashboard.badges') }}</a>
                 <form method="GET" action="{{ route('dashboard.student') }}" id="ecoGradeForm" class="eco-grade-form">
-                    <label for="ecoGradeSelector" class="eco-grade-label">My grade:</label>
-                    <select id="ecoGradeSelector" name="grade" class="eco-grade-select" aria-label="Choose your grade">
-                        <option value="">All</option>
+                    <label for="ecoGradeSelector" class="eco-grade-label">{{ __('messages.dashboard.my_grade') }}</label>
+                    <select id="ecoGradeSelector" name="grade" class="eco-grade-select" aria-label="{{ __('messages.dashboard.my_grade') }}">
+                        <option value="">{{ __('messages.dashboard.grade_all') }}</option>
                         @foreach (config('app.grade_levels', [4, 5]) as $g)
-                            <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>Grade {{ $g }}</option>
+                            <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>{{ __('messages.dashboard.grade', ['level' => $g]) }}</option>
                         @endforeach
                     </select>
                 </form>
                 @auth
                     <form method="POST" action="{{ route('logout') }}" class="eco-logout-form">
                         @csrf
-                        <button type="submit" class="eco-logout-btn">Leave</button>
+                        <button type="submit" class="eco-logout-btn">{{ __('messages.dashboard.leave') }}</button>
                     </form>
                 @endauth
             </div>
@@ -75,21 +76,21 @@
         <button type="button" class="eco-edubuddy-toggle" id="ecoEdubuddyToggle" aria-label="Open EduBuddy chat">🤖</button>
         <div class="eco-edubuddy-widget" id="ecoEdubuddy" aria-hidden="true">
             <div class="eco-edubuddy-header">
-                <span class="eco-edubuddy-title">🤖 EduBuddy</span>
+                <span class="eco-edubuddy-title">🤖 {{ __('messages.dashboard.edubuddy') }}</span>
                 <button type="button" class="eco-edubuddy-close" id="ecoEdubuddyClose" aria-label="Close chat">×</button>
             </div>
             <div class="eco-edubuddy-body">
-                <p class="eco-edubuddy-greeting" id="ecoEdubuddyGreeting">Hi {{ auth()->user()->name ?? 'there' }}! How can I help you today?</p>
+                <p class="eco-edubuddy-greeting" id="ecoEdubuddyGreeting">{{ __('messages.dashboard.edubuddy_greeting', ['name' => auth()->user()->name ?? 'there']) }}</p>
                 <div class="eco-edubuddy-suggestions" id="ecoEdubuddySuggestions">
-                    <button type="button" class="eco-edubuddy-suggestion" data-message="What is living vs non-living? 😕">What is living vs non-living? 😕 →</button>
-                    <button type="button" class="eco-edubuddy-suggestion" data-message="Explain the water cycle 🌧️">Explain the water cycle 🌧️ →</button>
-                    <button type="button" class="eco-edubuddy-suggestion" data-message="I need a hint for my quiz! 📝">I need a hint for my quiz! 📝 →</button>
+                    <button type="button" class="eco-edubuddy-suggestion" data-message="{{ __('messages.dashboard.edubuddy_suggestion_1') }} 😕">{{ __('messages.dashboard.edubuddy_suggestion_1') }} 😕 →</button>
+                    <button type="button" class="eco-edubuddy-suggestion" data-message="{{ __('messages.dashboard.edubuddy_suggestion_2') }} 🌧️">{{ __('messages.dashboard.edubuddy_suggestion_2') }} 🌧️ →</button>
+                    <button type="button" class="eco-edubuddy-suggestion" data-message="{{ __('messages.dashboard.edubuddy_suggestion_3') }} 📝">{{ __('messages.dashboard.edubuddy_suggestion_3') }} 📝 →</button>
                 </div>
                 <div class="eco-edubuddy-messages" id="ecoEdubuddyMessages"></div>
-                <div class="eco-edubuddy-typing" id="ecoEdubuddyTyping" style="display: none;">EduBuddy is typing...</div>
+                <div class="eco-edubuddy-typing" id="ecoEdubuddyTyping" style="display: none;">{{ __('messages.dashboard.edubuddy_typing') }}</div>
             </div>
             <div class="eco-edubuddy-footer">
-                <input type="text" class="eco-edubuddy-input" placeholder="Type a message..." id="ecoEdubuddyInput" autocomplete="off">
+                <input type="text" class="eco-edubuddy-input" placeholder="{{ __('messages.dashboard.edubuddy_placeholder') }}" id="ecoEdubuddyInput" autocomplete="off">
                 <button type="button" class="eco-edubuddy-send" id="ecoEdubuddySend" aria-label="Send">🤖</button>
             </div>
         </div>
@@ -206,14 +207,14 @@
         <script>window.ecoStudentData = { topics: @json($topicsPayload ?? []) };</script>
     @endif
 
-    <div class="eco-badge-modal" id="ecoBadgeModal">
-        <div class="eco-badge-modal-ribbon" id="ecoBadgeRibbon">You got a badge! 🎉</div>
+    <div class="eco-badge-modal" id="ecoBadgeModal" data-default-title="{{ __('messages.dashboard.default_badge_name') }}" data-default-desc="{{ __('messages.dashboard.congratulations') }}">
+        <div class="eco-badge-modal-ribbon" id="ecoBadgeRibbon">{{ __('messages.dashboard.you_got_badge') }} 🎉</div>
         <div style="font-size: 4rem; margin-bottom: 0.8rem; min-height: 4rem; display: flex; align-items: center; justify-content: center;" id="ecoBadgeIcon">🏆</div>
-        <div class="eco-badge-modal-badge-title" id="ecoBadgeTitle">Forest Guardian</div>
+        <div class="eco-badge-modal-badge-title" id="ecoBadgeTitle"></div>
         <p id="ecoBadgeDescription" style="color:#333; margin:0.75rem 0;"></p>
         <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="eco-btn" id="ecoCloseBadgeBtn" style="background: #fff8e1; color: #558b2f; border: 2px solid #81c784;">Close</button>
-            <a href="{{ route('dashboard.student.badges') }}" class="eco-btn" id="ecoViewAllBadgesBtn">See my badges</a>
+            <button type="button" class="eco-btn" id="ecoCloseBadgeBtn" style="background: #fff8e1; color: #558b2f; border: 2px solid #81c784;">{{ __('messages.common.close') }}</button>
+            <a href="{{ route('dashboard.student.badges') }}" class="eco-btn" id="ecoViewAllBadgesBtn">{{ __('messages.dashboard.see_my_badges') }}</a>
         </div>
     </div>
     <script>
@@ -222,14 +223,16 @@
             var icon = document.getElementById('ecoBadgeIcon');
             var title = document.getElementById('ecoBadgeTitle');
             var desc = document.getElementById('ecoBadgeDescription');
+            var defaultTitle = modal ? modal.getAttribute('data-default-title') || 'Forest Guardian' : 'Forest Guardian';
+            var defaultDesc = modal ? modal.getAttribute('data-default-desc') || 'Congratulations! You\'ve earned this badge.' : 'Congratulations! You\'ve earned this badge.';
             if (modal && icon && title && desc) {
                 if (badge.image_url) {
                     icon.innerHTML = '<img src="' + badge.image_url + '" alt="" style="width:80px;height:80px;object-fit:contain;border-radius:12px;">';
                 } else {
                     icon.textContent = badge.icon || '🏆';
                 }
-                title.textContent = badge.name || 'Forest Guardian';
-                desc.textContent = badge.description || 'Congratulations! You\'ve earned this badge.';
+                title.textContent = badge.name || defaultTitle;
+                desc.textContent = badge.description || defaultDesc;
                 modal.classList.add('show');
                 var countEl = document.getElementById('ecoBadgeCount');
                 if (countEl) { countEl.textContent = parseInt(countEl.textContent, 10) + 1; }
