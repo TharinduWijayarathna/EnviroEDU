@@ -34,8 +34,8 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
     camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
-    camera.position.set(0, 2.4, 6.8);
-    camera.lookAt(0, 1, 0);
+    camera.position.set(0, 1.6, 5.5);
+    camera.lookAt(0, 1.2, 0);
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(w, h);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -53,54 +53,65 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
     ground.rotation.x = -Math.PI / 2;
     scene.add(ground);
 
+    const trunkRadius = 0.5;
+    const trunkHeight = 2.6;
     treeGroup = new THREE.Group();
     const trunk = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.4, 0.5, 2.5, 12),
-      new THREE.MeshStandardMaterial({ color: 0x5d4037 })
+      new THREE.CylinderGeometry(trunkRadius * 0.9, trunkRadius * 1.1, trunkHeight, 24),
+      new THREE.MeshStandardMaterial({ color: 0x4e342e, roughness: 0.9, metalness: 0 })
     );
-    trunk.position.y = 1.25;
+    trunk.position.y = trunkHeight / 2;
+    trunk.castShadow = true;
     treeGroup.add(trunk);
-    const leaves = new THREE.Mesh(
-      new THREE.SphereGeometry(1.2, 16, 12),
-      new THREE.MeshStandardMaterial({ color: 0x2e7d32 })
+    const canopy = new THREE.Mesh(
+      new THREE.SphereGeometry(1.4, 24, 20),
+      new THREE.MeshStandardMaterial({ color: 0x2e7d32, roughness: 0.85, metalness: 0 })
     );
-    leaves.position.y = 2.8;
-    treeGroup.add(leaves);
-    treeGroup.position.z = 0;
+    canopy.position.y = trunkHeight + 0.4;
+    treeGroup.add(canopy);
+    treeGroup.position.set(0, 0, 0);
     scene.add(treeGroup);
 
-    vineCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0.5, 0, 0),
-      new THREE.Vector3(0.52, 0.35, 0.35),
-      new THREE.Vector3(0.38, 0.8, -0.28),
-      new THREE.Vector3(0.48, 1.25, 0.24),
-      new THREE.Vector3(0.32, 1.75, -0.15),
-      new THREE.Vector3(0.3, 2.25, 0.02),
-    ]);
+    const vineRadius = trunkRadius + 0.12;
+    const spiralPoints = [];
+    for (let i = 0; i <= 40; i++) {
+      const t = (i / 40) * Math.PI * 2.5;
+      const y = 0.02 + (trunkHeight * 0.92) * (i / 40);
+      spiralPoints.push(new THREE.Vector3(
+        Math.cos(t) * vineRadius,
+        y,
+        Math.sin(t) * vineRadius
+      ));
+    }
+    vineCurve = new THREE.CatmullRomCurve3(spiralPoints);
 
     rootMesh = new THREE.Mesh(
-      new THREE.TorusGeometry(0.48, 0.06, 8, 24),
-      new THREE.MeshStandardMaterial({ color: 0x558b2f })
+      new THREE.TorusGeometry(vineRadius, 0.08, 12, 32),
+      new THREE.MeshStandardMaterial({ color: 0x33691e, roughness: 0.8, metalness: 0 })
     );
     rootMesh.rotation.x = Math.PI / 2;
-    rootMesh.position.y = 0.04;
+    rootMesh.position.y = 0.02;
     rootMesh.scale.setScalar(0.01);
     scene.add(rootMesh);
 
     leafGroup = new THREE.Group();
     leafGroup.visible = false;
-    for (let i = 0; i < 6; i++) {
+    const leafPositions = [0.35, 0.5, 0.65, 0.78, 0.88, 0.96];
+    leafPositions.forEach((u, i) => {
+      const p = vineCurve.getPoint(u);
+      const tangent = vineCurve.getTangent(u);
       const leaf = new THREE.Mesh(
-        new THREE.SphereGeometry(0.13, 8, 8),
-        new THREE.MeshStandardMaterial({ color: 0x43a047 })
+        new THREE.SphereGeometry(0.18, 12, 10),
+        new THREE.MeshStandardMaterial({ color: 0x388e3c, roughness: 0.7, metalness: 0 })
       );
-      leaf.scale.set(1.5, 0.35, 1);
-      const p = vineCurve.getPoint(0.24 + i * 0.12);
-      leaf.position.copy(p).add(new THREE.Vector3(i % 2 ? 0.12 : -0.12, 0.06, i % 2 ? 0.05 : -0.05));
-      leaf.rotation.z = i % 2 ? 0.6 : -0.6;
+      leaf.scale.set(1.8, 0.4, 1);
+      leaf.position.copy(p);
+      leaf.position.y += 0.05;
+      leaf.position.addScaledVector(new THREE.Vector3(-tangent.z, 0, tangent.x), 0.25);
+      leaf.rotation.z = i % 2 ? 0.5 : -0.5;
       leaf.scale.multiplyScalar(0.01);
       leafGroup.add(leaf);
-    }
+    });
     scene.add(leafGroup);
 
     buildUI();
@@ -234,17 +245,22 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
   }
 
   function rebuildVine() {
-    const pointCount = Math.max(6, Math.ceil(45 * vineProgress));
-    const points = vineCurve.getPoints(pointCount);
+    const pointCount = Math.max(12, Math.ceil(50 * vineProgress));
+    const points = [];
+    for (let i = 0; i <= pointCount; i++) {
+      const u = (i / pointCount) * vineProgress;
+      points.push(vineCurve.getPoint(u));
+    }
     const curve = new THREE.CatmullRomCurve3(points);
-    const geo = new THREE.TubeGeometry(curve, Math.max(12, pointCount), 0.08, 10, false);
+    const tubeSegments = Math.max(8, pointCount);
+    const geo = new THREE.TubeGeometry(curve, tubeSegments, 0.1, 12, false);
     if (vineMesh) {
       scene.remove(vineMesh);
       vineMesh.geometry.dispose();
     }
     vineMesh = new THREE.Mesh(
       geo,
-      new THREE.MeshStandardMaterial({ color: 0x558b2f })
+      new THREE.MeshStandardMaterial({ color: 0x33691e, roughness: 0.8, metalness: 0 })
     );
     vineMesh.name = 'vine';
     scene.add(vineMesh);
