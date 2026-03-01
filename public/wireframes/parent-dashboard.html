@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe: Parent dashboard</title>
+  <link rel="stylesheet" href="css/wireframe.css">
+</head>
+<body class="wf-page">
+  <header class="wf-header">
+    <div class="wf-logo"></div>
+    <nav class="wf-nav">
+      <a href="parent-dashboard.html">Dashboard</a>
+      <span>Parent name</span>
+      <a href="index.html" class="wf-btn">Logout</a>
+    </nav>
+  </header>
+  <main class="wf-main">
+    <h1>Parent dashboard</h1>
+    <p style="margin-bottom:24px;">Link your child and view their badges and progress.</p>
+    <div class="wf-card" style="margin-bottom:24px;">
+      <h3>👤 Link child</h3>
+      <p style="color:#666;margin-bottom:12px;">Enter your child’s email to link their account.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div>
+          <label class="wf-label">Child email</label>
+          <input type="email" class="wf-input" placeholder="student@school.edu">
+        </div>
+        <button class="wf-btn wf-btn-primary" style="align-self:flex-end;">Link account</button>
+      </div>
+    </div>
+    <h2 style="font-size:1.2rem;margin-bottom:12px;">My children</h2>
+    <ul class="wf-list">
+      <li style="justify-content:space-between;">
+        <span><strong>Alex</strong> alex@school.edu</span>
+        <a href="#" class="wf-btn">View badges & progress</a>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>

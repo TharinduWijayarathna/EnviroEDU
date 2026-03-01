@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireframe: Teacher dashboard</title>
+  <link rel="stylesheet" href="css/wireframe.css">
+</head>
+<body class="wf-page">
+  <header class="wf-header">
+    <div class="wf-logo"></div>
+    <nav class="wf-nav">
+      <a href="teacher-dashboard.html">Dashboard</a>
+      <a href="teacher-classes.html">Classes</a>
+      <a href="teacher-topics.html">Topics</a>
+      <a href="teacher-quizzes.html">Quizzes</a>
+      <a href="teacher-minigames.html">Mini games</a>
+      <a href="teacher-badges.html">Badges</a>
+      <a href="teacher-progress.html">Student progress</a>
+      <span>Ms. Smith</span>
+      <a href="index.html" class="wf-btn">Logout</a>
+    </nav>
+  </header>
+  <main class="wf-main">
+    <h1>Dashboard</h1>
+    <p style="margin-bottom:24px;">Manage your classes, content, and track student progress.</p>
+    <div class="wf-grid wf-grid-4" style="grid-template-columns:repeat(3, 1fr) 280px;">
+      <a href="teacher-classes.html" class="wf-card" style="text-decoration:none;color:inherit;">
+        <span style="font-size:2rem;">🖥️</span>
+        <div class="wf-stat">3</div>
+        <h3>Classes</h3>
+        <p class="wf-card p">Create classes and add students.</p>
+        <span class="wf-btn">Manage Classes →</span>
+      </a>
+      <a href="teacher-topics.html" class="wf-card" style="text-decoration:none;color:inherit;">
+        <span style="font-size:2rem;">📚</span>
+        <div class="wf-stat">5</div>
+        <h3>Topics</h3>
+        <p class="wf-card p">Organize content; add quizzes and games.</p>
+        <span class="wf-btn">Manage Topics →</span>
+      </a>
+      <a href="teacher-quizzes.html" class="wf-card" style="text-decoration:none;color:inherit;">
+        <span style="font-size:2rem;">📝</span>
+        <div class="wf-stat">8</div>
+        <h3>Quizzes</h3>
+        <p class="wf-card p">Create quizzes with multiple choice.</p>
+        <span class="wf-btn">Manage Quizzes →</span>
+      </a>
+      <div class="wf-card">
+        <h3>Quick Actions</h3>
+        <ul class="wf-list" style="margin:0;">
+          <li><a href="#">➕ Create Topic</a></li>
+          <li><a href="#">📝 Create Quiz</a></li>
+          <li><a href="#">🎮 Create Mini Game</a></li>
+          <li><a href="teacher-badges.html">🏆 Badges</a></li>
+          <li><a href="teacher-classes.html">👥 Classes</a></li>
+          <li><a href="teacher-progress.html">📊 Student Progress</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wf-grid wf-grid-3" style="margin-top:24px;">
+      <a href="teacher-minigames.html" class="wf-card" style="text-decoration:none;color:inherit;">
+        <span style="font-size:1.5rem;">🎮</span>
+        <div class="wf-stat">4</div>
+        <h3>Mini Games</h3>
+        <p class="wf-card p">Drag-and-drop, matching, etc.</p>
+        <span class="wf-btn">Manage Mini Games →</span>
+      </a>
+      <a href="teacher-badges.html" class="wf-card" style="text-decoration:none;color:inherit;">
+        <span style="font-size:1.5rem;">🏆</span>
+        <div class="wf-stat">6</div>
+        <h3>Badges</h3>
+        <p class="wf-card p">Students earn by completing quizzes/games.</p>
+        <span class="wf-btn">Manage Badges →</span>
+      </a>
+      <a href="teacher-progress.html" class="wf-card" style="text-decoration:none;color:inherit;">
+        <span style="font-size:1.5rem;">📊</span>
+        <div class="wf-stat">24</div>
+        <h3>Student Progress</h3>
+        <p class="wf-card p">View attempts, scores, badges.</p>
+        <span class="wf-btn">View Progress →</span>
+      </a>
+    </div>
+    <div class="wf-tip">
+      <span>💡</span>
+      <p style="margin:0;">Tip: Create topics first, then add quizzes and games. Create badges so students can earn rewards.</p>
+    </div>
+  </main>
+</body>
+</html>

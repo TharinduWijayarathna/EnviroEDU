@@ -1,0 +1,46 @@
+/* EnviroEDU Wireframe Design - Shared Styles */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; font-size: 16px; color: #333; background: #f0f0f0; }
+.wf-page { min-height: 100vh; display: flex; flex-direction: column; }
+.wf-header { background: #fff; border-bottom: 2px solid #ccc; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.wf-logo { width: 120px; height: 40px; border: 2px dashed #999; border-radius: 4px; background: #fafafa; }
+.wf-nav { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.wf-nav a { color: #555; text-decoration: none; padding: 6px 10px; border: 1px dashed #999; border-radius: 4px; }
+.wf-main { flex: 1; padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
+.wf-hero { text-align: center; margin-bottom: 32px; }
+.wf-hero h1 { font-size: 2rem; margin: 0 0 8px; border-bottom: 2px dashed #999; display: inline-block; padding-bottom: 4px; }
+.wf-hero p { color: #666; margin: 0; }
+.wf-grid { display: grid; gap: 16px; }
+.wf-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.wf-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.wf-grid-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 768px) { .wf-grid-2, .wf-grid-3, .wf-grid-4 { grid-template-columns: 1fr; } }
+.wf-card { background: #fff; border: 2px dashed #999; border-radius: 12px; padding: 20px; }
+.wf-card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.wf-card p { margin: 0; color: #666; font-size: 0.9rem; }
+.wf-stat { font-size: 2rem; font-weight: 700; color: #333; margin-bottom: 4px; }
+.wf-btn { display: inline-block; padding: 10px 20px; border: 2px solid #333; border-radius: 8px; background: #fff; color: #333; text-decoration: none; font-weight: 600; margin: 4px; }
+.wf-btn-primary { background: #4ECDC4; border-color: #4ECDC4; color: #1a3c34; }
+.wf-input { display: block; width: 100%; max-width: 320px; padding: 10px 12px; border: 2px dashed #999; border-radius: 8px; margin: 8px 0; font-size: 1rem; }
+.wf-label { display: block; font-weight: 600; margin-bottom: 4px; }
+.wf-list { list-style: none; padding: 0; margin: 0; }
+.wf-list li { padding: 12px; border: 1px dashed #ccc; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+.wf-footer { padding: 16px 24px; text-align: center; border-top: 1px dashed #999; background: #fff; color: #666; font-size: 0.9rem; }
+.wf-section { margin-bottom: 32px; }
+.wf-section h2 { font-size: 1.35rem; margin: 0 0 16px; padding-bottom: 8px; border-bottom: 2px dashed #999; }
+.wf-placeholder { min-height: 60px; border: 2px dashed #bbb; border-radius: 8px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; }
+.wf-badge { width: 48px; height: 48px; border: 2px dashed #999; border-radius: 50%; background: #fafafa; }
+.wf-index { background: #fff; padding: 32px; max-width: 800px; margin: 24px auto; border: 2px dashed #999; border-radius: 16px; }
+.wf-index h1 { margin: 0 0 8px; }
+.wf-index p { color: #666; margin: 0 0 24px; }
+.wf-index ul { list-style: none; padding: 0; margin: 0; }
+.wf-index li { margin-bottom: 8px; }
+.wf-index a { color: #4ECDC4; font-weight: 600; text-decoration: none; }
+.wf-index a:hover { text-decoration: underline; }
+.wf-back { display: inline-block; margin-bottom: 16px; color: #4ECDC4; font-weight: 600; text-decoration: none; }
+.wf-back:hover { text-decoration: underline; }
+.wf-center { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; padding: 24px; }
+.wf-form-card { background: #fff; border: 2px dashed #999; border-radius: 16px; padding: 32px; max-width: 420px; width: 100%; }
+.wf-form-card h2 { margin: 0 0 24px; text-align: center; }
+.wf-form-group { margin-bottom: 16px; }
+.wf-tip { background: #fffde7; border: 2px dashed #d4a84b; border-radius: 12px; padding: 16px; margin-top: 24px; display: flex; gap: 12px; align-items: flex-start; }
