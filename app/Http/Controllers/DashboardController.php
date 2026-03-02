@@ -9,12 +9,17 @@ use App\Models\MiniGame;
 use App\Models\Quiz;
 use App\Models\Topic;
 use App\Models\User;
+use App\Services\LeaderboardService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private LeaderboardService $leaderboardService
+    ) {}
+
     public function index(): RedirectResponse
     {
         $user = auth()->user();
@@ -63,10 +68,16 @@ class DashboardController extends Controller
 
     public function student(): View
     {
+        $student = auth()->user();
+        $leaderboard = $this->leaderboardService->getClassLeaderboard($student, 10);
+        $enrolledClasses = $student->enrolledClasses()->orderBy('name')->get();
+
         return view('dashboard.student', [
             'studentPage' => 'dashboard',
             'studentLayoutTitle' => 'My Learning',
             'studentFullWidth' => true,
+            'leaderboard' => $leaderboard,
+            'enrolledClasses' => $enrolledClasses,
         ]);
     }
 

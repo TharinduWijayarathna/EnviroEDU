@@ -29,6 +29,33 @@
                     <span class="eco-env-gate-arrow">→</span>
                 </a>
                 </div>
+
+                @if (isset($leaderboard) && $leaderboard->isNotEmpty())
+                    <div class="eco-leaderboard">
+                        <h3 class="eco-leaderboard-title">{{ __('messages.dashboard.leaderboard') }}</h3>
+                        <p class="eco-leaderboard-desc">{{ __('messages.dashboard.leaderboard_desc') }}</p>
+                        <div class="eco-leaderboard-table">
+                            <div class="eco-leaderboard-header">
+                                <span>#</span>
+                                <span>{{ __('messages.dashboard.leaderboard_name') }}</span>
+                                <span>{{ __('messages.dashboard.leaderboard_quiz') }}</span>
+                                <span>{{ __('messages.dashboard.leaderboard_games') }}</span>
+                                <span>{{ __('messages.dashboard.leaderboard_total') }}</span>
+                            </div>
+                            @foreach ($leaderboard as $entry)
+                                <div class="eco-leaderboard-row {{ $entry['user']->id === auth()->id() ? 'eco-leaderboard-me' : '' }}">
+                                    <span class="eco-leaderboard-rank">{{ $entry['rank'] }}</span>
+                                    <span class="eco-leaderboard-name">{{ $entry['user']->name }}</span>
+                                    <span>{{ $entry['quiz_score'] }}</span>
+                                    <span>{{ $entry['game_score'] }}</span>
+                                    <span class="eco-leaderboard-total">{{ $entry['total_score'] }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @elseif (isset($enrolledClasses) && $enrolledClasses->isEmpty())
+                    <p class="eco-leaderboard-empty">{{ __('messages.dashboard.leaderboard_no_class') }}</p>
+                @endif
             </div>
         </div>
     </div>
@@ -57,6 +84,16 @@
         .eco-env-gate-quizzes { border-color: rgba(212, 168, 75, 0.6); }
         .eco-env-gate-quizzes:hover { border-color: #d4a84b; }
         @keyframes eco-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .eco-leaderboard { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 2px solid rgba(78, 205, 196, 0.4); }
+        .eco-leaderboard-title { font-size: 1.1rem; font-weight: 700; color: #1a3c34; margin: 0 0 0.25rem; }
+        .eco-leaderboard-desc { font-size: 0.85rem; color: #2d5a52; margin: 0 0 0.75rem; }
+        .eco-leaderboard-table { font-size: 0.9rem; }
+        .eco-leaderboard-header { display: grid; grid-template-columns: 2rem 1fr 3.5rem 3.5rem 3.5rem; gap: 0.5rem; padding: 0.4rem 0; font-weight: 700; color: #1a3c34; border-bottom: 2px solid rgba(78, 205, 196, 0.5); }
+        .eco-leaderboard-row { display: grid; grid-template-columns: 2rem 1fr 3.5rem 3.5rem 3.5rem; gap: 0.5rem; padding: 0.35rem 0; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .eco-leaderboard-row.eco-leaderboard-me { background: rgba(78, 205, 196, 0.2); margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border-radius: 8px; font-weight: 600; }
+        .eco-leaderboard-rank { font-weight: 700; color: var(--eco-primary); }
+        .eco-leaderboard-total { font-weight: 700; color: #1a3c34; }
+        .eco-leaderboard-empty { font-size: 0.9rem; color: #5a6b5d; margin: 1rem 0 0; }
     </style>
 @endpush
 

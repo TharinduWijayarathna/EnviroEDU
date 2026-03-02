@@ -229,6 +229,13 @@ return [
         'edubuddy_suggestion_1' => 'ජීවත් වන දේ සහ ජීවත් නොවන දේ යනු කුමක්ද?',
         'edubuddy_suggestion_2' => 'ජල චක්‍රය පැහැදිලි කරන්න',
         'edubuddy_suggestion_3' => 'මගේ විචාර අභ්‍යාසයට ඉඟියක් අවශ්‍යයි!',
+        'leaderboard' => 'පන්ති නායක පුවරුව',
+        'leaderboard_desc' => 'විචාර නිවැරදි පිළිතුරු + ක්‍රීඩා සම්පූර්ණ කිරීම් අනුව ඉහළම 10',
+        'leaderboard_name' => 'නම',
+        'leaderboard_quiz' => 'විචාර',
+        'leaderboard_games' => 'ක්‍රීඩා',
+        'leaderboard_total' => 'මුළු',
+        'leaderboard_no_class' => 'නායක පුවරුව දැකීමට පන්තියකට එකතු වන්න.',
     ],
 
     'teacher' => [

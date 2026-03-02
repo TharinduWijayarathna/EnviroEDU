@@ -228,6 +228,13 @@ return [
         'edubuddy_suggestion_1' => 'What is living vs non-living?',
         'edubuddy_suggestion_2' => 'Explain the water cycle',
         'edubuddy_suggestion_3' => 'I need a hint for my quiz!',
+        'leaderboard' => 'Class Leaderboard',
+        'leaderboard_desc' => 'Top 10 by quiz correct answers + games completed',
+        'leaderboard_name' => 'Name',
+        'leaderboard_quiz' => 'Quiz',
+        'leaderboard_games' => 'Games',
+        'leaderboard_total' => 'Total',
+        'leaderboard_no_class' => 'Join a class to see the leaderboard.',
     ],
 
     'teacher' => [
