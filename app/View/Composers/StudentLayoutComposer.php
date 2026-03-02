@@ -16,14 +16,15 @@ class StudentLayoutComposer
         $standaloneQuizzes = collect();
         $standaloneMiniGames = collect();
         $platformGames = collect();
-        $requestedGrade = request()->integer('grade', 0);
         $allowedGrades = config('app.grade_levels', [4, 5]);
-        $grade = in_array($requestedGrade, $allowedGrades, true) ? $requestedGrade : 0;
+        $grade = 0;
         $topicsPayload = [];
 
         if (auth()->check() && auth()->user()->role?->value === 'student') {
             $student = auth()->user();
             $schoolId = $student->school_id;
+            $studentGrade = $student->grade_level;
+            $grade = ($studentGrade !== null && in_array((int) $studentGrade, $allowedGrades, true)) ? (int) $studentGrade : 0;
             $gradeFilter = fn ($q) => $q->where(fn ($q2) => $q2->whereNull('grade_level')->orWhere('grade_level', $grade));
             $sameSchool = fn ($q) => $q->whereHas('user', fn ($uq) => $uq->where('school_id', $schoolId));
 

@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'role',
         'school_id',
+        'grade_level',
         'is_approved',
     ];
 
@@ -51,6 +52,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => Role::class,
+            'grade_level' => 'integer',
             'is_approved' => 'boolean',
         ];
     }

@@ -4,7 +4,7 @@
 
 @section('student-main')
     <div class="eco-student-back-bar">
-        <a href="{{ route('dashboard.student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-student-back-link">{{ __('messages.play.back_to_my_learning') }}</a>
+        <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">{{ __('messages.play.back_to_my_learning') }}</a>
     </div>
     <div class="eco-kid-topic-page">
         <h1 class="eco-kid-topic-page-title">📚 {{ $topic->title }}</h1>

@@ -52,6 +52,17 @@
                     </div>
                 @endif
 
+                @if ($role === 'student')
+                    <div style="margin-bottom: 1rem;">
+                        <label for="grade_level" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">{{ __('messages.auth.grade_level') }}</label>
+                        <select id="grade_level" name="grade_level" class="eco-input" required>
+                            @foreach (config('app.grade_levels', [4, 5]) as $g)
+                                <option value="{{ $g }}" {{ old('grade_level') == $g ? 'selected' : '' }}>{{ __('messages.dashboard.grade', ['level' => $g]) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+
                 @if ($role === 'parent')
                     <div style="margin-bottom: 1rem;">
                         <label for="child_email" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">{{ __('messages.auth.child_email') }}</label>

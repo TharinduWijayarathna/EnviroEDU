@@ -16,9 +16,6 @@
         .eco-student-logo-img { height: 52px; width: auto; object-fit: contain; display: block; }
         .eco-kid-header .eco-student-user-name { font-family: 'Bubblegum Sans', cursive; font-size: 1.25rem; color: var(--eco-dark); margin: 0; }
         .eco-dashboard-nav { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-        .eco-grade-form { display: inline-flex; align-items: center; gap: 0.5rem; }
-        .eco-grade-label { font-weight: 700; font-size: 0.95rem; color: var(--eco-dark); }
-        .eco-grade-select { background: #b3e5fc; border: 2px solid #4dd0e1; padding: 0.5rem 1rem; border-radius: 25px; font-weight: 700; cursor: pointer; font-size: 1rem; }
         .eco-logout-form { display: inline; }
         .eco-logout-btn { background: transparent; border: 2px solid #b0bec5; color: #546e7a; padding: 0.4rem 0.9rem; border-radius: 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
         .eco-logout-btn:hover { background: #eceff1; }
@@ -47,15 +44,6 @@
             <div class="eco-dashboard-nav">
                 @include('components.language-switcher')
                 <a href="{{ route('dashboard.student.badges') }}" class="eco-badge-btn">🏆 <span id="ecoBadgeCount">{{ $badgeCount ?? 0 }}</span> {{ __('messages.dashboard.badges') }}</a>
-                <form method="GET" action="{{ route('dashboard.student') }}" id="ecoGradeForm" class="eco-grade-form">
-                    <label for="ecoGradeSelector" class="eco-grade-label">{{ __('messages.dashboard.my_grade') }}</label>
-                    <select id="ecoGradeSelector" name="grade" class="eco-grade-select" aria-label="{{ __('messages.dashboard.my_grade') }}">
-                        <option value="">{{ __('messages.dashboard.grade_all') }}</option>
-                        @foreach (config('app.grade_levels', [4, 5]) as $g)
-                            <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>{{ __('messages.dashboard.grade', ['level' => $g]) }}</option>
-                        @endforeach
-                    </select>
-                </form>
                 @auth
                     <form method="POST" action="{{ route('logout') }}" class="eco-logout-form">
                         @csrf

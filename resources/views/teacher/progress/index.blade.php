@@ -5,7 +5,18 @@
 @section('teacher')
     <p style="margin-bottom: 1rem;"><a href="{{ route('dashboard.teacher') }}" style="color: var(--eco-primary); font-weight: 600;">← Back to Dashboard</a></p>
     <h1 style="font-family: 'Bubblegum Sans', cursive; font-size: 2rem; color: var(--eco-primary); margin-bottom: 0.5rem;">Student Progress</h1>
-    <p style="margin-bottom: 1.5rem; color: #555;">View quiz and game attempts, scores, and badges for each student.</p>
+    <p style="margin-bottom: 1rem; color: #555;">View quiz and game attempts, scores, and badges for each student.</p>
+
+    <form method="GET" action="{{ route('teacher.progress.index') }}" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <label for="grade_filter" style="font-weight: 600;">Filter by grade:</label>
+        <select id="grade_filter" name="grade" class="eco-input" style="width: auto; min-width: 120px;">
+            <option value="">All grades</option>
+            @foreach (config('app.grade_levels', [4, 5]) as $g)
+                <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>Grade {{ $g }}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="eco-btn">Apply</button>
+    </form>
 
     <div style="display: flex; flex-direction: column; gap: 1rem;">
         @forelse ($students as $s)
@@ -13,6 +24,9 @@
                 <div>
                     <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">{{ $s->name }}</h3>
                     <p style="color: #666; font-size: 0.9rem;">
+                        @if ($s->grade_level)
+                            Grade {{ $s->grade_level }} ·
+                        @endif
                         {{ $s->quiz_attempts_count }} quiz attempts · {{ $s->mini_game_attempts_count }} game attempts · {{ $s->badges_count }} badges
                     </p>
                 </div>

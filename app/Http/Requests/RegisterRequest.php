@@ -37,6 +37,10 @@ class RegisterRequest extends FormRequest
             $rules['school_code'] = ['required', 'string', 'exists:schools,slug'];
         }
 
+        if ($role === 'student') {
+            $rules['grade_level'] = ['required', 'integer', 'in:4,5'];
+        }
+
         if ($role === 'parent') {
             $rules['child_email'] = [
                 'nullable',
@@ -70,6 +74,8 @@ class RegisterRequest extends FormRequest
             'school_code.exists' => 'No school found with this code. Check the code and try again.',
             'school_code.unique' => 'This school code is already in use. Choose another.',
             'school_code.regex' => 'School code may only contain letters, numbers, and hyphens.',
+            'grade_level.required' => 'Please select your grade.',
+            'grade_level.in' => 'Please select Grade 4 or Grade 5.',
         ];
     }
 }

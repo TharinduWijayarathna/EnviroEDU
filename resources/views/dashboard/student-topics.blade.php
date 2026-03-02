@@ -6,7 +6,7 @@
     <div class="eco-env-wrap eco-env-wrap-list">
         <div id="eco-env-container" class="eco-env-canvas" aria-hidden="true"></div>
         <div class="eco-env-overlay eco-env-overlay-list">
-            <a href="{{ url('/dashboard/student') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-back">{{ __('messages.dashboard.back_to_my_learning') }}</a>
+            <a href="{{ route('dashboard.student') }}" class="eco-env-back">{{ __('messages.dashboard.back_to_my_learning') }}</a>
             <div class="eco-env-panel">
                 <h1 class="eco-env-panel-title">📚 {{ __('messages.dashboard.topics_title') }}</h1>
                 <p class="eco-env-panel-desc">{{ __('messages.dashboard.topics_desc') }}</p>
@@ -14,7 +14,7 @@
                     <ul class="eco-env-list">
                         @foreach ($topics as $t)
                             <li>
-                                <a href="{{ url('/dashboard/student/topic/'.$t->id) }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-list-item">
+                                <a href="{{ route('dashboard.student.topic', $t) }}" class="eco-env-list-item">
                                     <span class="eco-env-list-icon">📚</span>
                                     <span class="eco-env-list-text">{{ $t->title }}</span>
                                     <span class="eco-env-list-go">{{ __('messages.dashboard.open') }} →</span>

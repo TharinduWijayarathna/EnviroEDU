@@ -83,6 +83,7 @@ return [
         'child_email_placeholder' => 'student@example.com',
         'child_email_register_hint' => 'Your child must have an EnviroEdu student account. Enter their email to link their progress now, or add later from your dashboard.',
         'child_email_not_student' => 'No student account found with this email. Your child must register as a student first.',
+        'grade_level' => 'Grade',
         'account_pending' => 'Account pending approval',
         'account_pending_desc' => 'Your school admin has not approved your account yet. You\'ll be able to use the platform once they approve you.',
         'sign_out' => 'Sign out',

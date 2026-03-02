@@ -94,14 +94,18 @@ class AuthController extends Controller
                 $schoolId = $school->id;
                 $isApproved = false;
             }
-            $user = User::query()->create([
+            $userData = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
                 'role' => $roleEnum,
                 'school_id' => $schoolId,
                 'is_approved' => $isApproved,
-            ]);
+            ];
+            if ($role === 'student' && $request->has('grade_level')) {
+                $userData['grade_level'] = (int) $request->input('grade_level');
+            }
+            $user = User::query()->create($userData);
 
             if ($role === 'parent' && $request->filled('child_email')) {
                 $student = User::query()

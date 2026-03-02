@@ -9,8 +9,6 @@
   const topicsListEl = document.getElementById('ecoTopicsList');
   const headerEl = document.getElementById('ecoGameHeader');
   const contentEl = document.getElementById('ecoGameContent');
-  const gradeSelector = document.getElementById('ecoGradeSelector');
-  const gradeForm = document.getElementById('ecoGradeForm');
 
   function toEmbedUrl(url) {
     if (!url) return null;
@@ -29,7 +27,7 @@
   function renderTopics() {
     if (!topicsListEl) return;
     if (topics.length === 0) {
-      topicsListEl.innerHTML = '<p class="eco-kid-empty">No topics yet. Try another grade or come back later! 🌟</p>';
+      topicsListEl.innerHTML = '<p class="eco-kid-empty">No topics yet. Check back later! 🌟</p>';
       return;
     }
     topicsListEl.innerHTML = topics
@@ -108,10 +106,6 @@
         <p class="eco-kid-placeholder-text">Tap a topic on the left to learn, or pick a quiz or game to play!</p>
       </div>
     `;
-  }
-
-  if (gradeSelector && gradeForm) {
-    gradeSelector.addEventListener('change', () => gradeForm.submit());
   }
 
   document.getElementById('ecoCloseBadgeBtn')?.addEventListener('click', () => {

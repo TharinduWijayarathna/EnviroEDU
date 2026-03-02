@@ -10,17 +10,17 @@
                 <h1 class="eco-env-hero">Hi, {{ \Illuminate\Support\Str::before(auth()->user()->name ?? 'Friend', ' ') }}! 👋</h1>
                 <p class="eco-env-hero-sub">{{ __('messages.dashboard.choose_where') }}</p>
                 <div class="eco-env-gateways">
-                <a href="{{ url('/dashboard/student/topics') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-topics">
+                <a href="{{ route('dashboard.student.topics') }}" class="eco-env-gate eco-env-gate-topics">
                     <span class="eco-env-gate-icon">📚</span>
                     <span class="eco-env-gate-label">{{ __('messages.dashboard.topics') }}</span>
                     <span class="eco-env-gate-arrow">→</span>
                 </a>
-                <a href="{{ url('/dashboard/student/games') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-games">
+                <a href="{{ route('dashboard.student.games') }}" class="eco-env-gate eco-env-gate-games">
                     <span class="eco-env-gate-icon">🎮</span>
                     <span class="eco-env-gate-label">{{ __('messages.dashboard.games') }}</span>
                     <span class="eco-env-gate-arrow">→</span>
                 </a>
-                <a href="{{ url('/dashboard/student/quizzes') }}{{ request()->has('grade') ? '?grade=' . request('grade') : '' }}" class="eco-env-gate eco-env-gate-quizzes">
+                <a href="{{ route('dashboard.student.quizzes') }}" class="eco-env-gate eco-env-gate-quizzes">
                     <span class="eco-env-gate-icon">📝</span>
                     <span class="eco-env-gate-label">{{ __('messages.dashboard.quizzes') }}</span>
                     <span class="eco-env-gate-arrow">→</span>
