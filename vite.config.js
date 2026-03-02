@@ -18,7 +18,6 @@ export default defineConfig({
                 'resources/js/games/vine-growth.js',
                 'resources/js/games/star-patterns.js',
                 'resources/js/games/rainbow.js',
-                'resources/js/games/mosquito-lifecycle.js',
                 'resources/js/games/water-cycle.js',
                 'resources/js/games/day-night.js',
                 'resources/js/games/solar-eclipse.js',

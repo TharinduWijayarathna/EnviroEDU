@@ -41,9 +41,6 @@
         @case('rainbow')
             @vite(['resources/js/games/rainbow.js'])
             @break
-        @case('mosquito-lifecycle')
-            @vite(['resources/js/games/mosquito-lifecycle.js'])
-            @break
         @case('water-cycle')
             @vite(['resources/js/games/water-cycle.js'])
             @break
