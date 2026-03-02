@@ -1,7 +1,6 @@
 /**
- * Star Patterns – Learn 5–9 common constellations one by one. Complete each to finish the game.
+ * Star Patterns – Connect the stars to form the constellation!
  */
-import * as THREE from 'three';
 import { recordComplete, showWinUI } from './platform-game-utils.js';
 
 (function () {
@@ -10,138 +9,163 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
   const { slug, progressUrl, csrfToken } = window.EnviroEduPlatformGame;
 
   const constellations = [
-    { name: 'Big Dipper', points: [[0, 1.8], [0.6, 1.5], [1.2, 1.2], [1.8, 0.9], [1.5, 0.5], [0.9, 0.3], [0.3, 0.6]] },
-    { name: 'Orion', points: [[0, 1.4], [-0.5, 1], [0.5, 1], [0, 0.6], [-0.4, 0.2], [0.4, 0.2], [0, 0]] },
-    { name: 'Cassiopeia', points: [[-1.2, 0.8], [-0.5, 1.2], [0.2, 0.6], [0.8, 1], [1.4, 0.5]] },
-    { name: 'Leo', points: [[-0.8, 0.9], [-0.4, 1.2], [0.2, 1], [0.6, 0.6], [0.4, 0.2], [0, 0], [-0.6, 0.3], [-0.8, 0.9]] },
-    { name: 'Cygnus', points: [[-1, 0], [-0.3, 0.8], [0, 0.4], [0.3, 0.9], [1, 0.2], [0.3, 0]] },
-    { name: 'Scorpius', points: [[1.2, 0.5], [0.6, 0.6], [0, 0.5], [-0.5, 0.4], [-0.8, 0.2], [-1, -0.2], [-0.6, -0.5]] },
-    { name: 'Ursa Minor', points: [[0, 1.5], [0.4, 1.2], [0.9, 1.4], [1.2, 1], [1, 0.5], [0.5, 0.3], [0, 0.6]] },
-    { name: 'Pegasus', points: [[-0.8, 0.6], [-0.8, -0.2], [0.2, -0.2], [0.6, 0.2], [0.2, 0.6], [-0.8, 0.6]] },
+    { name: 'Big Dipper', points: [[0.2, 0.15], [0.35, 0.2], [0.5, 0.25], [0.65, 0.22], [0.6, 0.35], [0.4, 0.38], [0.25, 0.32]] },
+    { name: 'Orion', points: [[0.5, 0.2], [0.45, 0.35], [0.55, 0.35], [0.5, 0.5], [0.42, 0.7], [0.58, 0.7], [0.5, 0.85]] },
+    { name: 'Cassiopeia', points: [[0.2, 0.4], [0.35, 0.25], [0.5, 0.45], [0.65, 0.3], [0.8, 0.5]] },
   ];
 
-  let scene, camera, renderer, starsGroup, linesGroup;
   let currentIndex = 0;
-  let labelEl, nextBtn, doneBtn, progressEl;
-
-  function buildConstellation(c, scale, offsetX, offsetY) {
-    const starMeshes = [];
-    const pts = c.points.map((p) => new THREE.Vector3(p[0] * scale + offsetX, p[1] * scale + offsetY, 0));
-    pts.forEach((pt) => {
-      const star = new THREE.Mesh(
-        new THREE.SphereGeometry(0.08, 16, 16),
-        new THREE.MeshBasicMaterial({ color: 0xffffcc })
-      );
-      star.position.copy(pt);
-      starMeshes.push(star);
-    });
-    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
-    const line = new THREE.Line(
-      lineGeo,
-      new THREE.LineBasicMaterial({ color: 0x88aaff, linewidth: 2 })
-    );
-    return { starMeshes, line };
-  }
-
-  function showConstellation(index) {
-    if (starsGroup) {
-      starsGroup.children.forEach((c) => {
-        if (c.geometry) c.geometry.dispose();
-        if (c.material) c.material.dispose();
-      });
-      starsGroup.clear();
-    }
-    if (linesGroup) {
-      linesGroup.children.forEach((c) => {
-        if (c.geometry) c.geometry.dispose();
-        if (c.material) c.material.dispose();
-      });
-      linesGroup.clear();
-    }
-
-    const c = constellations[index];
-    const scale = 1.1;
-    const { starMeshes, line } = buildConstellation(c, scale, 0, 0);
-    starMeshes.forEach((m) => starsGroup.add(m));
-    linesGroup.add(line);
-
-    if (labelEl) labelEl.textContent = `⭐ ${c.name}`;
-    if (progressEl) progressEl.textContent = `Pattern ${index + 1} of ${constellations.length}`;
-    if (nextBtn) {
-      nextBtn.style.display = index < constellations.length - 1 ? 'inline-block' : 'none';
-    }
-    if (doneBtn) {
-      doneBtn.style.display = index === constellations.length - 1 ? 'inline-block' : 'none';
-    }
-  }
+  let connected = [];
+  let completed = false;
+  let starField = [];
 
   function init() {
-    const w = mount.getBoundingClientRect().width || 800;
-    const h = mount.getBoundingClientRect().height || 520;
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a1a);
-    camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
-    camera.position.set(0, 0, 5);
-    camera.lookAt(0, 0, 0);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(w, h);
-    mount.appendChild(renderer.domElement);
+    mount.innerHTML = '';
+    mount.style.cssText = 'position:relative;min-height:650px;background:linear-gradient(180deg,#0a0a1a 0%,#1a1a3a 100%);border-radius:20px;overflow:hidden;padding:28px;';
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-    const light = new THREE.PointLight(0xffffff, 0.8);
-    light.position.set(0, 0, 4);
-    scene.add(light);
+    const header = document.createElement('div');
+    header.className = 'eco-game-header';
+    header.style.cssText = 'margin-bottom:20px;background:rgba(0,0,0,0.5);color:#fff;border-color:rgba(255,204,0,0.5);';
+    header.innerHTML = '<h2 style="color:#ffcc00;font-size:1.5rem;margin:0 0 8px;">⭐ Connect the Stars</h2><p style="color:#90caf9;margin:0;font-weight:600;">Click stars in order to draw the constellation</p>';
+    mount.appendChild(header);
 
-    starsGroup = new THREE.Group();
-    linesGroup = new THREE.Group();
-    scene.add(starsGroup);
-    scene.add(linesGroup);
+    const progress = document.createElement('div');
+    progress.id = 'sp-progress';
+    progress.style.cssText = 'text-align:center;color:#ffcc00;font-weight:800;margin-bottom:20px;font-size:1.15rem;';
+    mount.appendChild(progress);
 
-    progressEl = document.createElement('div');
-    progressEl.style.cssText =
-      'position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.75);color:#fff;padding:8px 16px;border-radius:12px;font-weight:700;z-index:10;';
-    mount.style.position = 'relative';
-    mount.appendChild(progressEl);
+    const canvasWrap = document.createElement('div');
+    canvasWrap.id = 'sp-canvas-wrap';
+    canvasWrap.style.cssText = 'max-width:520px;margin:0 auto;position:relative;';
+    mount.appendChild(canvasWrap);
 
-    labelEl = document.createElement('div');
-    labelEl.style.cssText =
-      'position:absolute;top:48px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#ffcc00;padding:10px 20px;border-radius:12px;font-weight:700;z-index:10;';
-    mount.appendChild(labelEl);
-
-    const wrap = document.createElement('div');
-    wrap.style.cssText =
-      'position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:12px;justify-content:center;flex-wrap:wrap;z-index:10;';
-
-    nextBtn = document.createElement('button');
-    nextBtn.textContent = 'Next pattern →';
-    nextBtn.style.cssText =
-      'padding:12px 24px;border-radius:18px;font-weight:700;background:#ffc107;color:#1a1a1a;border:none;cursor:pointer;';
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'eco-game-btn';
+    nextBtn.textContent = 'Next constellation →';
+    nextBtn.style.cssText = 'display:block;margin:24px auto 0;background:#ffc107;color:#1a1a1a;border-color:#f9a825;';
     nextBtn.onclick = () => {
       currentIndex = Math.min(currentIndex + 1, constellations.length - 1);
-      showConstellation(currentIndex);
+      showConstellation();
     };
-    wrap.appendChild(nextBtn);
 
-    doneBtn = document.createElement('button');
+    const doneBtn = document.createElement('button');
+    doneBtn.className = 'eco-game-btn';
     doneBtn.textContent = "✓ I've learned!";
-    doneBtn.style.cssText =
-      'padding:12px 24px;border-radius:18px;font-weight:700;background:#2196f3;color:#fff;border:none;cursor:pointer;display:none;';
+    doneBtn.style.cssText = 'display:none;margin:24px auto 0;background:#2196f3;color:#fff;border-color:#1976d2;';
     doneBtn.onclick = () => {
-      showWinUI('⭐', 'Great Job!', 'You learned about star patterns in the sky!');
+      showWinUI('⭐', 'Star Expert!', 'You learned how to find constellations by connecting stars!');
       recordComplete(slug, progressUrl, csrfToken, {});
     };
-    wrap.appendChild(doneBtn);
 
-    mount.appendChild(wrap);
+    mount.appendChild(nextBtn);
+    mount.appendChild(doneBtn);
 
-    showConstellation(0);
-    animate();
-  }
+    function showConstellation() {
+      connected = [];
+      completed = false;
+      const c = constellations[currentIndex];
+      nextBtn.style.display = 'none';
+      doneBtn.style.display = 'none';
+      const wrap = document.getElementById('sp-canvas-wrap');
+      wrap.innerHTML = '';
 
-  function animate() {
-    requestAnimationFrame(animate);
-    if (starsGroup) starsGroup.rotation.z += 0.002;
-    renderer.render(scene, camera);
+      const size = 480;
+      const h = 380;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = h;
+      canvas.style.cssText = 'display:block;width:100%;border-radius:16px;background:#0d0d20;box-shadow:0 8px 24px rgba(0,0,0,0.4);';
+      wrap.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+
+      starField = [];
+      for (let i = 0; i < 50; i++) {
+        starField.push({
+          x: Math.random() * size,
+          y: Math.random() * h,
+          r: 0.5 + Math.random(),
+          a: 0.3 + Math.random() * 0.5,
+        });
+      }
+
+      const starPositions = c.points.map((p) => ({
+        x: p[0] * size,
+        y: p[1] * h,
+        radius: 22,
+      }));
+
+      function draw() {
+        ctx.fillStyle = '#0d0d20';
+        ctx.fillRect(0, 0, size, h);
+
+        starField.forEach((s) => {
+          ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 6]);
+        if (connected.length >= 2) {
+          ctx.beginPath();
+          ctx.moveTo(starPositions[connected[0]].x, starPositions[connected[0]].y);
+          for (let i = 1; i < connected.length; i++) {
+            ctx.lineTo(starPositions[connected[i]].x, starPositions[connected[i]].y);
+          }
+          ctx.stroke();
+        }
+        ctx.setLineDash([]);
+
+        starPositions.forEach((s, i) => {
+          ctx.fillStyle = connected.includes(i) ? '#ffeb3b' : '#fff';
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ffcc00';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        });
+      }
+
+      canvas.addEventListener('click', (e) => {
+        if (completed) return;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = size / rect.width;
+        const scaleY = h / rect.height;
+        const px = (e.clientX - rect.left) * scaleX;
+        const py = (e.clientY - rect.top) * scaleY;
+
+        for (let i = 0; i < starPositions.length; i++) {
+          const s = starPositions[i];
+          const dx = px - s.x;
+          const dy = py - s.y;
+          if (Math.sqrt(dx * dx + dy * dy) < s.radius) {
+            if (i === connected.length) {
+              connected.push(i);
+            }
+            break;
+          }
+        }
+        draw();
+
+        if (connected.length === starPositions.length) {
+          completed = true;
+          progress.textContent = `✓ ${c.name} complete!`;
+          if (currentIndex < constellations.length - 1) {
+            nextBtn.style.display = 'block';
+          } else {
+            doneBtn.style.display = 'block';
+          }
+        }
+      });
+
+      document.getElementById('sp-progress').textContent = `${c.name} (${connected.length}/${starPositions.length})`;
+      draw();
+    }
+
+    showConstellation();
   }
 
   init();

@@ -37,6 +37,7 @@ Route::middleware('guest')->group(function (): void {
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
+Route::get('/test', [PlayController::class, 'testGames'])->name('test.games');
 Route::get('/play/quiz/{quiz}', [PlayController::class, 'quiz'])->name('play.quiz');
 Route::get('/play/game/{miniGame}', [PlayController::class, 'miniGame'])->name('play.mini-game');
 Route::get('/play/platform-game/{platformGame:slug}', [PlayController::class, 'platformGame'])->name('play.platform-game');

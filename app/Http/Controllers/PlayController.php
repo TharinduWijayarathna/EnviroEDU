@@ -50,4 +50,13 @@ class PlayController extends Controller
             'studentFullWidth' => true,
         ]);
     }
+
+    public function testGames(): View
+    {
+        $platformGames = PlatformGame::query()->orderBy('order')->get();
+
+        return view('play.test-games', [
+            'platformGames' => $platformGames,
+        ]);
+    }
 }

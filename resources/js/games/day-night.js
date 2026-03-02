@@ -1,8 +1,6 @@
 /**
- * How Day and Night Work – Earth rotates; one side faces Sun (day), other side is dark (night).
- * User can drag to rotate the Earth. Earth orbits the Sun and spins on its axis.
+ * Day and Night – Rotate Earth to find daytime and nighttime!
  */
-import * as THREE from 'three';
 import { recordComplete, showWinUI } from './platform-game-utils.js';
 
 (function () {
@@ -10,19 +8,134 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
   if (!mount || !window.EnviroEduPlatformGame) return;
   const { slug, progressUrl, csrfToken } = window.EnviroEduPlatformGame;
 
-  let scene, camera, renderer, sunMesh, earthGroup, earthMesh, sunLight;
-  let orbitAngle = 0;
-  let earthSpin = 0;
-  let isDragging = false;
-  let prevMouseX = 0;
+  let canvas, ctx;
+  let earthRotation = 0;
+  let foundDay = false;
+  let foundNight = false;
+  let starField = [];
 
-  function createEarthTexture() {
-    const size = 256;
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    const gradient = ctx.createLinearGradient(0, 0, size, 0);
+  function init() {
+    mount.innerHTML = '';
+    mount.style.cssText = 'position:relative;min-height:650px;background:linear-gradient(180deg,#0a0a1a 0%,#1a1a3a 100%);border-radius:20px;overflow:hidden;padding:28px;';
+
+    const header = document.createElement('div');
+    header.className = 'eco-game-header';
+    header.style.cssText = 'margin-bottom:20px;background:rgba(0,0,0,0.4);color:#fff;border-color:rgba(255,255,255,0.3);';
+    header.innerHTML = '<h2 style="color:#fff;font-size:1.5rem;margin:0 0 8px;">🌍 Day and Night</h2><p style="color:#90caf9;margin:0;font-weight:600;">Rotate Earth with the slider. Bright side = day. Dark side = night.</p>';
+    mount.appendChild(header);
+
+    const sliderWrap = document.createElement('div');
+    sliderWrap.style.cssText = 'max-width:420px;margin:0 auto 24px;';
+    sliderWrap.innerHTML = `
+      <label style="color:#fff;font-weight:700;display:block;margin-bottom:10px;">Rotate Earth</label>
+      <input type="range" id="dn-slider" min="0" max="360" value="0" style="width:100%;height:12px;border-radius:6px;accent-color:#4fc3f7;">
+    `;
+    mount.appendChild(sliderWrap);
+
+    document.getElementById('dn-slider').addEventListener('input', (e) => {
+      earthRotation = (parseInt(e.target.value, 10) / 360) * Math.PI * 2;
+    });
+
+    canvas = document.createElement('canvas');
+    canvas.width = 600;
+    canvas.height = 420;
+    canvas.style.cssText = 'display:block;width:100%;max-width:600px;height:420px;margin:0 auto;border-radius:16px;';
+    mount.appendChild(canvas);
+    ctx = canvas.getContext('2d');
+
+    for (let i = 0; i < 60; i++) {
+      starField.push({
+        x: Math.random() * 600,
+        y: Math.random() * 420,
+        r: 0.5 + Math.random(),
+        a: 0.3 + Math.random() * 0.5,
+      });
+    }
+
+    const btnWrap = document.createElement('div');
+    btnWrap.style.cssText = 'display:flex;gap:14px;justify-content:center;margin-top:24px;flex-wrap:wrap;';
+    const dayBtn = document.createElement('button');
+    dayBtn.className = 'eco-game-btn';
+    dayBtn.textContent = '☀️ I see the daytime side!';
+    dayBtn.style.cssText = 'background:#ffc107;color:#1a1a1a;border-color:#f9a825;';
+    dayBtn.onclick = () => {
+      const daySide = Math.cos(earthRotation) > 0;
+      if (daySide) {
+        foundDay = true;
+        dayBtn.style.background = '#4caf50';
+        dayBtn.style.borderColor = '#2e7d32';
+        dayBtn.textContent = '✓ Day found!';
+        dayBtn.disabled = true;
+        checkComplete();
+      } else {
+        dayBtn.style.animation = 'eco-shake 0.4s ease';
+        dayBtn.style.background = '#ff5722';
+        setTimeout(() => { dayBtn.style.background = '#ffc107'; dayBtn.style.animation = ''; }, 500);
+      }
+    };
+    const nightBtn = document.createElement('button');
+    nightBtn.className = 'eco-game-btn';
+    nightBtn.textContent = '🌙 I see the nighttime side!';
+    nightBtn.style.cssText = 'background:#5c6bc0;color:#fff;border-color:#3949ab;';
+    nightBtn.onclick = () => {
+      const nightSide = Math.cos(earthRotation) < 0;
+      if (nightSide) {
+        foundNight = true;
+        nightBtn.style.background = '#4caf50';
+        nightBtn.style.borderColor = '#2e7d32';
+        nightBtn.textContent = '✓ Night found!';
+        nightBtn.disabled = true;
+        checkComplete();
+      } else {
+        nightBtn.style.animation = 'eco-shake 0.4s ease';
+        nightBtn.style.background = '#ff5722';
+        setTimeout(() => { nightBtn.style.background = '#5c6bc0'; nightBtn.style.animation = ''; }, 500);
+      }
+    };
+    btnWrap.appendChild(dayBtn);
+    btnWrap.appendChild(nightBtn);
+    mount.appendChild(btnWrap);
+
+    function checkComplete() {
+      if (foundDay && foundNight) {
+        showWinUI('🌍', 'You Got It!', 'Earth rotates! The side facing the Sun has day. The other side has night.');
+        recordComplete(slug, progressUrl, csrfToken, {});
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  function draw() {
+    ctx.fillStyle = '#0a0a1a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    starField.forEach((s) => {
+      ctx.fillStyle = `rgba(255,255,255,${s.a})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    const sunX = 100;
+    const sunY = canvas.height / 2;
+    const earthX = 420;
+    const earthY = canvas.height / 2;
+    const earthR = 85;
+
+    ctx.fillStyle = '#ffdd44';
+    ctx.shadowColor = '#ffc107';
+    ctx.shadowBlur = 35;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 45, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.save();
+    ctx.translate(earthX, earthY);
+    ctx.rotate(earthRotation);
+
+    const gradient = ctx.createLinearGradient(-earthR, 0, earthR, 0);
     gradient.addColorStop(0, '#1a5276');
     gradient.addColorStop(0.2, '#2874a6');
     gradient.addColorStop(0.4, '#2e86ab');
@@ -31,117 +144,23 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
     gradient.addColorStop(0.8, '#229954');
     gradient.addColorStop(1, '#1a5276');
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, size, size);
-    ctx.fillStyle = 'rgba(30, 132, 73, 0.6)';
     ctx.beginPath();
-    ctx.ellipse(size * 0.3, size * 0.4, size * 0.25, size * 0.2, 0.2, 0, Math.PI * 2);
+    ctx.arc(0, 0, earthR, 0, Math.PI * 2);
     ctx.fill();
+
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.beginPath();
-    ctx.ellipse(size * 0.7, size * 0.55, size * 0.2, size * 0.18, -0.1, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, earthR, earthR * 0.5, 0, Math.PI / 2, Math.PI * 1.5);
     ctx.fill();
-    ctx.fillStyle = 'rgba(139, 90, 43, 0.5)';
-    ctx.beginPath();
-    ctx.ellipse(size * 0.55, size * 0.25, size * 0.22, size * 0.15, 0, 0, Math.PI * 2);
-    ctx.fill();
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    return tex;
-  }
 
-  function init() {
-    const w = mount.getBoundingClientRect().width || 800;
-    const h = mount.getBoundingClientRect().height || 520;
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a1a);
-    camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
-    camera.position.set(0, 3, 10);
-    camera.lookAt(0, 0, 0);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(w, h);
-    mount.appendChild(renderer.domElement);
+    ctx.restore();
 
-    scene.add(new THREE.AmbientLight(0x111122, 0.15));
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 15px Quicksand, sans-serif';
+    ctx.fillText('Sun', sunX - 18, sunY + 60);
+    ctx.fillText('Earth', earthX - 24, earthY + earthR + 28);
 
-    const sunRadius = 1.2;
-    sunMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(sunRadius, 32, 32),
-      new THREE.MeshBasicMaterial({ color: 0xffdd44 })
-    );
-    sunMesh.position.set(5, 0, 0);
-    sunLight = new THREE.DirectionalLight(0xffeedd, 1.4);
-    sunLight.position.copy(sunMesh.position);
-    sunLight.target.position.set(0, 0, 0);
-    scene.add(sunLight.target);
-    scene.add(sunLight);
-    scene.add(sunMesh);
-
-    earthGroup = new THREE.Group();
-    const earthGeo = new THREE.SphereGeometry(0.7, 48, 48);
-    earthMesh = new THREE.Mesh(
-      earthGeo,
-      new THREE.MeshStandardMaterial({
-        map: createEarthTexture(),
-        roughness: 0.85,
-        metalness: 0.05,
-      })
-    );
-    earthGroup.add(earthMesh);
-    scene.add(earthGroup);
-
-    const label = document.createElement('div');
-    label.style.cssText =
-      'position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.75);color:#fff;padding:12px 24px;border-radius:16px;font-weight:700;z-index:10;text-align:center;max-width:90%;';
-    label.textContent = '🌍 Drag to rotate Earth. Bright side = day (sunrise/sunset); dark side = night.';
-    mount.style.position = 'relative';
-    mount.style.cursor = 'grab';
-    mount.appendChild(label);
-
-    mount.addEventListener('mousedown', (e) => {
-      if (e.button === 0) {
-        isDragging = true;
-        prevMouseX = e.clientX;
-      }
-    });
-    mount.addEventListener('mousemove', (e) => {
-      if (isDragging) {
-        const delta = (e.clientX - prevMouseX) * 0.01;
-        earthSpin -= delta;
-        prevMouseX = e.clientX;
-      }
-    });
-    mount.addEventListener('mouseup', () => { isDragging = false; });
-    mount.addEventListener('mouseleave', () => { isDragging = false; });
-
-    const btn = document.createElement('button');
-    btn.textContent = "✓ I've learned!";
-    btn.style.cssText =
-      'position:absolute;bottom:20px;left:50%;transform:translateX(-50%);padding:14px 28px;border-radius:20px;font-weight:700;background:#2196f3;color:#fff;border:none;cursor:pointer;z-index:10;';
-    btn.onclick = () => {
-      showWinUI('🌍', 'Great Job!', 'You learned why we have day and night!');
-      recordComplete(slug, progressUrl, csrfToken, {});
-    };
-    mount.appendChild(btn);
-
-    animate();
-  }
-
-  function animate() {
-    requestAnimationFrame(animate);
-    const dt = 0.012;
-
-    orbitAngle += dt * 0.15;
-    const orbitRadius = 3.5;
-    earthGroup.position.x = Math.cos(orbitAngle) * orbitRadius;
-    earthGroup.position.z = Math.sin(orbitAngle) * orbitRadius;
-
-    earthSpin += dt * 0.4;
-    earthMesh.rotation.y = earthSpin;
-
-    sunLight.position.copy(sunMesh.position);
-    sunLight.target.position.copy(earthGroup.position);
-
-    renderer.render(scene, camera);
+    requestAnimationFrame(draw);
   }
 
   init();
