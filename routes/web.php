@@ -41,7 +41,15 @@ Route::get('/play/quiz/{quiz}', [PlayController::class, 'quiz'])->name('play.qui
 Route::get('/play/game/{miniGame}', [PlayController::class, 'miniGame'])->name('play.mini-game');
 Route::get('/play/platform-game/{platformGame:slug}', [PlayController::class, 'platformGame'])->name('play.platform-game');
 
-Route::get('/approval/pending', fn () => view('auth.approval-pending'))->name('approval.pending')->middleware('auth');
+Route::get('/approval/pending', function () {
+    if (auth()->user()->isApproved()) {
+        $role = auth()->user()->role?->value ?? 'student';
+
+        return redirect()->route("dashboard.{$role}");
+    }
+
+    return view('auth.approval-pending');
+})->name('approval.pending')->middleware('auth');
 
 Route::middleware(['auth', 'approved'])->group(function (): void {
     Route::post('/progress/quiz', [ProgressController::class, 'recordQuiz'])->name('progress.quiz');
