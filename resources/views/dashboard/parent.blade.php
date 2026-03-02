@@ -68,6 +68,12 @@
                             <div>
                                 <strong>{{ $child->name }}</strong>
                                 <span style="color: #666;">{{ $child->email }}</span>
+                                @if ($child->badges_count > 0 || $child->quiz_attempts_count > 0)
+                                    <div style="margin-top: 0.5rem; display: flex; gap: 1rem; font-size: 0.9rem;">
+                                        <span>🏆 {{ $child->badges_count }} {{ __('messages.parent.badges') }}</span>
+                                        <span>📋 {{ $child->quiz_attempts_count }} {{ __('messages.parent.quiz_attempts') }}</span>
+                                    </div>
+                                @endif
                             </div>
                             <a href="{{ route('parent.children.show', $child) }}" class="eco-btn" style="padding: 0.5rem 1rem;">{{ __('messages.parent.view_badges_progress') }}</a>
                         </div>

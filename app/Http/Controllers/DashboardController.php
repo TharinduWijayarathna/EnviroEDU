@@ -151,7 +151,11 @@ class DashboardController extends Controller
 
     public function parent(): View
     {
-        $children = auth()->user()->children()->orderBy('name')->get();
+        $children = auth()->user()
+            ->children()
+            ->orderBy('name')
+            ->withCount(['badges', 'quizAttempts'])
+            ->get();
 
         return view('dashboard.parent', compact('children'));
     }

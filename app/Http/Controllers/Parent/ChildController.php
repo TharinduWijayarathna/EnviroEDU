@@ -52,7 +52,8 @@ class ChildController extends Controller
         $child->load([
             'quizAttempts' => fn ($q) => $q->with('quiz.topic')->latest('completed_at')->limit(100),
             'miniGameAttempts' => fn ($q) => $q->with('miniGame')->latest('completed_at')->limit(50),
-            'badges',
+            'platformGameAttempts' => fn ($q) => $q->with('platformGame')->latest('completed_at')->limit(50),
+            'badges' => fn ($q) => $q->orderByPivot('earned_at', 'desc'),
         ]);
 
         $weaknesses = $this->computeWeaknesses($child);
