@@ -345,6 +345,157 @@
     align-items: flex-start;
 }
 
+.eco-kid-badges-page {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.eco-kid-badges-page-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.6rem;
+    color: #1a3c34;
+    margin: 0 0 0.5rem;
+}
+
+.eco-kid-badges-count {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2d5a52;
+    margin: 0 0 1rem;
+}
+
+.eco-kid-badges-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.eco-kid-badge-item {
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid rgba(78, 205, 196, 0.35);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+}
+
+.eco-kid-badge-img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 14px;
+    background: #fffde7;
+    border: 2px solid rgba(255, 193, 7, 0.45);
+    flex: 0 0 auto;
+}
+
+.eco-kid-badge-emoji {
+    width: 64px;
+    height: 64px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.25rem;
+    border-radius: 14px;
+    background: #fffde7;
+    border: 2px solid rgba(255, 193, 7, 0.45);
+    flex: 0 0 auto;
+}
+
+.eco-kid-badge-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.eco-kid-badge-name {
+    font-weight: 800;
+    color: #1a3c34;
+    line-height: 1.15;
+}
+
+.eco-kid-badge-desc {
+    margin: 0;
+    color: #5a6c64;
+    font-size: 0.9rem;
+    line-height: 1.35;
+}
+
+.eco-kid-badge-empty {
+    font-size: 1rem;
+    color: #5a6c64;
+    margin: 0 0 0.75rem;
+    font-weight: 700;
+}
+
+.eco-kid-topic-page {
+    max-width: 980px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 22px;
+    padding: 1.75rem;
+    border: 2px solid rgba(78, 205, 196, 0.35);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
+}
+
+.eco-kid-topic-page-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.65rem;
+    color: #1a3c34;
+    margin: 0 0 0.5rem;
+}
+
+.eco-kid-topic-desc {
+    margin: 0 0 1rem;
+    color: #5a6c64;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.eco-kid-topic-video {
+    margin: 1rem 0 1.25rem;
+}
+
+.eco-kid-topic-actions-title {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.2rem;
+    color: var(--eco-primary);
+    margin: 0 0 0.75rem;
+}
+
+.eco-kid-topic-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.eco-btn.eco-kid-topic-btn {
+    border-radius: 16px;
+    font-weight: 800;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.eco-btn.eco-kid-topic-btn-quiz {
+    background: linear-gradient(135deg, #fff59d 0%, #ffecb3 100%);
+    border-color: rgba(212, 168, 75, 0.9);
+    color: #5d4037;
+}
+
+.eco-btn.eco-kid-topic-btn-game {
+    background: linear-gradient(135deg, #b3e5fc 0%, #e1f5fe 100%);
+    border-color: rgba(90, 138, 176, 0.9);
+    color: #01579b;
+}
+
+.eco-kid-no-games {
+    margin: 0.75rem 0 0;
+    color: #5a6c64;
+    font-weight: 700;
+}
+
 .eco-sidebar-nav {
     width: 300px;
     flex-shrink: 0;
