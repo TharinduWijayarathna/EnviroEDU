@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Badge;
+use App\Models\PlatformGame;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        PlatformGame::query()->where('slug', 'mosquito-lifecycle')->delete();
+        Badge::query()->where('slug', 'badge-mosquito-lifecycle')->delete();
     }
 
     /**
@@ -19,6 +20,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        // Cannot restore deleted platform game and badge.
     }
 };
