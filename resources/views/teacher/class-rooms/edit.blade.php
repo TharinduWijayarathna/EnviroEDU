@@ -14,6 +14,14 @@
             <input id="name" type="text" name="name" class="eco-input" value="{{ old('name', $classRoom->name) }}" required placeholder="e.g. Grade 4A">
             @error('name')<span style="color: var(--eco-accent); font-size: 0.9rem;">{{ $message }}</span>@enderror
         </div>
+        <div style="margin-bottom: 1rem;">
+            <label for="grade_level" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Grade</label>
+            <select id="grade_level" name="grade_level" class="eco-input" required>
+                @foreach (config('app.grade_levels', [4, 5]) as $g)
+                    <option value="{{ $g }}" {{ old('grade_level', $classRoom->grade_level ?? 4) == $g ? 'selected' : '' }}>Grade {{ $g }}</option>
+                @endforeach
+            </select>
+        </div>
         <div style="margin-bottom: 1.5rem;">
             <label for="description" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">Description (optional)</label>
             <textarea id="description" name="description" class="eco-input" rows="3" placeholder="Short description of this class">{{ old('description', $classRoom->description) }}</textarea>

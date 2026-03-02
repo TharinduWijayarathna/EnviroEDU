@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
+use App\Models\ClassRoom;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,6 +17,7 @@ class ProgressController extends Controller
         $query = User::query()
             ->where('role', Role::Student)
             ->where('school_id', $schoolId)
+            ->with(['enrolledClasses'])
             ->withCount(['quizAttempts', 'miniGameAttempts', 'badges'])
             ->orderBy('name');
 
@@ -25,9 +27,20 @@ class ProgressController extends Controller
             $query->where('grade_level', $grade);
         }
 
+        $classId = $request->integer('class', 0);
+        if ($classId > 0) {
+            $query->whereHas('enrolledClasses', fn ($q) => $q->where('class_rooms.id', $classId));
+        }
+
         $students = $query->paginate(20)->withQueryString();
 
-        return view('teacher.progress.index', compact('students', 'grade'));
+        $classes = ClassRoom::query()
+            ->where('school_id', $schoolId)
+            ->orderBy('grade_level')
+            ->orderBy('name')
+            ->get(['id', 'name', 'grade_level']);
+
+        return view('teacher.progress.index', compact('students', 'grade', 'classId', 'classes'));
     }
 
     public function show(User $student): View

@@ -13,7 +13,7 @@
         @forelse ($classRooms as $classRoom)
             <div class="eco-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">{{ $classRoom->name }}</h3>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">{{ $classRoom->name }}@if ($classRoom->grade_level) <span style="font-weight: 500; color: #666;">(Grade {{ $classRoom->grade_level }})</span>@endif</h3>
                     @if ($classRoom->description)
                         <p style="color: #666; font-size: 0.9rem;">{{ Str::limit($classRoom->description, 120) }}</p>
                     @endif

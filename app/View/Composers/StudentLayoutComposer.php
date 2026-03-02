@@ -86,10 +86,12 @@ class StudentLayoutComposer
         }
 
         $badgeCount = 0;
+        $enrolledClasses = collect();
         if (auth()->check() && auth()->user()->role?->value === 'student') {
             $badgeCount = auth()->user()->badges()->count();
+            $enrolledClasses = auth()->user()->enrolledClasses()->orderBy('name')->get();
         }
 
-        $view->with(compact('topics', 'standaloneQuizzes', 'standaloneMiniGames', 'platformGames', 'grade', 'topicsPayload', 'badgeCount'));
+        $view->with(compact('topics', 'standaloneQuizzes', 'standaloneMiniGames', 'platformGames', 'grade', 'topicsPayload', 'badgeCount', 'enrolledClasses'));
     }
 }

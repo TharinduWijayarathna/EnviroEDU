@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\Role;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\ClassRoom;
 use App\Models\School;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +66,24 @@ class AuthController extends Controller
         ]);
     }
 
+    public function registerClasses(Request $request): JsonResponse
+    {
+        $request->validate([
+            'school_code' => ['required', 'string', 'exists:schools,slug'],
+            'grade' => ['required', 'integer', 'in:4,5'],
+        ]);
+
+        $school = School::query()->where('slug', $request->input('school_code'))->first();
+        $classes = ClassRoom::query()
+            ->where('school_id', $school->id)
+            ->where('grade_level', (int) $request->input('grade'))
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->map(fn ($c) => ['id' => $c->id, 'name' => $c->name]);
+
+        return response()->json(['classes' => $classes]);
+    }
+
     public function register(RegisterRequest $request): RedirectResponse
     {
         $role = $request->input('role', 'student');
@@ -106,6 +126,17 @@ class AuthController extends Controller
                 $userData['grade_level'] = (int) $request->input('grade_level');
             }
             $user = User::query()->create($userData);
+
+            if ($role === 'student' && $request->filled('class_id')) {
+                $classRoom = ClassRoom::query()
+                    ->where('id', $request->input('class_id'))
+                    ->where('school_id', $schoolId)
+                    ->where('grade_level', (int) $request->input('grade_level'))
+                    ->first();
+                if ($classRoom) {
+                    $classRoom->students()->attach($user->id);
+                }
+            }
 
             if ($role === 'parent' && $request->filled('child_email')) {
                 $student = User::query()

@@ -10,9 +10,16 @@ class ClassRoom extends Model
 {
     protected $fillable = [
         'user_id',
+        'school_id',
         'name',
         'description',
+        'grade_level',
     ];
+
+    public function school(): BelongsTo
+    {
+        return $this->belongsTo(School::class);
+    }
 
     public function teacher(): BelongsTo
     {

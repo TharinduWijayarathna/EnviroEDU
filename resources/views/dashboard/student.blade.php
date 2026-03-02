@@ -8,6 +8,9 @@
         <div class="eco-env-overlay">
             <div class="eco-env-card">
                 <h1 class="eco-env-hero">Hi, {{ \Illuminate\Support\Str::before(auth()->user()->name ?? 'Friend', ' ') }}! 👋</h1>
+                @if (isset($enrolledClasses) && $enrolledClasses->isNotEmpty())
+                    <p class="eco-env-hero-class" style="font-size: 0.95rem; color: #2d5a52; margin: 0.25rem 0 0;">{{ __('messages.dashboard.class') }}: {{ $enrolledClasses->pluck('name')->join(', ') }}</p>
+                @endif
                 <p class="eco-env-hero-sub">{{ __('messages.dashboard.choose_where') }}</p>
                 <div class="eco-env-gateways">
                 <a href="{{ route('dashboard.student.topics') }}" class="eco-env-gate eco-env-gate-topics">

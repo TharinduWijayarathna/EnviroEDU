@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ApprovalController as AdminApprovalController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EduBuddyController;
@@ -23,6 +24,8 @@ Route::get('/', [LandingController::class, 'home'])->name('home');
 Route::get('/join', [LandingController::class, 'join'])->name('landing.join');
 Route::get('/platform', [LandingController::class, 'platform'])->name('landing.platform');
 Route::get('/how-it-works', [LandingController::class, 'howItWorks'])->name('landing.how-it-works');
+
+Route::get('/register/classes', [AuthController::class, 'registerClasses'])->name('register.classes');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthController::class, 'showLoginRoleChoice'])->name('login');
@@ -59,6 +62,8 @@ Route::middleware(['auth', 'approved'])->group(function (): void {
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function (): void {
         Route::get('approvals', [AdminApprovalController::class, 'index'])->name('approvals.index');
         Route::post('approvals/{user}/approve', [AdminApprovalController::class, 'approve'])->name('approvals.approve');
+        Route::get('students', [AdminUserController::class, 'students'])->name('students.index');
+        Route::get('teachers', [AdminUserController::class, 'teachers'])->name('teachers.index');
     });
 
     Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function (): void {

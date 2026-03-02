@@ -15,6 +15,13 @@
                 <option value="{{ $g }}" {{ (isset($grade) && $grade == $g) ? 'selected' : '' }}>Grade {{ $g }}</option>
             @endforeach
         </select>
+        <label for="class_filter" style="font-weight: 600;">Filter by class:</label>
+        <select id="class_filter" name="class" class="eco-input" style="width: auto; min-width: 160px;">
+            <option value="">All classes</option>
+            @foreach ($classes ?? [] as $c)
+                <option value="{{ $c->id }}" {{ (isset($classId) && $classId == $c->id) ? 'selected' : '' }}>{{ $c->name }} (Grade {{ $c->grade_level }})</option>
+            @endforeach
+        </select>
         <button type="submit" class="eco-btn">Apply</button>
     </form>
 
@@ -26,6 +33,9 @@
                     <p style="color: #666; font-size: 0.9rem;">
                         @if ($s->grade_level)
                             Grade {{ $s->grade_level }} ·
+                        @endif
+                        @if ($s->enrolledClasses->isNotEmpty())
+                            {{ $s->enrolledClasses->pluck('name')->join(', ') }} ·
                         @endif
                         {{ $s->quiz_attempts_count }} quiz attempts · {{ $s->mini_game_attempts_count }} game attempts · {{ $s->badges_count }} badges
                     </p>

@@ -19,6 +19,7 @@ class StoreClassRoomRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'grade_level' => ['required', 'integer', 'in:4,5'],
         ];
     }
 }

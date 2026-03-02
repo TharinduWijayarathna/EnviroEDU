@@ -39,6 +39,7 @@ class RegisterRequest extends FormRequest
 
         if ($role === 'student') {
             $rules['grade_level'] = ['required', 'integer', 'in:4,5'];
+            $rules['class_id'] = ['nullable', 'integer', 'exists:class_rooms,id'];
         }
 
         if ($role === 'parent') {

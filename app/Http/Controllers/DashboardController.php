@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\Badge;
 use App\Models\ClassRoom;
 use App\Models\MiniGame;
 use App\Models\Quiz;
 use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -23,13 +26,38 @@ class DashboardController extends Controller
     public function admin(): View
     {
         $school = auth()->user()->school;
+        $schoolId = auth()->user()->school_id;
         $pendingTeachersCount = $school?->pendingTeachers()->count() ?? 0;
         $pendingStudentsCount = $school?->pendingStudents()->count() ?? 0;
+
+        $teachersCount = $schoolId ? User::query()->where('role', Role::Teacher)->where('school_id', $schoolId)->where('is_approved', true)->count() : 0;
+        $studentsCount = $schoolId ? User::query()->where('role', Role::Student)->where('school_id', $schoolId)->count() : 0;
+        $classesCount = $schoolId ? ClassRoom::query()->where('school_id', $schoolId)->count() : 0;
+        $topicsCount = $schoolId ? Topic::query()->whereHas('user', fn ($q) => $q->where('school_id', $schoolId))->count() : 0;
+        $quizzesCount = $schoolId ? Quiz::query()->whereHas('user', fn ($q) => $q->where('school_id', $schoolId))->count() : 0;
+        $miniGamesCount = $schoolId ? MiniGame::query()->whereHas('user', fn ($q) => $q->where('school_id', $schoolId))->count() : 0;
+        $badgesEarnedCount = $schoolId ? DB::table('badge_user')
+            ->join('users', 'users.id', '=', 'badge_user.user_id')
+            ->where('users.school_id', $schoolId)
+            ->where('users.role', Role::Student)
+            ->count() : 0;
+        $quizAttemptsCount = $schoolId ? DB::table('quiz_attempts')
+            ->join('users', 'users.id', '=', 'quiz_attempts.user_id')
+            ->where('users.school_id', $schoolId)
+            ->count() : 0;
 
         return view('dashboard.admin', [
             'school' => $school,
             'pendingTeachersCount' => $pendingTeachersCount,
             'pendingStudentsCount' => $pendingStudentsCount,
+            'teachersCount' => $teachersCount,
+            'studentsCount' => $studentsCount,
+            'classesCount' => $classesCount,
+            'topicsCount' => $topicsCount,
+            'quizzesCount' => $quizzesCount,
+            'miniGamesCount' => $miniGamesCount,
+            'badgesEarnedCount' => $badgesEarnedCount,
+            'quizAttemptsCount' => $quizAttemptsCount,
         ]);
     }
 

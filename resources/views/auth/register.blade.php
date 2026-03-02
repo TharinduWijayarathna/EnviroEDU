@@ -61,6 +61,13 @@
                             @endforeach
                         </select>
                     </div>
+                    <div id="class_id_wrap" style="margin-bottom: 1rem; display: none;">
+                        <label for="class_id" style="display: block; font-weight: 600; margin-bottom: 0.4rem;">{{ __('messages.auth.class') }}</label>
+                        <select id="class_id" name="class_id" class="eco-input">
+                            <option value="">{{ __('messages.auth.class_optional') }}</option>
+                        </select>
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 0.35rem;">{{ __('messages.auth.class_hint') }}</p>
+                    </div>
                 @endif
 
                 @if ($role === 'parent')
@@ -104,4 +111,42 @@
             </p>
         </div>
     </div>
+
+    @if ($role === 'student')
+    <script>
+        (function() {
+            var schoolInput = document.getElementById('school_code');
+            var gradeSelect = document.getElementById('grade_level');
+            var classWrap = document.getElementById('class_id_wrap');
+            var classSelect = document.getElementById('class_id');
+            var classesUrl = @json(route('register.classes'));
+
+            function fetchClasses() {
+                var schoolCode = schoolInput && schoolInput.value ? schoolInput.value.trim() : '';
+                var grade = gradeSelect && gradeSelect.value ? gradeSelect.value : '';
+                if (!schoolCode || !grade) {
+                    classWrap.style.display = 'none';
+                    return;
+                }
+                fetch(classesUrl + '?school_code=' + encodeURIComponent(schoolCode) + '&grade=' + encodeURIComponent(grade))
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        classSelect.innerHTML = '<option value="">' + @json(__('messages.auth.class_optional')) + '</option>';
+                        (data.classes || []).forEach(function(c) {
+                            var opt = document.createElement('option');
+                            opt.value = c.id;
+                            opt.textContent = c.name;
+                            classSelect.appendChild(opt);
+                        });
+                        classWrap.style.display = 'block';
+                    })
+                    .catch(function() { classWrap.style.display = 'none'; });
+            }
+
+            if (schoolInput) schoolInput.addEventListener('blur', fetchClasses);
+            if (gradeSelect) gradeSelect.addEventListener('change', fetchClasses);
+            if (schoolInput && gradeSelect && schoolInput.value && gradeSelect.value) fetchClasses();
+        })();
+    </script>
+    @endif
 @endsection

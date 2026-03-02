@@ -34,8 +34,10 @@ class ClassRoomController extends Controller
     {
         ClassRoom::query()->create([
             'user_id' => auth()->id(),
+            'school_id' => auth()->user()->school_id,
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'grade_level' => (int) $request->input('grade_level'),
         ]);
 
         return redirect()->route('teacher.class-rooms.index')->with('status', 'Class created.');
@@ -69,6 +71,7 @@ class ClassRoomController extends Controller
         $classRoom->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'grade_level' => (int) $request->input('grade_level'),
         ]);
 
         return redirect()->route('teacher.class-rooms.show', $classRoom)->with('status', 'Class updated.');
