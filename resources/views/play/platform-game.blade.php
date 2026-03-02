@@ -7,15 +7,18 @@
     <style>
         .play-platform-game-container { max-width: 100%; margin: 0 auto; width: 100%; min-height: 70vh; position: relative; }
         #platform-game-mount { width: 100%; min-height: 700px; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #87ceeb 0%, #e0f7fa 100%); }
+        .eco-topic-quiz-game-content { padding: 1.5rem 2rem 2rem; }
     </style>
 @endpush
 
 @section('student-main')
+    <div class="eco-topic-quiz-game-content">
     <div class="eco-student-back-bar">
         <a href="{{ route('dashboard.student.games') }}" class="eco-student-back-link">{{ __('messages.play.back_to_games') }}</a>
     </div>
     <div class="play-platform-game-container">
         <div id="platform-game-mount"></div>
+    </div>
     </div>
     <script>
         window.EnviroEduPlatformGame = {

@@ -60,15 +60,18 @@
         .eco-3d-match-card.eco-3d-drawing { border-color: var(--eco-primary); box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.4); }
         .eco-3d-match-card.eco-3d-matched { background: #e8f5e9; border-color: #81c784; opacity: 0.95; cursor: default; }
         .eco-3d-match-card.eco-3d-wrong { animation: eco-shake 0.4s ease; border-color: var(--eco-accent); background: #ffebee; }
+        .eco-topic-quiz-game-content { padding: 1.5rem 2rem 2rem; }
     </style>
 @endpush
 
 @section('student-main')
+    <div class="eco-topic-quiz-game-content">
     <div class="eco-student-back-bar">
         <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">{{ __('messages.play.back_to_my_learning') }}</a>
     </div>
     <div class="play-game-container">
         <div id="game-mount"></div>
+    </div>
     </div>
     <script>
         window.EnviroEduGame = {

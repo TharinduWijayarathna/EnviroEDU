@@ -3,6 +3,7 @@
 @section('title', $topic->title)
 
 @section('student-main')
+    <div class="eco-topic-quiz-game-content">
     <div class="eco-student-back-bar">
         <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">{{ __('messages.play.back_to_my_learning') }}</a>
     </div>
@@ -48,4 +49,11 @@
             @endif
         </div>
     </div>
+    </div>
 @endsection
+
+@push('styles')
+    <style>
+        .eco-topic-quiz-game-content { padding: 1.5rem 2rem 2rem; }
+    </style>
+@endpush

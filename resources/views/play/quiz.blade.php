@@ -27,10 +27,12 @@
         .play-option.correct { background: #fff59d; border-color: #ffc107; }
         .play-option.incorrect { background: #ffcdd2; border-color: var(--eco-accent); }
         .play-result { text-align: center; padding: 2rem; }
+        .eco-topic-quiz-game-content { padding: 1.5rem 2rem 2rem; }
     </style>
 @endpush
 
 @section('student-main')
+    <div class="eco-topic-quiz-game-content">
     <div class="eco-student-back-bar">
         <a href="{{ route('dashboard.student') }}" class="eco-student-back-link">{{ __('messages.play.back_to_my_learning') }}</a>
     </div>
@@ -56,6 +58,7 @@
                 <a href="{{ route('dashboard.student') }}" class="eco-btn" style="margin-top: 1rem;">{{ __('messages.play.back_to_my_learning') }}</a>
             </div>
         </div>
+    </div>
     </div>
     <script>
         const questions = document.querySelectorAll('.play-question[data-question-index]');
