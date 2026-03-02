@@ -39,7 +39,7 @@
                     <ul class="eco-env-list">
                         @foreach ($standaloneMiniGames as $game)
                             <li>
-                                <a href="{{ url('/play/game/'.$game->id) }}" class="eco-env-list-item eco-env-list-item-game">
+                                <a href="{{ route('play.mini-game', $game) }}" class="eco-env-list-item eco-env-list-item-game">
                                     <span class="eco-env-list-icon">🎮</span>
                                     <span class="eco-env-list-text">{{ $game->title }}</span>
                                     <span class="eco-env-list-go">{{ __('messages.dashboard.play') }} →</span>
@@ -61,11 +61,11 @@
         .eco-env-overlay-list { align-items: flex-start; justify-content: flex-start; padding: 1.25rem 1.5rem; overflow-y: auto; }
         .eco-env-back { font-weight: 700; font-size: 1rem; color: var(--eco-primary); text-decoration: none; margin-bottom: 1rem; display: inline-block; position: relative; z-index: 10; pointer-events: auto; }
         .eco-env-back:hover { text-decoration: underline; }
-        .eco-env-panel { background: rgba(255,255,255,0.95); border-radius: 20px; padding: 1.5rem; max-width: 560px; border: 2px solid rgba(78, 205, 196, 0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.1); position: relative; z-index: 10; pointer-events: auto; }
+        .eco-env-panel { background: rgba(255,255,255,0.95); border-radius: 20px; padding: 1.5rem; max-width: 100%; width: 100%; border: 2px solid rgba(78, 205, 196, 0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.1); position: relative; z-index: 10; pointer-events: auto; }
         .eco-env-panel-title { font-family: 'Bubblegum Sans', cursive; font-size: 1.5rem; color: #1a3c34; margin: 0 0 0.35rem; }
         .eco-env-panel-desc { font-size: 0.95rem; color: #5a6c64; margin: 0 0 1rem; line-height: 1.4; }
-        .eco-env-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-        .eco-env-list-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.1rem; border-radius: 14px; text-decoration: none; color: #1a3c34; font-weight: 600; background: #f8fcfb; border: 2px solid transparent; transition: all 0.2s; }
+        .eco-env-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+        .eco-env-list-item { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 1rem 1.1rem; border-radius: 14px; text-decoration: none; color: #1a3c34; font-weight: 600; background: #f8fcfb; border: 2px solid transparent; transition: all 0.2s; min-height: 80px; }
         .eco-env-list-item:hover { background: #e8f7f5; border-color: var(--eco-primary); }
         .eco-env-section-title { font-size: 1.1rem; color: #1a3c34; margin: 1rem 0 0.5rem; }
         .eco-env-section-title:first-of-type { margin-top: 0; }
