@@ -202,6 +202,11 @@
     color: white;
 }
 
+.eco-dashboard-nav a.eco-dashboard-link-active {
+    background: var(--eco-primary);
+    color: white;
+}
+
 .eco-logout-btn {
     background: var(--eco-accent);
     color: white;
@@ -843,6 +848,12 @@
 .eco-landing-nav-link:hover {
     background: rgba(78, 205, 196, 0.2);
     color: var(--eco-primary);
+}
+
+.eco-landing-nav-link-active {
+    background: rgba(78, 205, 196, 0.25);
+    color: var(--eco-primary);
+    font-weight: 700;
 }
 
 /* Language switcher */

@@ -12,10 +12,10 @@
                     <img src="{{ asset('images/logo.png') }}" alt="{{ __('messages.common.app_name') }}" class="eco-landing-logo-img">
                 </a>
                 <nav class="eco-landing-nav">
-                    <a href="{{ route('home') }}" class="eco-landing-nav-link">{{ __('messages.nav.home') }}</a>
-                    <a href="{{ route('landing.join') }}" class="eco-landing-nav-link">{{ __('messages.nav.join') }}</a>
-                    <a href="{{ route('landing.platform') }}" class="eco-landing-nav-link">{{ __('messages.nav.platform') }}</a>
-                    <a href="{{ route('landing.how-it-works') }}" class="eco-landing-nav-link">{{ __('messages.nav.how_it_works') }}</a>
+                    <a href="{{ route('home') }}" class="eco-landing-nav-link {{ request()->routeIs('home') ? 'eco-landing-nav-link-active' : '' }}">{{ __('messages.nav.home') }}</a>
+                    <a href="{{ route('landing.join') }}" class="eco-landing-nav-link {{ request()->routeIs('landing.join') ? 'eco-landing-nav-link-active' : '' }}">{{ __('messages.nav.join') }}</a>
+                    <a href="{{ route('landing.platform') }}" class="eco-landing-nav-link {{ request()->routeIs('landing.platform') ? 'eco-landing-nav-link-active' : '' }}">{{ __('messages.nav.platform') }}</a>
+                    <a href="{{ route('landing.how-it-works') }}" class="eco-landing-nav-link {{ request()->routeIs('landing.how-it-works') ? 'eco-landing-nav-link-active' : '' }}">{{ __('messages.nav.how_it_works') }}</a>
                     @include('components.language-switcher')
                     <a href="{{ route('login') }}" class="eco-btn eco-landing-nav-btn">{{ __('messages.nav.login') }}</a>
                 </nav>

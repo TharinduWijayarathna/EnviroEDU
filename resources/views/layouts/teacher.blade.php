@@ -12,13 +12,13 @@
             </a>
             <nav class="eco-dashboard-nav">
                 @include('components.language-switcher')
-                <a href="{{ route('dashboard.teacher') }}">{{ __('messages.nav.dashboard') }}</a>
-                <a href="{{ route('teacher.class-rooms.index') }}">{{ __('messages.teacher.classes') }}</a>
-                <a href="{{ route('teacher.topics.index') }}">{{ __('messages.teacher.topics') }}</a>
-                <a href="{{ route('teacher.quizzes.index') }}">{{ __('messages.teacher.quizzes') }}</a>
-                <a href="{{ route('teacher.mini-games.index') }}">{{ __('messages.teacher.mini_games') }}</a>
-                <a href="{{ route('teacher.badges.index') }}">{{ __('messages.teacher.badges') }}</a>
-                <a href="{{ route('teacher.progress.index') }}">{{ __('messages.teacher.student_progress') }}</a>
+                <a href="{{ route('dashboard.teacher') }}" class="{{ request()->routeIs('dashboard.teacher') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.nav.dashboard') }}</a>
+                <a href="{{ route('teacher.class-rooms.index') }}" class="{{ request()->routeIs('teacher.class-rooms.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.teacher.classes') }}</a>
+                <a href="{{ route('teacher.topics.index') }}" class="{{ request()->routeIs('teacher.topics.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.teacher.topics') }}</a>
+                <a href="{{ route('teacher.quizzes.index') }}" class="{{ request()->routeIs('teacher.quizzes.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.teacher.quizzes') }}</a>
+                <a href="{{ route('teacher.mini-games.index') }}" class="{{ request()->routeIs('teacher.mini-games.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.teacher.mini_games') }}</a>
+                <a href="{{ route('teacher.badges.index') }}" class="{{ request()->routeIs('teacher.badges.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.teacher.badges') }}</a>
+                <a href="{{ route('teacher.progress.index') }}" class="{{ request()->routeIs('teacher.progress.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.teacher.student_progress') }}</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf

@@ -19,7 +19,7 @@
             </a>
             <nav class="eco-dashboard-nav">
                 @include('components.language-switcher')
-                <a href="{{ route('dashboard.parent') }}">{{ __('messages.nav.dashboard') }}</a>
+                <a href="{{ route('dashboard.parent') }}" class="{{ request()->routeIs('dashboard.parent') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.nav.dashboard') }}</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf

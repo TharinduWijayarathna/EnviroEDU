@@ -12,10 +12,10 @@
             </a>
             <nav class="eco-dashboard-nav">
                 @include('components.language-switcher')
-                <a href="{{ route('dashboard.admin') }}">{{ __('messages.nav.dashboard') }}</a>
-                <a href="{{ route('admin.teachers.index') }}">{{ __('messages.admin.teachers') }}</a>
-                <a href="{{ route('admin.students.index') }}">{{ __('messages.admin.students') }}</a>
-                <a href="{{ route('admin.approvals.index') }}">{{ __('messages.admin.pending_approvals') }}</a>
+                <a href="{{ route('dashboard.admin') }}" class="{{ request()->routeIs('dashboard.admin') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.nav.dashboard') }}</a>
+                <a href="{{ route('admin.teachers.index') }}" class="{{ request()->routeIs('admin.teachers.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.admin.teachers') }}</a>
+                <a href="{{ route('admin.students.index') }}" class="{{ request()->routeIs('admin.students.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.admin.students') }}</a>
+                <a href="{{ route('admin.approvals.index') }}" class="{{ request()->routeIs('admin.approvals.*') ? 'eco-dashboard-link-active' : '' }}">{{ __('messages.admin.pending_approvals') }}</a>
                 <span style="font-weight: 600;">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
