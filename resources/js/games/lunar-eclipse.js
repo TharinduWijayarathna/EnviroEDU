@@ -9,7 +9,7 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
   const { slug, progressUrl, csrfToken } = window.EnviroEduPlatformGame;
 
   let canvas, ctx;
-  let moonAngle = Math.PI * 0.5;
+  let moonAngle = Math.PI * 0.2;
   let dragging = false;
   let lastAngle = 0;
   let eclipseAchieved = false;
@@ -140,14 +140,17 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
     const moonX = CENTER_X + Math.cos(moonAngle) * ORBIT_R;
     const moonY = CENTER_Y + Math.sin(moonAngle) * ORBIT_R;
 
-    const sunToMoon = Math.atan2(moonY - sunY, moonX - sunX);
-    let diff = Math.abs(sunToMoon - Math.PI);
-    if (diff > Math.PI) diff = Math.PI * 2 - diff;
-    const inShadow = diff < 0.5 && moonX > CENTER_X + 20;
+    const earthToMoonX = moonX - CENTER_X;
+    const earthToMoonY = moonY - CENTER_Y;
+    const sunToEarthX = CENTER_X - sunX;
+    const sunToEarthLen = Math.sqrt(sunToEarthX * sunToEarthX);
+    const earthToMoonLen = Math.sqrt(earthToMoonX * earthToMoonX + earthToMoonY * earthToMoonY) || 1;
+    const alignment = (earthToMoonX * sunToEarthX + earthToMoonY * 0) / (earthToMoonLen * sunToEarthLen);
+    const inShadow = alignment > 0.9 && moonX > CENTER_X + 25;
 
     if (inShadow) {
       eclipseTimer += 0.016;
-      if (eclipseTimer > 1.2 && !eclipseAchieved) {
+      if (eclipseTimer > 2.5 && !eclipseAchieved) {
         eclipseAchieved = true;
         showWinUI('🌒', 'Lunar Eclipse!', 'When Earth is between the Sun and Moon, Earth\'s shadow covers the Moon!');
         recordComplete(slug, progressUrl, csrfToken, {});

@@ -48,7 +48,7 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
       });
     }
 
-    moonX = 350;
+    moonX = 100;
     moonY = CENTER_Y;
 
     canvas.addEventListener('mousedown', onDown);
@@ -130,7 +130,7 @@ import { recordComplete, showWinUI } from './platform-game-utils.js';
     const inLine = moonX > SUN_X + sunR && moonX < EARTH_X - earthR && Math.abs(moonY - CENTER_Y) < 55;
     if (inLine) {
       eclipseTimer += 0.016;
-      if (eclipseTimer > 1.5 && !eclipseAchieved) {
+      if (eclipseTimer > 2.5 && !eclipseAchieved) {
         eclipseAchieved = true;
         ctx.fillStyle = 'rgba(0,0,0,0.75)';
         ctx.beginPath();

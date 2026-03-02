@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GenerateQuizRequest;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
 use App\Models\Topic;
+use App\Services\QuizGeneratorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -29,6 +31,48 @@ class QuizController extends Controller
         $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
 
         return view('teacher.quizzes.create', compact('topics'));
+    }
+
+    public function createWithAi(): View
+    {
+        $topics = Topic::query()->where('user_id', auth()->id())->orderBy('order')->orderBy('title')->get();
+
+        return view('teacher.quizzes.create-with-ai', compact('topics'));
+    }
+
+    public function generate(GenerateQuizRequest $request, QuizGeneratorService $generator): RedirectResponse
+    {
+        $gradeLevel = $request->input('grade_level') ? (int) $request->input('grade_level') : null;
+        $result = $generator->generate($request->input('prompt'), $gradeLevel);
+
+        if (isset($result['error'])) {
+            return back()->withErrors(['prompt' => $result['error']])->withInput();
+        }
+
+        $quiz = Quiz::query()->create([
+            'user_id' => auth()->id(),
+            'topic_id' => $request->input('topic_id') ?: null,
+            'title' => $result['title'],
+            'description' => $result['description'] ?? null,
+            'grade_level' => $gradeLevel,
+            'is_published' => false,
+        ]);
+
+        foreach ($result['questions'] ?? [] as $index => $q) {
+            $question = $quiz->questions()->create([
+                'question_text' => $q['question_text'],
+                'order' => $q['order'] ?? $index,
+            ]);
+            foreach ($q['options'] ?? [] as $optIndex => $opt) {
+                $question->options()->create([
+                    'option_text' => $opt['option_text'],
+                    'is_correct' => $opt['is_correct'] ?? false,
+                    'order' => $opt['order'] ?? $optIndex,
+                ]);
+            }
+        }
+
+        return redirect()->route('teacher.quizzes.edit', $quiz)->with('status', 'Quiz generated. You can tweak questions and publish when ready.');
     }
 
     public function store(StoreQuizRequest $request): RedirectResponse

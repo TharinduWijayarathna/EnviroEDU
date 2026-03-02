@@ -86,6 +86,8 @@ Route::middleware(['auth', 'approved'])->group(function (): void {
         Route::post('class-rooms/{classRoom}/students', [ClassRoomController::class, 'addStudent'])->name('class-rooms.students.store');
         Route::delete('class-rooms/{classRoom}/students/{student}', [ClassRoomController::class, 'removeStudent'])->name('class-rooms.students.destroy');
         Route::resource('topics', TopicController::class)->parameters(['topics' => 'topic']);
+        Route::get('quizzes/create-with-ai', [QuizController::class, 'createWithAi'])->name('quizzes.create-with-ai');
+        Route::post('quizzes/generate', [QuizController::class, 'generate'])->name('quizzes.generate');
         Route::resource('quizzes', QuizController::class);
         Route::post('mini-games/generate', [MiniGameController::class, 'generate'])->name('mini-games.generate');
         Route::resource('mini-games', MiniGameController::class)->parameters(['mini-games' => 'miniGame']);
