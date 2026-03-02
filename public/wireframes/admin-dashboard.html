@@ -11,28 +11,59 @@
     <div class="wf-logo"></div>
     <nav class="wf-nav">
       <a href="admin-dashboard.html">Dashboard</a>
-      <a href="admin-approvals.html">Approvals</a>
+      <a href="admin-teachers.html">Teachers</a>
+      <a href="admin-students.html">Students</a>
+      <a href="admin-approvals.html">Pending approvals</a>
       <span>Admin</span>
       <a href="index.html" class="wf-btn">Logout</a>
     </nav>
   </header>
   <main class="wf-main">
-    <h1>Admin dashboard</h1>
-    <p style="margin-bottom:24px;">Manage your school: approve accounts, view overview.</p>
-    <div class="wf-grid wf-grid-3">
-      <div class="wf-card" style="text-align:center;">
-        <div class="wf-stat">2</div>
-        <span>Pending approvals</span>
-        <p style="margin-top:8px;"><a href="admin-approvals.html" class="wf-btn">Review</a></p>
-      </div>
-      <div class="wf-card" style="text-align:center;">
+    <h1>School dashboard</h1>
+    <p style="margin-bottom:16px;">Manage your school: approve accounts, view overview.</p>
+    <div class="wf-card" style="margin-bottom:24px;padding:1rem;">
+      <h2 style="font-size:1.1rem;margin:0 0 8px;">Green Valley School</h2>
+      <p style="margin:0;color:#666;">School code: <strong style="color:#4ECDC4;">GVS-2024</strong> — Share with teachers and students.</p>
+    </div>
+    <h2 style="font-size:1.1rem;margin-bottom:12px;">Analytics</h2>
+    <div class="wf-grid wf-grid-3" style="gap:1rem;">
+      <a href="admin-teachers.html" class="wf-card" style="text-align:center;text-decoration:none;color:inherit;">
         <div class="wf-stat">5</div>
         <span>Teachers</span>
-      </div>
-      <div class="wf-card" style="text-align:center;">
+      </a>
+      <a href="admin-students.html" class="wf-card" style="text-align:center;text-decoration:none;color:inherit;">
         <div class="wf-stat">48</div>
         <span>Students</span>
+      </a>
+      <div class="wf-card" style="text-align:center;">
+        <div class="wf-stat">6</div>
+        <span>Classes</span>
       </div>
+      <div class="wf-card" style="text-align:center;">
+        <div class="wf-stat">12</div>
+        <span>Topics</span>
+      </div>
+      <div class="wf-card" style="text-align:center;">
+        <div class="wf-stat">24</div>
+        <span>Quizzes</span>
+      </div>
+      <div class="wf-card" style="text-align:center;">
+        <div class="wf-stat">8</div>
+        <span>Games</span>
+      </div>
+      <div class="wf-card" style="text-align:center;">
+        <div class="wf-stat">156</div>
+        <span>Quiz attempts</span>
+      </div>
+      <div class="wf-card" style="text-align:center;">
+        <div class="wf-stat">89</div>
+        <span>Badges earned</span>
+      </div>
+    </div>
+    <div class="wf-card" style="margin-top:24px;padding:1rem;">
+      <h2 style="font-size:1.1rem;margin:0 0 8px;">Pending approvals</h2>
+      <p style="margin:0 0 12px;color:#666;">2 teachers, 1 student awaiting approval.</p>
+      <a href="admin-approvals.html" class="wf-btn">Review pending</a>
     </div>
   </main>
 </body>

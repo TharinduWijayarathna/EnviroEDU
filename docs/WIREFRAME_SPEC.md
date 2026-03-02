@@ -43,17 +43,24 @@ Use this spec to create UI wireframes in Figma. Each section maps to `resources/
 - Links: “Register as [role]”, “Different role”, “Back to home”.
 
 ### 2.3 Register (`auth/register.blade.php`)
-- Form: name, email, password, role-specific fields (e.g. school code for student/teacher), school name for admin.
+- Form: name, email, password, role-specific fields.
+- **Admin**: school_name, school_code.
+- **Teacher/Student**: school_code.
+- **Student**: grade_level, class_id (optional; dropdown populated via `/register/classes` API when school code is valid).
+- **Parent**: child_email (optional).
 - Submit, link to login.
 
-### 2.4 Approval pending (`auth/approval-pending.blade.php`)
+### 2.4 Register classes API (`/register/classes`)
+- JSON API: returns classes for a given school code. Used by student registration form to populate class dropdown.
+
+### 2.5 Approval pending (`auth/approval-pending.blade.php`)
 - Message that account is pending approval.
 
 ---
 
 ## 3. Student (layout: `layouts/student`)
 
-- **Header**: Logo, nav (My learning, Topics, Quizzes, Games, Badges), user name, Logout.
+- **Header**: Logo, greeting "Hi, [name]! 👋", language switcher, badge count + link to badges, Leave (logout). No Topics/Quizzes/Games in header – navigation is via dashboard gateway cards.
 
 ### 3.1 Student dashboard (`dashboard/student.blade.php`)
 - Greeting “Hi, [name]!”
@@ -66,14 +73,18 @@ Use this spec to create UI wireframes in Figma. Each section maps to `resources/
 - List of topic cards: icon, title, “Open →”.
 
 ### 3.3 Topic detail (`dashboard/student-topic.blade.php`)
-- Back link, topic title.
-- Content: quizzes and/or mini games as links/cards.
+- "Back to my learning" link, topic title.
+- Optional: video embed (YouTube) or link.
+- Section "Play quiz or game": buttons for linked quizzes and mini games.
 
 ### 3.4 Quizzes list (`dashboard/student-quizzes.blade.php`)
 - List of available quizzes (e.g. title, link to play).
 
 ### 3.5 Games list (`dashboard/student-games.blade.php`)
-- List of mini games / platform games.
+- Two sections:
+  - **Platform Games** (🌟): Built-in educational games (Photosynthesis, Seed Grow, Vine Growth, Star Patterns, Rainbow, Water Cycle, Day/Night, Solar Eclipse, Lunar Eclipse).
+  - **Teacher Games** (🎮): Mini games created by teachers in the same school.
+- Each item: icon, title, "Play →".
 
 ### 3.6 Badges (`dashboard/student-badges.blade.php`)
 - List or grid of earned badges.
@@ -82,10 +93,10 @@ Use this spec to create UI wireframes in Figma. Each section maps to `resources/
 - Question, answer options, next/submit, progress.
 
 ### 3.8 Mini game play (`play/mini-game.blade.php`)
-- Game UI (varies by type: drag-drop, matching, etc.).
+- Game UI (varies by type: drag_drop, multiple_choice, matching).
 
 ### 3.9 Platform game (`play/platform-game.blade.php`)
-- Platform game canvas/UI.
+- Platform game canvas/UI. Games: photosynthesis, seed-grow, vine-growth, star-patterns, rainbow, water-cycle, day-night, solar-eclipse, lunar-eclipse.
 
 ---
 
@@ -149,11 +160,21 @@ Use this spec to create UI wireframes in Figma. Each section maps to `resources/
 
 ## 6. Admin (layout: `layouts/admin`)
 
-### 6.1 Admin dashboard (`dashboard/admin.blade.php`)
-- Overview (e.g. pending approvals, stats).
+- **Header**: Logo, Dashboard, Teachers, Students, Pending approvals, user name, Logout.
 
-### 6.2 Approvals (`admin/approvals/index.blade.php`)
-- List of pending registrations, approve/reject actions.
+### 6.1 Admin dashboard (`dashboard/admin.blade.php`)
+- School name, school code (share with teachers/students).
+- Analytics grid: Teachers, Students, Classes, Topics, Quizzes, Games, Quiz attempts, Badges earned (clickable links where applicable).
+- Pending approvals card (if any) with "Review pending" button.
+
+### 6.2 Teachers (`admin/users/teachers.blade.php`)
+- List of teachers (name, email, classes count, pending badge if not approved).
+
+### 6.3 Students (`admin/users/students.blade.php`)
+- List of students (name, email, grade, classes, quiz attempts, game attempts, badges, pending badge if not approved).
+
+### 6.4 Approvals (`admin/approvals/index.blade.php`)
+- List of pending teachers and students, approve action per user.
 
 ---
 
