@@ -15,7 +15,7 @@ class LeaderboardService
      */
     public function getClassLeaderboard(User $student, int $limit = 10): Collection
     {
-        $classIds = $student->enrolledClasses()->pluck('id');
+        $classIds = $student->enrolledClasses()->pluck('class_rooms.id');
 
         if ($classIds->isEmpty()) {
             return collect();

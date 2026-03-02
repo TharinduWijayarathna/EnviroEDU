@@ -10,7 +10,6 @@
             <header class="eco-landing-header">
                 <a href="{{ route('home') }}" class="eco-logo">
                     <img src="{{ asset('images/logo.png') }}" alt="{{ __('messages.common.app_name') }}" class="eco-landing-logo-img">
-                    <span>{{ __('messages.common.app_name') }}</span>
                 </a>
                 <nav class="eco-landing-nav">
                     <a href="{{ route('home') }}" class="eco-landing-nav-link">{{ __('messages.nav.home') }}</a>
