@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -81,6 +82,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Badge::class, 'badge_user')
             ->withPivot('earned_at', 'source_type', 'source_id')
             ->withTimestamps();
+    }
+
+    public function getBadgeEarnedAt($badge): ?Carbon
+    {
+        $earnedAt = $badge->pivot?->earned_at;
+        if (! $earnedAt) {
+            return null;
+        }
+
+        return $earnedAt instanceof Carbon ? $earnedAt : Carbon::parse($earnedAt);
     }
 
     public function quizAttempts(): HasMany

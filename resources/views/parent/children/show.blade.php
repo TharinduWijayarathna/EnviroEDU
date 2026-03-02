@@ -104,7 +104,12 @@
                                     @if ($badge->description)
                                         <p style="font-size: 0.9rem; color: #666; margin: 0.25rem 0;">{{ $badge->description }}</p>
                                     @endif
-                                    <span style="font-size: 0.8rem; color: #888;">{{ $badge->pivot->earned_at->format('M j, Y') }}</span>
+                                    @php
+                                        $earnedAt = $child->getBadgeEarnedAt($badge);
+                                    @endphp
+                                    @if ($earnedAt)
+                                        <span style="font-size: 0.8rem; color: #888;">{{ $earnedAt->format('M j, Y') }}</span>
+                                    @endif
                                 </div>
                             </div>
                         @empty
