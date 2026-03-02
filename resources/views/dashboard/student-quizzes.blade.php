@@ -10,6 +10,32 @@
             <div class="eco-env-panel">
                 <h1 class="eco-env-panel-title">📝 {{ __('messages.dashboard.quizzes_title') }}</h1>
                 <p class="eco-env-panel-desc">{{ __('messages.dashboard.quizzes_desc') }}</p>
+
+                @php
+                    $topicsWithQuizzes = ($topics ?? collect())->filter(fn ($t) => $t->quizzes->isNotEmpty());
+                @endphp
+
+                @if ($topicsWithQuizzes->isNotEmpty())
+                    <h2 class="eco-env-section-title">📚 {{ __('messages.dashboard.topic_quizzes') }}</h2>
+                    @foreach ($topicsWithQuizzes as $t)
+                        <div class="eco-env-topic-group">
+                            <div class="eco-env-topic-group-title">{{ $t->title }}</div>
+                            <ul class="eco-env-list eco-env-list-compact">
+                                @foreach ($t->quizzes as $quiz)
+                                    <li>
+                                        <a href="{{ route('play.quiz', $quiz) }}" class="eco-env-list-item eco-env-list-item-quiz">
+                                            <span class="eco-env-list-icon">📝</span>
+                                            <span class="eco-env-list-text">{{ $quiz->title }}</span>
+                                            <span class="eco-env-list-go">{{ __('messages.dashboard.play') }} →</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endforeach
+                @endif
+
+                <h2 class="eco-env-section-title">📝 {{ __('messages.dashboard.standalone_quizzes') }}</h2>
                 @if (isset($standaloneQuizzes) && $standaloneQuizzes->isNotEmpty())
                     <ul class="eco-env-list">
                         @foreach ($standaloneQuizzes as $quiz)
@@ -23,7 +49,11 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="eco-env-empty">{{ __('messages.dashboard.no_standalone_quizzes') }}</p>
+                    @if ($topicsWithQuizzes->isNotEmpty())
+                        <p class="eco-env-empty eco-env-empty-sub">{{ __('messages.dashboard.no_standalone_quizzes') }}</p>
+                    @else
+                        <p class="eco-env-empty">{{ __('messages.dashboard.no_quizzes_available') }}</p>
+                    @endif
                 @endif
             </div>
         </div>
@@ -39,15 +69,21 @@
         .eco-env-panel { background: rgba(255,255,255,0.95); border-radius: 20px; padding: 2rem; max-width: 100%; width: 100%; border: 2px solid rgba(78, 205, 196, 0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.1); position: relative; z-index: 10; pointer-events: auto; }
         .eco-env-panel-title { font-family: 'Bubblegum Sans', cursive; font-size: 1.5rem; color: #1a3c34; margin: 0 0 0.35rem; }
         .eco-env-panel-desc { font-size: 0.95rem; color: #5a6c64; margin: 0 0 1rem; line-height: 1.4; }
+        .eco-env-section-title { font-size: 1.1rem; color: #1a3c34; margin: 1rem 0 0.75rem; }
+        .eco-env-section-title:first-of-type { margin-top: 0.25rem; }
         .eco-env-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+        .eco-env-list-compact { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
         .eco-env-list-item { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 1rem 1.1rem; border-radius: 14px; text-decoration: none; color: #1a3c34; font-weight: 600; background: #f8fcfb; border: 2px solid transparent; transition: all 0.2s; min-height: 80px; }
         .eco-env-list-item:hover { background: #e8f7f5; border-color: var(--eco-primary); }
         .eco-env-list-item-quiz { background: #fffbf0; }
         .eco-env-list-item-quiz:hover { border-color: #d4a84b; background: #fff5dc; }
+        .eco-env-topic-group { margin-bottom: 1.25rem; }
+        .eco-env-topic-group-title { font-weight: 800; color: #1a3c34; margin: 0 0 0.5rem; }
         .eco-env-list-icon { font-size: 1.3rem; }
         .eco-env-list-text { flex: 1; }
         .eco-env-list-go { font-size: 0.9rem; color: var(--eco-primary); }
         .eco-env-empty { margin: 0; color: #5a6c64; font-size: 1rem; }
+        .eco-env-empty-sub { font-size: 0.9rem; margin-top: 0; margin-bottom: 0; }
     </style>
 @endpush
 
